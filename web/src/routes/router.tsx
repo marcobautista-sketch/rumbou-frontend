@@ -1,20 +1,24 @@
-import { Suspense, type ReactNode } from 'react'
 import { createBrowserRouter } from 'react-router'
-import { PageLoader } from '../components/feedback/PageLoader'
 import RouteErrorPage from '../pages/route-error/RouteErrorPage'
-import { HomePage, NotFoundPage } from './lazyPages'
+import { GuestRoute } from './GuestRoute'
+import { HomePage, LoginPage, NotFoundPage, RegisterPage } from './lazyPages'
 import { paths } from './paths'
-
-function withSuspense(page: ReactNode) {
-  return <Suspense fallback={<PageLoader />}>{page}</Suspense>
-}
+import { RootLayout } from './RootLayout'
 
 export const router = createBrowserRouter([
   {
+    element: <RootLayout />,
     errorElement: <RouteErrorPage />,
     children: [
-      { path: paths.home, element: withSuspense(<HomePage />) },
-      { path: '*', element: withSuspense(<NotFoundPage />) },
+      { path: paths.home, element: <HomePage /> },
+      {
+        element: <GuestRoute />,
+        children: [
+          { path: paths.login, element: <LoginPage /> },
+          { path: paths.register, element: <RegisterPage /> },
+        ],
+      },
+      { path: '*', element: <NotFoundPage /> },
     ],
   },
 ])
