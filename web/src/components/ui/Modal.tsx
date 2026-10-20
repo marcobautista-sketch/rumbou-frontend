@@ -56,7 +56,7 @@ export function Modal({
       onClick={(event) => {
         if (event.target === event.currentTarget) requestClose()
       }}
-      className={`m-auto w-[calc(100%-2rem)] rounded-2xl bg-white p-0 text-slate-900 shadow-xl backdrop:bg-slate-950/60 backdrop:backdrop-blur-sm dark:bg-slate-900 dark:text-slate-100 ${sizes[size]}`}
+      className={`m-auto w-[calc(100%-2rem)] rounded-2xl bg-surface p-0 text-ink shadow-raised backdrop:bg-primary/60 backdrop:backdrop-blur-sm ${sizes[size]}`}
     >
       <div className="space-y-4 p-6">
         <header className="flex items-start justify-between gap-4">
@@ -65,7 +65,7 @@ export function Modal({
               {title}
             </h2>
             {description && (
-              <p id={descriptionId} className="text-slate-600 dark:text-slate-300">
+              <p id={descriptionId} className="text-ink-muted">
                 {description}
               </p>
             )}
@@ -75,7 +75,7 @@ export function Modal({
             onClick={requestClose}
             disabled={!dismissible}
             aria-label="Cerrar"
-            className="rounded-lg p-1 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:opacity-50 dark:hover:bg-slate-800 dark:hover:text-slate-300"
+            className="rounded-lg p-1 text-ink-muted transition hover:bg-surface-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-accent disabled:opacity-50"
           >
             <X aria-hidden className="size-5" />
           </button>

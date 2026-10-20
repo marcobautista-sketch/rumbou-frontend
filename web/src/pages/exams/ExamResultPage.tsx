@@ -9,8 +9,7 @@ import { useFetch } from '../../hooks/useFetch'
 import { paths } from '../../routes/paths'
 import { examTypeLabels, summarizeExam } from '../../utils/examSummary'
 
-const cardStyles =
-  'rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900'
+const cardStyles = 'rounded-2xl bg-surface p-6 shadow-card'
 
 export default function ExamResultPage() {
   const examId = Number(useParams().examId)
@@ -36,29 +35,25 @@ export default function ExamResultPage() {
   }
 
   const stats = [
-    { label: 'Correctas', value: summary.correct, Icon: CircleCheck, color: 'text-emerald-600' },
-    { label: 'Incorrectas', value: summary.incorrect, Icon: CircleX, color: 'text-red-600' },
-    { label: 'En blanco', value: summary.blank, Icon: CircleSlash, color: 'text-slate-500' },
+    { label: 'Correctas', value: summary.correct, Icon: CircleCheck, color: 'text-success' },
+    { label: 'Incorrectas', value: summary.incorrect, Icon: CircleX, color: 'text-danger' },
+    { label: 'En blanco', value: summary.blank, Icon: CircleSlash, color: 'text-ink-muted' },
   ]
 
   return (
     <main className="mx-auto max-w-4xl space-y-6 px-4 py-10">
       <header className="space-y-1">
-        <p className="text-sm text-slate-500 dark:text-slate-400">{examTypeLabels[exam.tipo]}</p>
+        <p className="text-sm text-ink-muted">{examTypeLabels[exam.tipo]}</p>
         <h1 className="text-2xl font-bold">Tu resultado</h1>
       </header>
 
       <section aria-label="Puntaje" className={`${cardStyles} grid gap-6 sm:grid-cols-2`}>
         <div>
-          <p className="text-sm text-slate-500 dark:text-slate-400">Puntaje obtenido</p>
-          <p className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">
-            {exam.puntajeObtenido?.toFixed(2)}
-          </p>
+          <p className="text-sm text-ink-muted">Puntaje obtenido</p>
+          <p className="text-4xl font-bold text-primary">{exam.puntajeObtenido?.toFixed(2)}</p>
         </div>
         <div>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            Puntaje simulado proyectado (PSP)
-          </p>
+          <p className="text-sm text-ink-muted">Puntaje simulado proyectado (PSP)</p>
           <p className="text-4xl font-bold">{exam.psp?.toFixed(2)}</p>
         </div>
       </section>
@@ -69,7 +64,7 @@ export default function ExamResultPage() {
             <Icon aria-hidden className={`size-8 ${color}`} />
             <div>
               <p className="text-2xl font-bold">{value}</p>
-              <p className="text-sm text-slate-500 dark:text-slate-400">{label}</p>
+              <p className="text-sm text-ink-muted">{label}</p>
             </div>
           </div>
         ))}
@@ -81,15 +76,15 @@ export default function ExamResultPage() {
           Temas para reforzar
         </h2>
         {summary.weakTopics.length === 0 ? (
-          <p className="text-slate-600 dark:text-slate-300">
+          <p className="text-ink-muted">
             ¡Respondiste todo bien! Prueba ahora un simulacro completo.
           </p>
         ) : (
-          <ul className="divide-y divide-slate-200 dark:divide-slate-800">
+          <ul className="divide-y divide-line">
             {summary.weakTopics.map((topic) => (
               <li key={topic.temaId} className="flex flex-wrap justify-between gap-2 py-2">
                 <span className="font-medium">{topic.tema}</span>
-                <span className="text-sm text-slate-500 dark:text-slate-400">
+                <span className="text-sm text-ink-muted">
                   {topic.incorrect} incorrectas · {topic.blank} en blanco
                 </span>
               </li>

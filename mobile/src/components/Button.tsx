@@ -28,15 +28,17 @@ export function Button({
         styles.button,
         isPrimary
           ? { backgroundColor: colors.primary }
-          : { borderColor: colors.border, borderWidth: 1 },
+          : { borderColor: colors.primary, borderWidth: 2 },
         (pressed || inactive) && styles.dimmed,
       ]}
       {...props}
     >
       {loading ? (
-        <ActivityIndicator color={isPrimary ? '#ffffff' : colors.primary} />
+        <ActivityIndicator color={isPrimary ? colors.onPrimary : colors.primary} />
       ) : (
-        <Text style={[styles.title, { color: isPrimary ? '#ffffff' : colors.text }]}>{title}</Text>
+        <Text style={[styles.title, { color: isPrimary ? colors.onPrimary : colors.primary }]}>
+          {title}
+        </Text>
       )}
     </Pressable>
   )

@@ -17,10 +17,10 @@ interface TableProps<T> {
 
 export function Table<T>({ caption, columns, rows, rowKey, isRowSelected }: TableProps<T>) {
   return (
-    <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+    <div className="overflow-x-auto rounded-2xl bg-surface shadow-card">
       <table className="w-full text-left text-sm">
         <caption className="sr-only">{caption}</caption>
-        <thead className="border-b border-slate-200 bg-slate-50 text-xs tracking-wide text-slate-500 uppercase dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-400">
+        <thead className="border-b border-line bg-surface-muted text-xs tracking-wide text-ink-muted uppercase">
           <tr>
             {columns.map((column) => (
               <th
@@ -33,14 +33,12 @@ export function Table<T>({ caption, columns, rows, rowKey, isRowSelected }: Tabl
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+        <tbody className="divide-y divide-line">
           {rows.map((row) => (
             <tr
               key={rowKey(row)}
               className={`transition ${
-                isRowSelected?.(row)
-                  ? 'bg-indigo-50/70 dark:bg-indigo-950/40'
-                  : 'hover:bg-slate-50 dark:hover:bg-slate-800/50'
+                isRowSelected?.(row) ? 'bg-accent-soft' : 'hover:bg-surface-muted'
               }`}
             >
               {columns.map((column) => (

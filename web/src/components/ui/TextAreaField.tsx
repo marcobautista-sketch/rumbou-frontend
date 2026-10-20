@@ -38,7 +38,7 @@ export function TextAreaField({
         <p
           id={messageId}
           role={error ? 'alert' : undefined}
-          className={`text-sm ${error ? 'text-red-600 dark:text-red-400' : 'text-slate-500 dark:text-slate-400'}`}
+          className={`text-sm ${error ? 'text-danger' : 'text-ink-muted'}`}
         >
           {message}
         </p>

@@ -34,7 +34,7 @@ export function QuestionFilters({
   onClear,
 }: QuestionFiltersProps) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+    <div className="rounded-2xl bg-surface p-4 shadow-card">
       <div
         className={`grid gap-4 sm:grid-cols-2 ${showStatus ? 'lg:grid-cols-5' : 'lg:grid-cols-4'}`}
       >

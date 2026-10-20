@@ -89,7 +89,7 @@ export default function AdminUsersPage() {
         />
         <Search
           aria-hidden
-          className="pointer-events-none absolute top-[2.15rem] left-3 size-5 text-slate-400"
+          className="pointer-events-none absolute top-[2.15rem] left-3 size-5 text-ink-muted"
         />
       </div>
 
@@ -104,7 +104,7 @@ export default function AdminUsersPage() {
           <div
             role="status"
             aria-label="Buscando usuario…"
-            className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900"
+            className="space-y-4 rounded-2xl bg-surface p-6 shadow-card"
           >
             <div className="flex items-center gap-4">
               <Skeleton className="size-16 rounded-full" />

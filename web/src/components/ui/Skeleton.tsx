@@ -3,12 +3,7 @@ interface SkeletonProps {
 }
 
 export function Skeleton({ className = 'h-4 w-full' }: SkeletonProps) {
-  return (
-    <div
-      aria-hidden
-      className={`animate-pulse rounded-lg bg-slate-200 dark:bg-slate-800 ${className}`}
-    />
-  )
+  return <div aria-hidden className={`animate-pulse rounded-lg bg-line ${className}`} />
 }
 
 interface SkeletonListProps {
@@ -20,10 +15,7 @@ export function SkeletonList({ rows = 5, label = 'Cargando…' }: SkeletonListPr
   return (
     <div role="status" aria-label={label} className="space-y-3">
       {Array.from({ length: rows }, (_, index) => (
-        <div
-          key={index}
-          className="space-y-3 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
-        >
+        <div key={index} className="space-y-3 rounded-2xl bg-surface p-5 shadow-card">
           <Skeleton className="h-3 w-24" />
           <Skeleton className="h-4 w-full" />
           <Skeleton className="h-4 w-2/3" />

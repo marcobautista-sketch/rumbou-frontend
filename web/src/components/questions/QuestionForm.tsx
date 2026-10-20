@@ -51,7 +51,7 @@ export function QuestionForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-6">
       {notice && (
-        <div className="flex gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-900 dark:border-amber-900 dark:bg-amber-950/50 dark:text-amber-200">
+        <div className="flex gap-3 rounded-2xl border border-warning/30 bg-warning/10 p-4 text-warning">
           <Info aria-hidden className="mt-0.5 size-5 shrink-0" />
           <p>{notice}</p>
         </div>
@@ -133,7 +133,7 @@ export function QuestionForm({
 
         <fieldset className="space-y-3">
           <legend className="text-sm font-medium">Alternativas</legend>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-ink-muted">
             Escribe las 5 alternativas y marca con el círculo la correcta.
           </p>
           {Array.from({ length: ALTERNATIVES_COUNT }, (_, index) => {
@@ -144,16 +144,14 @@ export function QuestionForm({
               <div key={index} className="space-y-1">
                 <div
                   className={`flex items-center gap-3 rounded-xl border p-2 pl-3 transition ${
-                    isCorrect
-                      ? 'border-emerald-400 bg-emerald-50 dark:border-emerald-700 dark:bg-emerald-950/40'
-                      : 'border-transparent'
+                    isCorrect ? 'border-success bg-success/10' : 'border-transparent'
                   }`}
                 >
                   <input
                     type="radio"
                     value={String(index)}
                     aria-label={`Marcar la alternativa ${letter} como correcta`}
-                    className="size-4 shrink-0 accent-emerald-600"
+                    className="size-4 shrink-0 accent-success"
                     {...register('claveCorrecta')}
                   />
                   <span className="w-5 font-semibold">{letter})</span>
@@ -167,7 +165,7 @@ export function QuestionForm({
                   />
                 </div>
                 {fieldError && (
-                  <p role="alert" className="pl-14 text-sm text-red-600 dark:text-red-400">
+                  <p role="alert" className="pl-14 text-sm text-danger">
                     {fieldError}
                   </p>
                 )}
@@ -175,7 +173,7 @@ export function QuestionForm({
             )
           })}
           {errors.claveCorrecta && (
-            <p role="alert" className="text-sm text-red-600 dark:text-red-400">
+            <p role="alert" className="text-sm text-danger">
               {errors.claveCorrecta.message}
             </p>
           )}
@@ -191,10 +189,10 @@ export function QuestionForm({
         />
 
         <label className="flex cursor-pointer items-center gap-3">
-          <input type="checkbox" className="size-4 accent-indigo-600" {...register('aprobada')} />
+          <input type="checkbox" className="size-4 accent-primary" {...register('aprobada')} />
           <span>
             <span className="font-medium">Aprobada</span>
-            <span className="block text-sm text-slate-500 dark:text-slate-400">
+            <span className="block text-sm text-ink-muted">
               Solo las preguntas aprobadas aparecen en los simulacros.
             </span>
           </span>

@@ -40,7 +40,7 @@ export default function RegisterPage() {
       footer={
         <>
           ¿Ya tienes cuenta?{' '}
-          <Link to={paths.login} className="font-medium text-indigo-600 dark:text-indigo-400">
+          <Link to={paths.login} className="font-semibold text-accent-ink">
             Inicia sesión
           </Link>
         </>

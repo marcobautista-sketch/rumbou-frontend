@@ -8,13 +8,12 @@ import { useFetch } from '../../hooks/useFetch'
 import { notify } from '../../utils/notify'
 import { roleLabels } from '../../utils/roleLabels'
 
-const cardStyles =
-  'space-y-4 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900'
+const cardStyles = 'space-y-4 rounded-2xl bg-surface p-6 shadow-card'
 
 function ProfileItem({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="text-sm text-slate-500 dark:text-slate-400">{label}</dt>
+      <dt className="text-sm text-ink-muted">{label}</dt>
       <dd className="font-medium break-words">{value}</dd>
     </div>
   )
@@ -69,10 +68,10 @@ export default function ProfilePage() {
           Tu plan
         </h2>
         {subscription.loading ? (
-          <div className="h-20 animate-pulse rounded-lg bg-slate-200 dark:bg-slate-800" />
+          <div className="h-20 animate-pulse rounded-lg bg-surface-muted" />
         ) : subscription.error ? (
           <div className="flex flex-wrap items-center gap-3">
-            <p className="text-red-600 dark:text-red-400">{subscription.error.message}</p>
+            <p className="text-danger">{subscription.error.message}</p>
             <Button variant="ghost" onClick={subscription.retry}>
               <RotateCw aria-hidden className="size-4" />
               Reintentar
@@ -81,6 +80,7 @@ export default function ProfilePage() {
         ) : (
           <PlanDetails
             subscription={subscription.data}
+            isAdmin={user.role === 'ADMIN'}
             upgrading={upgrading}
             onUpgrade={upgradeToPro}
           />

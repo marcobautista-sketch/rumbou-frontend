@@ -17,6 +17,7 @@ import { Skeleton } from '../../components/ui/Skeleton'
 import { useAuth } from '../../hooks/useAuth'
 import { useFetch } from '../../hooks/useFetch'
 import { paths } from '../../routes/paths'
+import { formatMath } from '../../utils/formatMath'
 import { notify } from '../../utils/notify'
 
 interface DetailLocationState {
@@ -128,10 +129,12 @@ export default function QuestionDetailPage() {
 
           <Card className="space-y-5">
             <div className="flex flex-wrap items-center gap-2">
-              <Badge tone="indigo">{data.temaNombre}</Badge>
+              <Badge tone="brand">{data.temaNombre}</Badge>
               <DifficultyBadge difficulty={data.dificultad} />
             </div>
-            <p className="text-lg leading-relaxed whitespace-pre-line">{data.enunciado}</p>
+            <p className="text-lg leading-relaxed whitespace-pre-line">
+              {formatMath(data.enunciado)}
+            </p>
             <AlternativeList alternatives={data.alternativas} />
           </Card>
 
