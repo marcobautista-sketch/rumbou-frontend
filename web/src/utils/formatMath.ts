@@ -43,7 +43,22 @@ const superscripts: Record<string, string> = {
   '8': '⁸',
   '9': '⁹',
   '-': '⁻',
+  '+': '⁺',
+  '=': '⁼',
+  '(': '⁽',
+  ')': '⁾',
+  i: 'ⁱ',
   n: 'ⁿ',
+  x: 'ˣ',
+  y: 'ʸ',
+  T: 'ᵀ',
+}
+
+function toSuperscript(exponent: string) {
+  const characters = [...exponent]
+  return characters.every((character) => character in superscripts)
+    ? characters.map((character) => superscripts[character]).join('')
+    : null
 }
 
 export function formatMath(text: string) {
@@ -57,7 +72,9 @@ export function formatMath(text: string) {
       /\\([a-zA-Z]+)/g,
       (command, name: string) => symbols[name] ?? (functionNames.has(name) ? name : command),
     )
-    .replace(/\^\{?(-?[0-9n]+)\}?/g, (_, exponent: string) =>
-      [...exponent].map((character) => superscripts[character] ?? character).join(''),
+    .replace(
+      /\^(?:\{([^}]+)\}|(\([^)]+\))|(-?[0-9a-zA-Z]+))/g,
+      (match, braced?: string, parenthesized?: string, plain?: string) =>
+        toSuperscript(braced ?? parenthesized ?? plain ?? '') ?? match,
     )
 }
