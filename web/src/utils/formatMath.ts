@@ -17,42 +17,11 @@ const symbols: Record<string, string> = {
   times: '×',
 }
 
-const functionNames = new Set([
-  'sin',
-  'cos',
-  'tan',
-  'cot',
-  'sec',
-  'csc',
-  'arcsin',
-  'arccos',
-  'arctan',
-  'log',
-  'ln',
-])
+const functionNames = new Set('sin cos tan cot sec csc arcsin arccos arctan log ln'.split(' '))
 
-const superscripts: Record<string, string> = {
-  '0': '⁰',
-  '1': '¹',
-  '2': '²',
-  '3': '³',
-  '4': '⁴',
-  '5': '⁵',
-  '6': '⁶',
-  '7': '⁷',
-  '8': '⁸',
-  '9': '⁹',
-  '-': '⁻',
-  '+': '⁺',
-  '=': '⁼',
-  '(': '⁽',
-  ')': '⁾',
-  i: 'ⁱ',
-  n: 'ⁿ',
-  x: 'ˣ',
-  y: 'ʸ',
-  T: 'ᵀ',
-}
+const superscripts: Record<string, string> = Object.fromEntries(
+  [...'0123456789-+=()inxyT'].map((character, index) => [character, '⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺⁼⁽⁾ⁱⁿˣʸᵀ'[index]]),
+)
 
 function toSuperscript(exponent: string) {
   const characters = [...exponent]
