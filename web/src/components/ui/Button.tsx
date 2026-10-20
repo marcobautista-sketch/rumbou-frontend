@@ -1,14 +1,16 @@
 import { LoaderCircle } from 'lucide-react'
 import type { ComponentProps } from 'react'
-import { buttonStyles, type ButtonVariant } from './buttonStyles'
+import { buttonStyles, type ButtonSize, type ButtonVariant } from './buttonStyles'
 
 interface ButtonProps extends ComponentProps<'button'> {
   variant?: ButtonVariant
+  size?: ButtonSize
   loading?: boolean
 }
 
 export function Button({
   variant = 'primary',
+  size = 'md',
   loading = false,
   disabled,
   type = 'button',
@@ -21,7 +23,7 @@ export function Button({
       type={type}
       disabled={disabled || loading}
       aria-busy={loading}
-      className={`${buttonStyles(variant)} ${className}`}
+      className={`${buttonStyles(variant, size)} ${className}`}
       {...props}
     >
       {loading && <LoaderCircle aria-hidden className="size-4 animate-spin" />}
