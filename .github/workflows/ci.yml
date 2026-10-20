@@ -27,3 +27,26 @@ jobs:
         run: npx prettier --check src
       - name: Type check and build
         run: npm run build
+
+  mobile:
+    name: Mobile
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - run: npm install
+      - name: Lint
+        run: npm run lint
+      - name: Format
+        run: npx prettier --check App.tsx src
+      - name: Type check
+        run: npm run typecheck
+      - name: Bundle
+        run: npx expo export --platform android

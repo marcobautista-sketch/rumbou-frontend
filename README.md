@@ -19,3 +19,13 @@ npm run dev
 ```
 
 Se abre en `http://localhost:5173`.
+
+### Móvil
+
+```bash
+cd mobile
+npm install
+npx expo start
+```
+
+Escanea el código QR con la app **Expo Go** (Android o iOS).
