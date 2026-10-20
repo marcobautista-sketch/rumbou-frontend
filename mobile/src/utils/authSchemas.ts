@@ -12,8 +12,17 @@ export const registerSchema = z
     nombre: z
       .string()
       .trim()
-      .min(2, 'Ingresa tu nombre')
+      .min(2, 'Ingresa tus nombres')
       .max(100, 'Usa como máximo 100 caracteres'),
+    apellidos: z
+      .string()
+      .trim()
+      .min(2, 'Ingresa tus apellidos')
+      .max(100, 'Usa como máximo 100 caracteres'),
+    telefono: z
+      .string()
+      .trim()
+      .regex(/^(9\d{8})?$/, 'El celular debe tener 9 dígitos y empezar con 9'),
     email: emailField,
     password: z
       .string()
@@ -22,6 +31,8 @@ export const registerSchema = z
         'Usa de 8 a 72 caracteres, con al menos una mayúscula, una minúscula y un número',
       ),
     confirmPassword: z.string(),
+    universidad: z.string().min(1, 'Elige la universidad a la que postulas'),
+    ofertaAcademicaId: z.number({ error: 'Elige la carrera que deseas estudiar' }),
   })
   .refine((form) => form.password === form.confirmPassword, {
     error: 'Las contraseñas no coinciden',

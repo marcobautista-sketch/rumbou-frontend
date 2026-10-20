@@ -158,9 +158,6 @@ export default function ChallengeScreen() {
       style={{ backgroundColor: colors.background }}
       contentContainerStyle={styles.content}
     >
-      <Text style={[styles.subtitle, { color: colors.muted }]}>
-        Mantén tu inercia académica. Un desafío a la vez.
-      </Text>
       <View style={styles.row}>
         <StatCard
           icon="flame"
@@ -239,7 +236,6 @@ export default function ChallengeScreen() {
 
 const styles = StyleSheet.create({
   content: { gap: 16, padding: 20 },
-  subtitle: { fontSize: 16 },
   row: { flexDirection: 'row', gap: 12 },
   card: { gap: 10, borderRadius: 16, padding: 16 },
   stat: { flex: 1, alignItems: 'center' },

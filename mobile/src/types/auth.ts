@@ -4,6 +4,8 @@ export interface User {
   id: number
   email: string
   nombre: string
+  apellidos: string | null
+  telefono: string | null
   role: Role
 }
 
@@ -19,4 +21,6 @@ export interface LoginRequest {
 
 export interface RegisterRequest extends LoginRequest {
   nombre: string
+  apellidos?: string
+  telefono?: string
 }
