@@ -36,21 +36,19 @@ export default function ForgotPasswordPage() {
       title="Recupera tu contraseña"
       subtitle="Te enviaremos un enlace para crear una contraseña nueva."
       footer={
-        <Link to={paths.login} className="font-medium text-indigo-600 dark:text-indigo-400">
+        <Link to={paths.login} className="font-semibold text-accent-ink">
           Volver a iniciar sesión
         </Link>
       }
     >
       {sentTo ? (
         <div role="status" className="space-y-3 text-center">
-          <MailCheck aria-hidden className="mx-auto size-12 text-emerald-500" />
+          <MailCheck aria-hidden className="mx-auto size-12 text-success" />
           <p>
             Si <strong className="break-words">{sentTo}</strong> tiene una cuenta, te llegará un
             correo con el enlace. Vence en 30 minutos.
           </p>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            Revisa también la carpeta de spam.
-          </p>
+          <p className="text-sm text-ink-muted">Revisa también la carpeta de spam.</p>
         </div>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">

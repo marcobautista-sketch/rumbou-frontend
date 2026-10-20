@@ -20,14 +20,12 @@ export function RoleRoute({ roles }: RoleRouteProps) {
         role="alert"
         className="mx-auto flex max-w-md animate-fade-in flex-col items-center gap-4 px-4 py-20 text-center"
       >
-        <span className="rounded-full bg-red-50 p-4 dark:bg-red-950/60">
-          <ShieldOff aria-hidden className="size-10 text-red-600 dark:text-red-400" />
+        <span className="rounded-full bg-danger-soft p-4">
+          <ShieldOff aria-hidden className="size-10 text-danger" />
         </span>
-        <p className="text-sm font-semibold tracking-widest text-red-600 dark:text-red-400">
-          ERROR 403
-        </p>
+        <p className="text-sm font-semibold tracking-widest text-danger">ERROR 403</p>
         <h1 className="text-2xl font-semibold">No tienes acceso a esta sección</h1>
-        <p className="text-slate-600 dark:text-slate-300">
+        <p className="text-ink-muted">
           Esta parte de RumboU es solo para cuentas de tipo {allowed}. Si crees que es un error,
           pídele a un administrador que revise tu rol.
         </p>

@@ -42,10 +42,7 @@ export default function ResetPasswordPage() {
       title="Crea una contraseña nueva"
       subtitle="Elige una contraseña que no hayas usado antes."
       footer={
-        <Link
-          to={paths.forgotPassword}
-          className="font-medium text-indigo-600 dark:text-indigo-400"
-        >
+        <Link to={paths.forgotPassword} className="font-semibold text-accent-ink">
           Pedir un enlace nuevo
         </Link>
       }
@@ -72,7 +69,7 @@ export default function ResetPasswordPage() {
           </Button>
         </form>
       ) : (
-        <p role="alert" className="text-center text-red-600 dark:text-red-400">
+        <p role="alert" className="text-center text-danger">
           Este enlace no es válido. Pide uno nuevo para recuperar tu contraseña.
         </p>
       )}

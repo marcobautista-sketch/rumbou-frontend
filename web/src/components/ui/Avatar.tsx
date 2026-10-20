@@ -7,7 +7,7 @@ const sizes: Record<AvatarSize, string> = {
 }
 
 const palette = [
-  'bg-indigo-600',
+  'bg-sky-700',
   'bg-emerald-600',
   'bg-amber-600',
   'bg-rose-600',
