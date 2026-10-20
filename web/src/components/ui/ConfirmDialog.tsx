@@ -37,12 +37,12 @@ export function ConfirmDialog({
         event.preventDefault()
         if (!loading) onCancel()
       }}
-      className="m-auto w-[calc(100%-2rem)] max-w-md rounded-2xl bg-white p-6 text-slate-900 backdrop:bg-slate-950/60 dark:bg-slate-900 dark:text-slate-100"
+      className="m-auto w-[calc(100%-2rem)] max-w-md rounded-2xl bg-surface p-6 text-ink shadow-raised backdrop:bg-primary/60"
     >
       <h2 id={titleId} className="text-lg font-semibold">
         {title}
       </h2>
-      <p className="mt-2 text-slate-600 dark:text-slate-300">{message}</p>
+      <p className="mt-2 text-ink-muted">{message}</p>
       <div className="mt-6 flex justify-end gap-3">
         <Button variant="secondary" onClick={onCancel} disabled={loading}>
           Cancelar

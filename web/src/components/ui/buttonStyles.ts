@@ -1,13 +1,13 @@
-export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost'
+export type ButtonVariant = 'primary' | 'accent' | 'secondary' | 'danger' | 'ghost'
 
 const variants: Record<ButtonVariant, string> = {
-  primary: 'bg-indigo-600 text-white hover:bg-indigo-500',
-  secondary:
-    'border border-slate-300 hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800',
-  danger: 'bg-red-600 text-white hover:bg-red-500',
-  ghost: 'text-indigo-600 hover:bg-indigo-50 dark:text-indigo-400 dark:hover:bg-slate-800',
+  primary: 'bg-primary text-on-primary shadow-raised hover:bg-primary-hover',
+  accent: 'bg-accent text-on-accent hover:brightness-95',
+  secondary: 'border-2 border-primary text-primary hover:bg-surface-muted',
+  danger: 'bg-danger text-white hover:brightness-110',
+  ghost: 'text-accent-ink hover:bg-surface-muted',
 }
 
 export function buttonStyles(variant: ButtonVariant = 'primary') {
-  return `inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:cursor-not-allowed disabled:opacity-60 ${variants[variant]}`
+  return `inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 py-2.5 font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-60 ${variants[variant]}`
 }
