@@ -1,4 +1,4 @@
-import { Crown } from 'lucide-react'
+import { Crown, ShieldCheck } from 'lucide-react'
 import type { Subscription } from '../../types/subscription'
 import { formatDate } from '../../utils/format'
 import { Button } from '../ui/Button'
@@ -11,15 +11,25 @@ const proBenefits = [
 
 interface PlanDetailsProps {
   subscription: Subscription | null
+  isAdmin: boolean
   upgrading: boolean
   onUpgrade: () => void
 }
 
-export function PlanDetails({ subscription, upgrading, onUpgrade }: PlanDetailsProps) {
+export function PlanDetails({ subscription, isAdmin, upgrading, onUpgrade }: PlanDetailsProps) {
+  if (isAdmin) {
+    return (
+      <p className="flex items-center gap-2">
+        <ShieldCheck aria-hidden className="size-5 text-success" />
+        Tu cuenta de administrador tiene acceso completo, sin límites de plan.
+      </p>
+    )
+  }
+
   if (subscription?.estado === 'ACTIVA') {
     return (
       <p className="flex items-center gap-2">
-        <Crown aria-hidden className="size-5 text-amber-500" />
+        <Crown aria-hidden className="size-5 text-warning" />
         Tienes el plan PRO
         {subscription.fechaFin ? ` hasta el ${formatDate(subscription.fechaFin)}.` : '.'}
       </p>
@@ -28,9 +38,15 @@ export function PlanDetails({ subscription, upgrading, onUpgrade }: PlanDetailsP
 
   if (subscription?.estado === 'PENDIENTE') {
     return (
-      <p className="text-slate-600 dark:text-slate-300">
-        Tu pago está en revisión. Apenas Mercado Pago lo confirme, se activa tu plan PRO.
-      </p>
+      <div className="space-y-3">
+        <p className="text-ink-muted">
+          Tu pago está en revisión. Si no lo completaste en Mercado Pago, puedes intentarlo de
+          nuevo.
+        </p>
+        <Button variant="secondary" onClick={onUpgrade} loading={upgrading}>
+          Volver a intentar el pago
+        </Button>
+      </div>
     )
   }
 
@@ -39,7 +55,7 @@ export function PlanDetails({ subscription, upgrading, onUpgrade }: PlanDetailsP
       <p>
         Estás en el plan <strong>Gratuito</strong>. Con PRO tienes:
       </p>
-      <ul className="list-inside list-disc space-y-1 text-slate-600 dark:text-slate-300">
+      <ul className="list-inside list-disc space-y-1 text-ink-muted">
         {proBenefits.map((benefit) => (
           <li key={benefit}>{benefit}</li>
         ))}
