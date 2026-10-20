@@ -74,7 +74,9 @@ export function TutorPanel({ questionId }: { questionId: number }) {
 
       {error && error.kind !== 'forbidden' && (
         <p role="alert" className="text-red-600 dark:text-red-400">
-          {error.message}{' '}
+          {error.kind === 'unavailable'
+            ? 'El tutor no está disponible en este momento. Intenta en unos minutos.'
+            : error.message}{' '}
           <button type="button" onClick={askTutor} className="font-medium underline">
             Intentar de nuevo
           </button>
