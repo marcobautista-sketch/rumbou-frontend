@@ -6,6 +6,8 @@ import { InlineError } from '../../components/feedback/InlineError'
 import { PageHeader } from '../../components/layout/PageHeader'
 import { AlternativeList } from '../../components/questions/AlternativeList'
 import { DifficultyBadge } from '../../components/questions/DifficultyBadge'
+import { QuestionExplanation } from '../../components/questions/QuestionExplanation'
+import { ReviewStatusBadges } from '../../components/questions/ReviewStatusBadges'
 import { TutorPanel } from '../../components/questions/TutorPanel'
 import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
@@ -17,6 +19,7 @@ import { Skeleton } from '../../components/ui/Skeleton'
 import { useAuth } from '../../hooks/useAuth'
 import { useFetch } from '../../hooks/useFetch'
 import { paths } from '../../routes/paths'
+import { isAdminQuestion, type Question } from '../../types/question'
 import { formatMath } from '../../utils/formatMath'
 import { notify } from '../../utils/notify'
 
@@ -47,6 +50,7 @@ export default function QuestionDetailPage() {
   const location = useLocation()
   const { hasRole } = useAuth()
   const isAdmin = hasRole('ADMIN')
+  const canReview = hasRole('REVIEWER', 'ADMIN')
   const [confirmingDelete, setConfirmingDelete] = useState(false)
   const [deleting, setDeleting] = useState(false)
 
@@ -54,8 +58,9 @@ export default function QuestionDetailPage() {
   const listUrl = fromSearch ? `${paths.questions}?${fromSearch}` : paths.questions
 
   const fetchQuestion = useCallback(
-    (signal: AbortSignal) => questionService.getById(id, signal),
-    [id],
+    (signal: AbortSignal): Promise<Question> =>
+      canReview ? questionService.getComplete(id, signal) : questionService.getById(id, signal),
+    [id, canReview],
   )
   const question = useFetch(fetchQuestion)
 
@@ -131,11 +136,16 @@ export default function QuestionDetailPage() {
             <div className="flex flex-wrap items-center gap-2">
               <Badge tone="brand">{data.temaNombre}</Badge>
               <DifficultyBadge difficulty={data.dificultad} />
+              {isAdminQuestion(data) && <ReviewStatusBadges question={data} />}
             </div>
             <p className="text-lg leading-relaxed whitespace-pre-line">
               {formatMath(data.enunciado)}
             </p>
-            <AlternativeList alternatives={data.alternativas} />
+            <AlternativeList
+              alternatives={data.alternativas}
+              correctIndex={isAdminQuestion(data) ? data.claveCorrecta : undefined}
+            />
+            {isAdminQuestion(data) && <QuestionExplanation explanation={data.explicacion} />}
           </Card>
 
           <TutorPanel questionId={data.id} />
