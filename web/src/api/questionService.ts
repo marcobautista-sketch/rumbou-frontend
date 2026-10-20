@@ -45,10 +45,10 @@ export const questionService = {
     return data
   },
 
-  async askTutor(questionId: number) {
+  async askTutor(questionId: number, markedAlternative?: number | null) {
     const { data } = await apiClient.post<TutorExplanation>(
       `/preguntas/${questionId}/tutor-ia`,
-      undefined,
+      markedAlternative == null ? undefined : { alternativaMarcada: markedAlternative },
       { timeout: TUTOR_TIMEOUT_MS },
     )
     return data
