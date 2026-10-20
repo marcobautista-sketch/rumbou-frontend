@@ -17,6 +17,10 @@ export interface AdminQuestion extends Question {
   aprobada: boolean
 }
 
+export function isAdminQuestion(question: Question): question is AdminQuestion {
+  return 'claveCorrecta' in question
+}
+
 export interface QuestionRequest {
   temaId: number
   enunciado: string

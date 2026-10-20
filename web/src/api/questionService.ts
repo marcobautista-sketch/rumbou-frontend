@@ -21,6 +21,13 @@ export const questionService = {
     return data
   },
 
+  async getComplete(questionId: number, signal?: AbortSignal) {
+    const { data } = await apiClient.get<AdminQuestion>(`/preguntas/${questionId}/completa`, {
+      signal,
+    })
+    return data
+  },
+
   async create(request: QuestionRequest) {
     const { data } = await apiClient.post<AdminQuestion>('/preguntas', request)
     return data
