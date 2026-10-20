@@ -10,6 +10,8 @@ CS 2031 Desarrollo Basado en Plataformas (UTEC).
 
 Requisitos: Node.js 22 o superior y el backend corriendo (en local queda en `http://localhost:8080`).
 
+La web llama a la API por `/api/v1` y el servidor de desarrollo reenvía esas llamadas al backend, así que la cookie de sesión es del mismo origen y no hay problemas de CORS. Los valores por defecto están en `web/.env.example`; para cambiarlos, cópialo como `web/.env.local`.
+
 ### Web
 
 ```bash
