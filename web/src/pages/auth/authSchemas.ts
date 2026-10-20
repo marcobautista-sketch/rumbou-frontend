@@ -30,5 +30,19 @@ export const registerSchema = z
     path: ['confirmPassword'],
   })
 
+export const forgotPasswordSchema = z.object({ email: emailField })
+
+export const resetPasswordSchema = z
+  .object({
+    newPassword: newPasswordField,
+    confirmPassword: z.string(),
+  })
+  .refine((form) => form.newPassword === form.confirmPassword, {
+    error: 'Las contraseñas no coinciden',
+    path: ['confirmPassword'],
+  })
+
 export type LoginForm = z.infer<typeof loginSchema>
 export type RegisterForm = z.infer<typeof registerSchema>
+export type ForgotPasswordForm = z.infer<typeof forgotPasswordSchema>
+export type ResetPasswordForm = z.infer<typeof resetPasswordSchema>
