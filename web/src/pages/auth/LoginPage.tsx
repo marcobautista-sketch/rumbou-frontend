@@ -61,6 +61,12 @@ export default function LoginPage() {
           error={errors.password?.message}
           {...register('password')}
         />
+        <Link
+          to={paths.forgotPassword}
+          className="block text-right text-sm font-medium text-indigo-600 dark:text-indigo-400"
+        >
+          ¿Olvidaste tu contraseña?
+        </Link>
         <Button type="submit" loading={isSubmitting} className="w-full">
           Iniciar sesión
         </Button>
