@@ -5,4 +5,7 @@ export const paths = {
   forgotPassword: '/forgot-password',
   resetPassword: '/reset-password',
   profile: '/profile',
+  newExam: '/exams/new',
+  exam: '/exams/:examId',
+  examResult: '/exams/:examId/result',
 } as const

@@ -1,5 +1,6 @@
 import { Eye, EyeOff } from 'lucide-react'
 import { useId, useState, type ComponentProps } from 'react'
+import { fieldStyles } from './fieldStyles'
 
 interface TextFieldProps extends ComponentProps<'input'> {
   label: string
@@ -34,11 +35,7 @@ export function TextField({
           type={isPassword && passwordVisible ? 'text' : type}
           aria-invalid={error ? true : undefined}
           aria-describedby={messageId}
-          className={`w-full rounded-lg border bg-white px-3 py-2 transition outline-none focus:ring-2 dark:bg-slate-900 ${
-            error
-              ? 'border-red-500 focus:ring-red-200 dark:focus:ring-red-900'
-              : 'border-slate-300 focus:border-indigo-500 focus:ring-indigo-200 dark:border-slate-700 dark:focus:ring-indigo-900'
-          } ${isPassword ? 'pr-10' : ''}`}
+          className={`${fieldStyles(Boolean(error))} ${isPassword ? 'pr-10' : ''}`}
           {...props}
         />
         {isPassword && (
