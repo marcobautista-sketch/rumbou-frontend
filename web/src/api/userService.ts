@@ -13,6 +13,15 @@ export const userService = {
     return data
   },
 
+  async updateProfile(profile: Pick<User, 'nombre' | 'apellidos' | 'telefono'>) {
+    const { data } = await apiClient.put<User>('/usuarios/me', profile)
+    return data
+  },
+
+  async changePassword(contrasenaActual: string, contrasenaNueva: string) {
+    await apiClient.patch('/usuarios/me/contrasena', { contrasenaActual, contrasenaNueva })
+  },
+
   async findByEmail(email: string, signal?: AbortSignal) {
     const { data } = await apiClient.get<User>('/usuarios', { params: { email }, signal })
     return data
