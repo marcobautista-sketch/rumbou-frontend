@@ -33,7 +33,7 @@ export function SelectField({
         {children}
       </select>
       {error && (
-        <p id={errorId} role="alert" className="text-sm text-red-600 dark:text-red-400">
+        <p id={errorId} role="alert" className="text-sm text-danger">
           {error}
         </p>
       )}

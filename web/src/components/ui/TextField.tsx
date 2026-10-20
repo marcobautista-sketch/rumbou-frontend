@@ -43,7 +43,7 @@ export function TextField({
             type="button"
             onClick={() => setPasswordVisible((visible) => !visible)}
             aria-label={passwordVisible ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-            className="absolute inset-y-0 right-0 flex items-center px-3 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+            className="absolute inset-y-0 right-0 flex items-center px-3 text-ink-muted hover:text-ink"
           >
             {passwordVisible ? (
               <EyeOff aria-hidden className="size-4" />
@@ -57,7 +57,7 @@ export function TextField({
         <p
           id={messageId}
           role={error ? 'alert' : undefined}
-          className={`text-sm ${error ? 'text-red-600 dark:text-red-400' : 'text-slate-500 dark:text-slate-400'}`}
+          className={`text-sm ${error ? 'text-danger' : 'text-ink-muted'}`}
         >
           {message}
         </p>

@@ -6,10 +6,7 @@ interface QuestionNavigatorProps {
 
 export function QuestionNavigator({ answered, current, onSelect }: QuestionNavigatorProps) {
   return (
-    <nav
-      aria-label="Preguntas del simulacro"
-      className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900"
-    >
+    <nav aria-label="Preguntas del simulacro" className="rounded-2xl bg-surface p-4 shadow-card">
       <ol className="grid max-h-80 grid-cols-8 gap-1.5 overflow-y-auto sm:grid-cols-10 lg:grid-cols-6">
         {answered.map((isAnswered, position) => (
           <li key={position}>
@@ -20,9 +17,9 @@ export function QuestionNavigator({ answered, current, onSelect }: QuestionNavig
               aria-label={`Pregunta ${position + 1}${isAnswered ? ', respondida' : ''}`}
               className={`size-9 rounded-lg text-sm font-medium transition ${
                 isAnswered
-                  ? 'bg-indigo-600 text-white hover:bg-indigo-500'
-                  : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700'
-              } ${position === current ? 'ring-2 ring-amber-400 ring-offset-1' : ''}`}
+                  ? 'bg-accent text-on-accent hover:brightness-95'
+                  : 'bg-surface-muted hover:bg-chip'
+              } ${position === current ? 'ring-2 ring-primary ring-offset-2 ring-offset-surface' : ''}`}
             >
               {position + 1}
             </button>
