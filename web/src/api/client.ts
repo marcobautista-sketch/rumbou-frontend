@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { toApiError } from './apiError'
 import { tokenStore } from './tokenStore'
 
 const baseURL = import.meta.env.VITE_API_URL ?? '/api/v1'
@@ -16,3 +17,8 @@ apiClient.interceptors.request.use((config) => {
   }
   return config
 })
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error: unknown) => Promise.reject(toApiError(error)),
+)
