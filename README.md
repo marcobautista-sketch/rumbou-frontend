@@ -31,3 +31,5 @@ npx expo start
 ```
 
 Escanea el código QR con la app **Expo Go** (Android o iOS).
+
+Para que el celular llegue al backend de tu PC, copia `mobile/.env.example` como `mobile/.env.local` y pon la IP de tu PC en `EXPO_PUBLIC_API_URL`: en el celular, `localhost` es el propio celular.
