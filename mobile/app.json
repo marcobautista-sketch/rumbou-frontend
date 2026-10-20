@@ -20,6 +20,9 @@
       "predictiveBackGestureEnabled": false,
       "package": "app.rumbou.mobile"
     },
-    "scheme": "rumbou"
+    "scheme": "rumbou",
+    "plugins": [
+      "expo-secure-store"
+    ]
   }
 }
