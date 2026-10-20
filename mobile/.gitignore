@@ -1,0 +1,13 @@
+expo-env.d.ts
+*.tsbuildinfo
+.metro-health-check*
+web-build/
+
+/ios
+/android
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.pem
