@@ -5,3 +5,17 @@ Web y app móvil de **RumboU**, la plataforma de preparación para el examen de 
 CS 2031 Desarrollo Basado en Plataformas (UTEC).
 
 - **Integrantes:** Marco Emilio Bautista Ortega, Fabiana Gomez, Juan Carlos Alexander Vergara Montalván y Zoe Camila Garrido Cantoni
+
+## Cómo correrlo
+
+Requisitos: Node.js 22 o superior y el backend corriendo (en local queda en `http://localhost:8080`).
+
+### Web
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+Se abre en `http://localhost:5173`.
