@@ -10,6 +10,7 @@ export interface AuthContextValue {
   register: (account: RegisterRequest) => Promise<void>
   logout: () => Promise<void>
   hasRole: (...roles: Role[]) => boolean
+  updateUser: (user: User) => void
 }
 
 export const AuthContext = createContext<AuthContextValue | null>(null)

@@ -3,7 +3,7 @@ import { alternativeLetter } from '../../utils/format'
 import { formatMath } from '../../utils/formatMath'
 
 interface QuestionCardProps {
-  question: ExamQuestion
+  question: Pick<ExamQuestion, 'preguntaId' | 'tema' | 'enunciado' | 'alternativas'>
   position: number
   selected: number | null
   onSelect: (alternative: number) => void

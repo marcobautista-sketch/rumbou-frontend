@@ -5,6 +5,7 @@ import {
   NotebookPen,
   UserRound,
   UsersRound,
+  Zap,
   type LucideIcon,
 } from 'lucide-react'
 import { paths } from '../../routes/paths'
@@ -19,6 +20,7 @@ export interface NavItem {
 
 export const navItems: NavItem[] = [
   { label: 'Inicio', to: paths.home, icon: House },
+  { label: 'Desafío diario', to: paths.challenge, icon: Zap },
   { label: 'Nuevo simulacro', to: paths.newExam, icon: NotebookPen },
   { label: 'Banco de preguntas', to: paths.questions, icon: LibraryBig },
   { label: 'Revisión', to: paths.review, icon: ClipboardCheck, roles: ['REVIEWER', 'ADMIN'] },

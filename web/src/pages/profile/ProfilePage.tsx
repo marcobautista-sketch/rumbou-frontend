@@ -1,6 +1,9 @@
-import { LogOut, RotateCw } from 'lucide-react'
+import { LogOut, Pencil, RotateCw } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { subscriptionService } from '../../api/subscriptionService'
+import { PageHeader } from '../../components/layout/PageHeader'
+import { ChangePasswordForm } from '../../components/profile/ChangePasswordForm'
+import { EditProfileForm } from '../../components/profile/EditProfileForm'
 import { PlanDetails } from '../../components/profile/PlanDetails'
 import { Button } from '../../components/ui/Button'
 import { useAuth } from '../../hooks/useAuth'
@@ -20,8 +23,9 @@ function ProfileItem({ label, value }: { label: string; value: string }) {
 }
 
 export default function ProfilePage() {
-  const { user, logout } = useAuth()
+  const { user, logout, updateUser } = useAuth()
   const [upgrading, setUpgrading] = useState(false)
+  const [editing, setEditing] = useState(false)
   const fetchSubscription = useCallback(
     (signal: AbortSignal) => subscriptionService.getCurrent(signal),
     [],
@@ -43,24 +47,55 @@ export default function ProfilePage() {
   if (!user) return null
 
   return (
-    <main className="mx-auto max-w-3xl space-y-6 px-4 py-10">
-      <header className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold">Mi perfil</h1>
-        <Button variant="secondary" onClick={logout}>
-          <LogOut aria-hidden className="size-4" />
-          Cerrar sesión
-        </Button>
-      </header>
+    <main className="mx-auto max-w-3xl space-y-6 px-4 py-8 sm:px-6">
+      <PageHeader
+        title="Mi perfil"
+        breadcrumbs={[{ label: 'Mi perfil' }]}
+        actions={
+          <Button variant="secondary" onClick={logout}>
+            <LogOut aria-hidden className="size-4" />
+            Cerrar sesión
+          </Button>
+        }
+      />
 
       <section aria-labelledby="account-title" className={cardStyles}>
-        <h2 id="account-title" className="text-lg font-semibold">
-          Tu cuenta
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 id="account-title" className="text-lg font-semibold">
+            Tu cuenta
+          </h2>
+          {!editing && (
+            <Button variant="ghost" size="sm" onClick={() => setEditing(true)}>
+              <Pencil aria-hidden className="size-4" />
+              Editar datos
+            </Button>
+          )}
+        </div>
+        {editing ? (
+          <EditProfileForm
+            user={user}
+            onCancel={() => setEditing(false)}
+            onSaved={(updated) => {
+              updateUser(updated)
+              setEditing(false)
+            }}
+          />
+        ) : (
+          <dl className="grid gap-4 sm:grid-cols-3">
+            <ProfileItem label="Nombres" value={user.nombre} />
+            <ProfileItem label="Apellidos" value={user.apellidos ?? 'Sin registrar'} />
+            <ProfileItem label="Celular" value={user.telefono ?? 'Sin registrar'} />
+            <ProfileItem label="Correo" value={user.email} />
+            <ProfileItem label="Rol" value={roleLabels[user.role]} />
+          </dl>
+        )}
+      </section>
+
+      <section aria-labelledby="password-title" className={cardStyles}>
+        <h2 id="password-title" className="text-lg font-semibold">
+          Contraseña
         </h2>
-        <dl className="grid gap-4 sm:grid-cols-3">
-          <ProfileItem label="Nombre" value={user.nombre} />
-          <ProfileItem label="Correo" value={user.email} />
-          <ProfileItem label="Rol" value={roleLabels[user.role]} />
-        </dl>
+        <ChangePasswordForm />
       </section>
 
       <section aria-labelledby="plan-title" aria-busy={subscription.loading} className={cardStyles}>

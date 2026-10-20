@@ -4,6 +4,7 @@ import RouteErrorPage from '../pages/route-error/RouteErrorPage'
 import { GuestRoute } from './GuestRoute'
 import {
   AdminUsersPage,
+  ChallengePage,
   ExamResultPage,
   ForgotPasswordPage,
   HomePage,
@@ -46,6 +47,7 @@ export const router = createBrowserRouter([
             element: <AppLayout />,
             children: [
               { path: paths.profile, element: <ProfilePage /> },
+              { path: paths.challenge, element: <ChallengePage /> },
               { path: paths.newExam, element: <NewExamPage /> },
               { path: paths.exam, element: <TakeExamPage /> },
               { path: paths.examResult, element: <ExamResultPage /> },

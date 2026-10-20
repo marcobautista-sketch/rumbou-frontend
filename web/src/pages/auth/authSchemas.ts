@@ -14,16 +14,33 @@ export const loginSchema = z.object({
   password: z.string().min(1, 'Ingresa tu contraseña'),
 })
 
+export const namesField = z
+  .string()
+  .trim()
+  .min(2, 'Ingresa tus nombres')
+  .max(100, 'Usa como máximo 100 caracteres')
+
+export const surnamesField = z
+  .string()
+  .trim()
+  .min(2, 'Ingresa tus apellidos')
+  .max(100, 'Usa como máximo 100 caracteres')
+
+export const phoneField = z
+  .string()
+  .trim()
+  .regex(/^(9\d{8})?$/, 'El celular debe tener 9 dígitos y empezar con 9')
+
 export const registerSchema = z
   .object({
-    nombre: z
-      .string()
-      .trim()
-      .min(2, 'Ingresa tu nombre')
-      .max(100, 'Usa como máximo 100 caracteres'),
+    nombre: namesField,
+    apellidos: surnamesField,
+    telefono: phoneField,
     email: emailField,
     password: newPasswordField,
     confirmPassword: z.string(),
+    universidad: z.string().min(1, 'Elige la universidad a la que postulas'),
+    ofertaAcademicaId: z.string().min(1, 'Elige la carrera que deseas estudiar'),
   })
   .refine((form) => form.password === form.confirmPassword, {
     error: 'Las contraseñas no coinciden',
