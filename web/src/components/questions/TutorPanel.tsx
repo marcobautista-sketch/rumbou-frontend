@@ -9,7 +9,12 @@ import { buttonStyles } from '../ui/buttonStyles'
 import { Card } from '../ui/Card'
 import { Skeleton } from '../ui/Skeleton'
 
-export function TutorPanel({ questionId }: { questionId: number }) {
+interface TutorPanelProps {
+  questionId: number
+  markedAlternative?: number | null
+}
+
+export function TutorPanel({ questionId, markedAlternative }: TutorPanelProps) {
   const [explanation, setExplanation] = useState<string | null>(null)
   const [error, setError] = useState<ApiError | null>(null)
   const [loading, setLoading] = useState(false)
@@ -18,7 +23,7 @@ export function TutorPanel({ questionId }: { questionId: number }) {
     setLoading(true)
     setError(null)
     try {
-      const response = await questionService.askTutor(questionId)
+      const response = await questionService.askTutor(questionId, markedAlternative)
       setExplanation(response.explicacion)
     } catch (caught) {
       setError(toApiError(caught))
@@ -39,7 +44,9 @@ export function TutorPanel({ questionId }: { questionId: number }) {
               Tutor con IA
             </h2>
             <p className="text-sm text-ink-muted">
-              Te explica paso a paso cómo resolver esta pregunta.
+              {markedAlternative == null
+                ? 'Te explica paso a paso cómo resolver esta pregunta.'
+                : 'Te explica por qué tu respuesta era tentadora y cómo resolverla.'}
             </p>
           </div>
         </div>
