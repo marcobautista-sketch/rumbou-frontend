@@ -1,8 +1,9 @@
 import { createBrowserRouter } from 'react-router'
 import RouteErrorPage from '../pages/route-error/RouteErrorPage'
 import { GuestRoute } from './GuestRoute'
-import { HomePage, LoginPage, NotFoundPage, RegisterPage } from './lazyPages'
+import { HomePage, LoginPage, NotFoundPage, ProfilePage, RegisterPage } from './lazyPages'
 import { paths } from './paths'
+import { PrivateRoute } from './PrivateRoute'
 import { RootLayout } from './RootLayout'
 
 export const router = createBrowserRouter([
@@ -17,6 +18,10 @@ export const router = createBrowserRouter([
           { path: paths.login, element: <LoginPage /> },
           { path: paths.register, element: <RegisterPage /> },
         ],
+      },
+      {
+        element: <PrivateRoute />,
+        children: [{ path: paths.profile, element: <ProfilePage /> }],
       },
       { path: '*', element: <NotFoundPage /> },
     ],
