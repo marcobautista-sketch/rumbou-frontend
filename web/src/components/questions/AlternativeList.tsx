@@ -29,7 +29,7 @@ export function AlternativeList({ alternatives, correctIndex }: AlternativeListP
             >
               {alternativeLetter(index)}
             </span>
-            <span className="flex-1 pt-0.5">{text}</span>
+            <span className="flex-1 pt-0.5">{text.replace(/^[A-E]\)\s*/, '')}</span>
             {isCorrect && (
               <CircleCheck
                 aria-label="Respuesta correcta"

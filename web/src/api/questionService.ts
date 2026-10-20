@@ -8,6 +8,8 @@ import type {
 } from '../types/question'
 import { apiClient } from './client'
 
+const TUTOR_TIMEOUT_MS = 60000
+
 export const questionService = {
   async list(query: QuestionQuery, signal?: AbortSignal) {
     const { data } = await apiClient.get<Page<Question>>('/preguntas', { params: query, signal })
@@ -44,7 +46,11 @@ export const questionService = {
   },
 
   async askTutor(questionId: number) {
-    const { data } = await apiClient.post<TutorExplanation>(`/preguntas/${questionId}/tutor-ia`)
+    const { data } = await apiClient.post<TutorExplanation>(
+      `/preguntas/${questionId}/tutor-ia`,
+      undefined,
+      { timeout: TUTOR_TIMEOUT_MS },
+    )
     return data
   },
 }
