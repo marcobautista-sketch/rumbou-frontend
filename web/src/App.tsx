@@ -14,8 +14,7 @@ export default function App() {
           <Toaster
             position="top-right"
             toastOptions={{
-              className:
-                '!rounded-xl !bg-white !text-slate-900 !shadow-lg dark:!bg-slate-800 dark:!text-slate-100',
+              className: '!rounded-xl !bg-surface !text-ink !shadow-raised',
             }}
           />
         </AuthProvider>

@@ -15,6 +15,7 @@ import { Table, type TableColumn } from '../../components/ui/Table'
 import { useFetch } from '../../hooks/useFetch'
 import { usePagination } from '../../hooks/usePagination'
 import type { Question } from '../../types/question'
+import { formatMath } from '../../utils/formatMath'
 import { notify } from '../../utils/notify'
 
 export default function ReviewPage() {
@@ -101,7 +102,7 @@ export default function ReviewPage() {
           onChange={toggleAll}
           disabled={busy || rows.length === 0}
           aria-label="Seleccionar todas las preguntas de esta página"
-          className="size-4 accent-indigo-600"
+          className="size-4 accent-primary"
         />
       ),
       className: 'w-10',
@@ -112,7 +113,7 @@ export default function ReviewPage() {
           onChange={() => toggle(question.id)}
           disabled={busy}
           aria-label={`Seleccionar la pregunta ${question.id}`}
-          className="size-4 accent-indigo-600"
+          className="size-4 accent-primary"
         />
       ),
     },
@@ -122,13 +123,11 @@ export default function ReviewPage() {
       render: (question) => (
         <div className="space-y-1.5">
           <div className="flex flex-wrap items-center gap-2">
-            <Badge tone="indigo">{question.temaNombre}</Badge>
+            <Badge tone="brand">{question.temaNombre}</Badge>
             <DifficultyBadge difficulty={question.dificultad} />
-            <span className="text-xs text-slate-400">#{question.id}</span>
+            <span className="text-xs text-ink-muted">#{question.id}</span>
           </div>
-          <p className="line-clamp-2 max-w-xl text-slate-700 dark:text-slate-300">
-            {question.enunciado}
-          </p>
+          <p className="line-clamp-2 max-w-xl text-ink">{formatMath(question.enunciado)}</p>
         </div>
       ),
     },

@@ -66,17 +66,17 @@ function ExamInProgress({ exam }: { exam: ExamDetail }) {
     <main className="mx-auto max-w-5xl space-y-6 px-4 py-8">
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="text-sm text-slate-500 dark:text-slate-400">{examTypeLabels[exam.tipo]}</p>
+          <p className="text-sm text-ink-muted">{examTypeLabels[exam.tipo]}</p>
           <h1 className="text-2xl font-bold">
             Pregunta {index + 1} de {total}
           </h1>
         </div>
         <div className="flex items-center gap-4">
           <span
-            className="flex items-center gap-2 font-mono text-lg"
+            className="flex items-center gap-2 rounded-full bg-chip px-4 py-1.5 font-mono text-lg font-semibold text-primary"
             aria-label="Tiempo transcurrido"
           >
-            <Timer aria-hidden className="size-5 text-indigo-600 dark:text-indigo-400" />
+            <Timer aria-hidden className="size-5 text-primary" />
             {formatDuration(elapsedSeconds)}
           </span>
           <Button onClick={() => setConfirmOpen(true)}>Finalizar</Button>
@@ -89,10 +89,10 @@ function ExamInProgress({ exam }: { exam: ExamDetail }) {
         aria-valuemin={0}
         aria-valuemax={total}
         aria-valuenow={answeredCount}
-        className="h-2 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800"
+        className="h-2 overflow-hidden rounded-full bg-surface-muted"
       >
         <div
-          className="h-full bg-indigo-600 transition-all"
+          className="h-full rounded-full bg-accent transition-all"
           style={{ width: `${(answeredCount / total) * 100}%` }}
         />
       </div>

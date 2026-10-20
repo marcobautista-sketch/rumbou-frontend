@@ -39,7 +39,7 @@ export default function LoginPage() {
       footer={
         <>
           ¿Todavía no tienes cuenta?{' '}
-          <Link to={paths.register} className="font-medium text-indigo-600 dark:text-indigo-400">
+          <Link to={paths.register} className="font-semibold text-accent-ink">
             Regístrate gratis
           </Link>
         </>
@@ -63,7 +63,7 @@ export default function LoginPage() {
         />
         <Link
           to={paths.forgotPassword}
-          className="block text-right text-sm font-medium text-indigo-600 dark:text-indigo-400"
+          className="block text-right text-sm font-semibold text-accent-ink"
         >
           ¿Olvidaste tu contraseña?
         </Link>

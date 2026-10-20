@@ -31,14 +31,14 @@ export function TutorPanel({ questionId }: { questionId: number }) {
     <Card aria-labelledby="tutor-title" aria-busy={loading} className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <span className="rounded-xl bg-linear-to-br from-indigo-500 to-violet-500 p-2 text-white">
+          <span className="rounded-xl bg-accent p-2 text-on-accent">
             <Sparkles aria-hidden className="size-5" />
           </span>
           <div>
             <h2 id="tutor-title" className="font-semibold">
               Tutor con IA
             </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-400">
+            <p className="text-sm text-ink-muted">
               Te explica paso a paso cómo resolver esta pregunta.
             </p>
           </div>
@@ -63,7 +63,7 @@ export function TutorPanel({ questionId }: { questionId: number }) {
       )}
 
       {error?.kind === 'forbidden' && (
-        <div className="flex flex-wrap items-center gap-3 rounded-xl bg-amber-50 p-4 text-amber-900 dark:bg-amber-950/50 dark:text-amber-200">
+        <div className="flex flex-wrap items-center gap-3 rounded-xl bg-warning/10 p-4 text-warning">
           <Lock aria-hidden className="size-5 shrink-0" />
           <p className="flex-1">{error.message}</p>
           <Link to={paths.profile} className={buttonStyles('primary', 'sm')}>
@@ -73,7 +73,7 @@ export function TutorPanel({ questionId }: { questionId: number }) {
       )}
 
       {error && error.kind !== 'forbidden' && (
-        <p role="alert" className="text-red-600 dark:text-red-400">
+        <p role="alert" className="text-danger">
           {error.kind === 'unavailable'
             ? 'El tutor no está disponible en este momento. Intenta en unos minutos.'
             : error.message}{' '}
@@ -84,7 +84,7 @@ export function TutorPanel({ questionId }: { questionId: number }) {
       )}
 
       {explanation && (
-        <div className="animate-fade-in rounded-xl bg-indigo-50/60 p-4 leading-relaxed whitespace-pre-line dark:bg-indigo-950/40">
+        <div className="animate-fade-in rounded-xl bg-accent-soft p-4 leading-relaxed whitespace-pre-line">
           {explanation}
         </div>
       )}

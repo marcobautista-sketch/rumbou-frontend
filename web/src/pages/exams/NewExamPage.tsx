@@ -83,7 +83,7 @@ export default function NewExamPage() {
     <main className="mx-auto max-w-3xl space-y-6 px-4 py-10">
       <header className="space-y-1">
         <h1 className="text-2xl font-bold">Nuevo simulacro</h1>
-        <p className="text-slate-600 dark:text-slate-300">
+        <p className="text-ink-muted">
           Elige qué examen quieres rendir. Si lo dejas a medias, puedes continuarlo después.
         </p>
       </header>
@@ -91,7 +91,7 @@ export default function NewExamPage() {
       <form
         onSubmit={handleSubmit(onSubmit)}
         noValidate
-        className="space-y-6 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900"
+        className="space-y-6 rounded-2xl bg-surface p-6 shadow-card"
       >
         <SelectField
           label="Universidad y área"
@@ -113,13 +113,11 @@ export default function NewExamPage() {
             {examTypes.map((type) => (
               <label
                 key={type.value}
-                className="cursor-pointer rounded-xl border border-slate-200 p-4 transition hover:bg-slate-50 has-checked:border-indigo-500 has-checked:bg-indigo-50 has-focus-visible:ring-2 has-focus-visible:ring-indigo-400 dark:border-slate-700 dark:hover:bg-slate-800 dark:has-checked:bg-indigo-950"
+                className="cursor-pointer rounded-2xl border-2 border-line bg-surface p-4 transition hover:bg-surface-muted has-checked:border-accent has-checked:bg-accent-soft has-focus-visible:ring-2 has-focus-visible:ring-accent"
               >
                 <input type="radio" value={type.value} className="sr-only" {...register('tipo')} />
                 <span className="block font-medium">{type.title}</span>
-                <span className="mt-1 block text-sm text-slate-600 dark:text-slate-400">
-                  {type.description}
-                </span>
+                <span className="mt-1 block text-sm text-ink-muted">{type.description}</span>
               </label>
             ))}
           </div>

@@ -10,8 +10,8 @@ import { SelectField } from '../ui/SelectField'
 
 const roleTones: Record<Role, BadgeTone> = {
   USER: 'neutral',
-  REVIEWER: 'amber',
-  ADMIN: 'indigo',
+  REVIEWER: 'warning',
+  ADMIN: 'brand',
 }
 
 const roleDescriptions: Record<Role, string> = {
@@ -35,7 +35,7 @@ export function UserRoleCard({ user, isCurrentUser, onRequestChange }: UserRoleC
         <Avatar name={user.nombre} size="lg" />
         <div className="min-w-0 flex-1">
           <p className="truncate text-lg font-semibold">{user.nombre}</p>
-          <p className="truncate text-slate-600 dark:text-slate-400">{user.email}</p>
+          <p className="truncate text-ink-muted">{user.email}</p>
         </div>
         <Badge tone={roleTones[user.role]}>
           <ShieldCheck aria-hidden className="size-3" />
@@ -44,7 +44,7 @@ export function UserRoleCard({ user, isCurrentUser, onRequestChange }: UserRoleC
       </div>
 
       <form
-        className="flex flex-col gap-4 border-t border-slate-200 pt-6 sm:flex-row sm:items-end dark:border-slate-800"
+        className="flex flex-col gap-4 border-t border-line pt-6 sm:flex-row sm:items-end"
         onSubmit={(event) => {
           event.preventDefault()
           onRequestChange(selectedRole)
@@ -63,7 +63,7 @@ export function UserRoleCard({ user, isCurrentUser, onRequestChange }: UserRoleC
               </option>
             ))}
           </SelectField>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-ink-muted">
             {isCurrentUser
               ? 'No puedes cambiar tu propio rol: el sistema podría quedarse sin administradores.'
               : roleDescriptions[selectedRole]}

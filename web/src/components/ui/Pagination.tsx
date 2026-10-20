@@ -27,7 +27,7 @@ function visiblePages(current: number, total: number): PageItem[] {
 }
 
 const pageButton =
-  'inline-flex size-9 items-center justify-center rounded-lg text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:cursor-not-allowed disabled:opacity-40'
+  'inline-flex size-9 items-center justify-center rounded-lg text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-40'
 
 export function Pagination({
   page,
@@ -44,22 +44,22 @@ export function Pagination({
 
   return (
     <div className="flex flex-col items-center justify-between gap-4 text-sm sm:flex-row">
-      <p className="text-slate-600 dark:text-slate-400" aria-live="polite">
-        Mostrando <strong className="text-slate-900 dark:text-slate-100">{from}</strong>–
-        <strong className="text-slate-900 dark:text-slate-100">{to}</strong> de{' '}
-        <strong className="text-slate-900 dark:text-slate-100">{totalElements}</strong> {itemLabel}
+      <p className="text-ink-muted" aria-live="polite">
+        Mostrando <strong className="text-ink">{from}</strong>–
+        <strong className="text-ink">{to}</strong> de{' '}
+        <strong className="text-ink">{totalElements}</strong> {itemLabel}
       </p>
 
       <div className="flex flex-wrap items-center justify-center gap-4">
         <div className="flex items-center gap-2">
-          <label htmlFor={sizeSelectId} className="text-slate-600 dark:text-slate-400">
+          <label htmlFor={sizeSelectId} className="text-ink-muted">
             Por página
           </label>
           <select
             id={sizeSelectId}
             value={size}
             onChange={(event) => onSizeChange(Number(event.target.value))}
-            className="rounded-lg border border-slate-300 bg-white px-2 py-1.5 focus:ring-2 focus:ring-indigo-200 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:focus:ring-indigo-900"
+            className="rounded-lg border border-line bg-surface px-2 py-1.5 focus:ring-2 focus:ring-accent focus:outline-none"
           >
             {PAGE_SIZES.map((option) => (
               <option key={option} value={option}>
@@ -75,13 +75,13 @@ export function Pagination({
             onClick={() => onPageChange(page - 1)}
             disabled={page <= 1}
             aria-label="Página anterior"
-            className={`${pageButton} hover:bg-slate-100 dark:hover:bg-slate-800`}
+            className={`${pageButton} hover:bg-surface-muted`}
           >
             <ChevronLeft aria-hidden className="size-4" />
           </button>
           {visiblePages(page, Math.max(totalPages, 1)).map((item, index) =>
             item === 'gap' ? (
-              <span key={`gap-${index}`} aria-hidden className="px-1 text-slate-400">
+              <span key={`gap-${index}`} aria-hidden className="px-1 text-ink-muted">
                 …
               </span>
             ) : (
@@ -93,8 +93,8 @@ export function Pagination({
                 aria-current={item === page ? 'page' : undefined}
                 className={`${pageButton} ${
                   item === page
-                    ? 'bg-indigo-600 text-white shadow-sm'
-                    : 'hover:bg-slate-100 dark:hover:bg-slate-800'
+                    ? 'bg-primary text-on-primary shadow-card'
+                    : 'hover:bg-surface-muted'
                 }`}
               >
                 {item}
@@ -106,7 +106,7 @@ export function Pagination({
             onClick={() => onPageChange(page + 1)}
             disabled={page >= totalPages}
             aria-label="Página siguiente"
-            className={`${pageButton} hover:bg-slate-100 dark:hover:bg-slate-800`}
+            className={`${pageButton} hover:bg-surface-muted`}
           >
             <ChevronRight aria-hidden className="size-4" />
           </button>

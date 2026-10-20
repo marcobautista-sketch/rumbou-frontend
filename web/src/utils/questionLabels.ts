@@ -11,9 +11,9 @@ export const difficultyLabels: Record<Difficulty, string> = {
 }
 
 export const difficultyTones: Record<Difficulty, BadgeTone> = {
-  FACIL: 'green',
-  MEDIA: 'amber',
-  DIFICIL: 'red',
+  FACIL: 'success',
+  MEDIA: 'warning',
+  DIFICIL: 'danger',
 }
 
 export const originLabels: Record<QuestionOrigin, string> = {

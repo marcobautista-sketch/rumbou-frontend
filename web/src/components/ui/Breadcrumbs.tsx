@@ -14,12 +14,12 @@ interface BreadcrumbsProps {
 export function Breadcrumbs({ items }: BreadcrumbsProps) {
   return (
     <nav aria-label="Ubicación" className="text-sm">
-      <ol className="flex flex-wrap items-center gap-1.5 text-slate-500 dark:text-slate-400">
+      <ol className="flex flex-wrap items-center gap-1.5 text-ink-muted">
         <li>
           <Link
             to={paths.home}
             aria-label="Inicio"
-            className="flex items-center rounded transition hover:text-indigo-600 dark:hover:text-indigo-400"
+            className="flex items-center rounded transition hover:text-accent-ink"
           >
             <House aria-hidden className="size-4" />
           </Link>
@@ -30,16 +30,13 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
             <li key={`${item.label}-${index}`} className="flex items-center gap-1.5">
               <ChevronRight aria-hidden className="size-3.5" />
               {item.to && !isLast ? (
-                <Link
-                  to={item.to}
-                  className="rounded transition hover:text-indigo-600 dark:hover:text-indigo-400"
-                >
+                <Link to={item.to} className="rounded transition hover:text-accent-ink">
                   {item.label}
                 </Link>
               ) : (
                 <span
                   aria-current={isLast ? 'page' : undefined}
-                  className="max-w-[16rem] truncate font-medium text-slate-900 dark:text-slate-100"
+                  className="max-w-[16rem] truncate font-medium text-ink"
                 >
                   {item.label}
                 </span>
