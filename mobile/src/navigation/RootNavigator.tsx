@@ -3,6 +3,7 @@ import { LoadingView } from '../components/LoadingView'
 import { useAuth } from '../hooks/useAuth'
 import LoginScreen from '../screens/auth/LoginScreen'
 import RegisterScreen from '../screens/auth/RegisterScreen'
+import ChallengeScreen from '../screens/ChallengeScreen'
 import WelcomeScreen from '../screens/WelcomeScreen'
 import type { RootStackParamList } from './types'
 
@@ -16,7 +17,14 @@ export function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {status === 'authenticated' ? (
-        <Stack.Screen name="Home" component={WelcomeScreen} />
+        <>
+          <Stack.Screen name="Home" component={WelcomeScreen} />
+          <Stack.Screen
+            name="Challenge"
+            component={ChallengeScreen}
+            options={{ headerShown: true, title: 'Desafío diario' }}
+          />
+        </>
       ) : (
         <>
           <Stack.Screen name="Login" component={LoginScreen} />
