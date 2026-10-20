@@ -22,7 +22,13 @@
     },
     "scheme": "rumbou",
     "plugins": [
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "RumboU usa Face ID para que entres sin escribir tu contraseña."
+        }
+      ]
     ]
   }
 }
