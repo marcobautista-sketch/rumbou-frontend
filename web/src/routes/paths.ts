@@ -8,4 +8,10 @@ export const paths = {
   newExam: '/exams/new',
   exam: '/exams/:examId',
   examResult: '/exams/:examId/result',
+  questions: '/questions',
+  newQuestion: '/questions/new',
+  question: '/questions/:questionId',
+  editQuestion: '/questions/:questionId/edit',
+  review: '/review',
+  adminUsers: '/admin/users',
 } as const

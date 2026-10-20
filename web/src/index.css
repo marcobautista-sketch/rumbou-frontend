@@ -80,3 +80,45 @@ h2,
 h3 {
   @apply font-display;
 }
+
+@theme {
+  --animate-fade-in: fade-in 200ms ease-out;
+  --animate-slide-in: slide-in 200ms ease-out;
+  --animate-pop-in: pop-in 180ms ease-out;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes slide-in {
+    from {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96) translateY(8px);
+    }
+  }
+}
+
+dialog[open] {
+  @apply animate-pop-in;
+}
+
+dialog::backdrop {
+  @apply animate-fade-in;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

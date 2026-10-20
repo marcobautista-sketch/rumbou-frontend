@@ -5,14 +5,8 @@ import { PlanDetails } from '../../components/profile/PlanDetails'
 import { Button } from '../../components/ui/Button'
 import { useAuth } from '../../hooks/useAuth'
 import { useFetch } from '../../hooks/useFetch'
-import type { Role } from '../../types/auth'
 import { notify } from '../../utils/notify'
-
-const roleLabels: Record<Role, string> = {
-  USER: 'Postulante',
-  REVIEWER: 'Revisor',
-  ADMIN: 'Administrador',
-}
+import { roleLabels } from '../../utils/roleLabels'
 
 const cardStyles = 'space-y-4 rounded-2xl bg-surface p-6 shadow-card'
 
