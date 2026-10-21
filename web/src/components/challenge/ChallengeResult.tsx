@@ -3,6 +3,7 @@ import type { DailyChallenge } from '../../types/challenge'
 import { formatMath } from '../../utils/formatMath'
 import { AnswerReview } from '../exam/AnswerReview'
 import { TutorPanel } from '../questions/TutorPanel'
+import { SolutionReviewPanel } from '../solution/SolutionReviewPanel'
 import { Card } from '../ui/Card'
 
 export function ChallengeResult({ challenge }: { challenge: DailyChallenge }) {
@@ -56,6 +57,8 @@ export function ChallengeResult({ challenge }: { challenge: DailyChallenge }) {
           markedAlternative={challenge.alternativaMarcada}
         />
       )}
+
+      <SolutionReviewPanel questionId={challenge.preguntaId} statement={challenge.enunciado} />
 
       <p className="flex items-center justify-center gap-2 text-ink-muted">
         <CalendarClock aria-hidden className="size-5" />
