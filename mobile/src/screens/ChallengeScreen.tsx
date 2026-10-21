@@ -6,6 +6,7 @@ import { Button } from '../components/Button'
 import { ErrorRetry } from '../components/ErrorRetry'
 import { OptionList } from '../components/OptionList'
 import { ProgressBar } from '../components/ProgressBar'
+import { SolutionPhotoReview } from '../components/SolutionPhotoReview'
 import { useFetch } from '../hooks/useFetch'
 import { toApiError } from '../services/apiError'
 import { challengeService } from '../services/challengeService'
@@ -110,6 +111,7 @@ function ChallengeResult({ challenge }: { challenge: DailyChallenge }) {
         </View>
       )}
       {!correct && <TutorExplanation challenge={challenge} />}
+      <SolutionPhotoReview questionId={challenge.preguntaId} />
       <Text style={[styles.centered, { color: colors.muted }]}>
         Vuelve mañana por un nuevo desafío.
       </Text>

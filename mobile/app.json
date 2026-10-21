@@ -28,6 +28,14 @@
         {
           "faceIDPermission": "RumboU usa Face ID para que entres sin escribir tu contraseña."
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "RumboU usa la cámara para fotografiar tu solución escrita a mano y que el tutor la revise.",
+          "photosPermission": "RumboU abre tus fotos para que elijas la foto de tu solución.",
+          "microphonePermission": false
+        }
       ]
     ]
   }
