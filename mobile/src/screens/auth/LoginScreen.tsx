@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { Alert } from 'react-native'
+import { Alert, Pressable, StyleSheet, Text } from 'react-native'
 import { AuthScreenLayout } from '../../components/AuthScreenLayout'
 import { Button } from '../../components/Button'
 import { FormTextField } from '../../components/FormTextField'
@@ -10,6 +10,7 @@ import { useAuth } from '../../hooks/useAuth'
 import type { RootStackParamList } from '../../navigation/types'
 import { toApiError } from '../../services/apiError'
 import { biometricService } from '../../services/biometricService'
+import { useColors } from '../../theme/useColors'
 import { loginSchema, type LoginForm } from '../../utils/authSchemas'
 import { notify } from '../../utils/notify'
 
@@ -36,6 +37,7 @@ async function offerBiometricLogin() {
 }
 
 export default function LoginScreen({ navigation }: LoginScreenProps) {
+  const colors = useColors()
   const { login, status, unlockWithBiometrics } = useAuth()
   const locked = status === 'locked'
   const {
@@ -99,6 +101,15 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
         autoComplete="current-password"
         textContentType="password"
       />
+      <Pressable
+        accessibilityRole="link"
+        onPress={() => navigation.navigate('ForgotPassword')}
+        style={styles.link}
+      >
+        <Text style={[styles.linkText, { color: colors.accentText }]}>
+          ¿Olvidaste tu contraseña?
+        </Text>
+      </Pressable>
       <Button
         title="Iniciar sesión"
         variant={locked ? 'secondary' : 'primary'}
@@ -113,3 +124,8 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
     </AuthScreenLayout>
   )
 }
+
+const styles = StyleSheet.create({
+  link: { alignSelf: 'flex-end', minHeight: 44, justifyContent: 'center' },
+  linkText: { fontWeight: '600' },
+})
