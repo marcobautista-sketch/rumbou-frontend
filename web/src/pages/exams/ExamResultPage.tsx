@@ -1,7 +1,9 @@
-import { BookOpen, CircleCheck, CircleSlash, CircleX } from 'lucide-react'
+import { CircleCheck, CircleSlash, CircleX, GraduationCap, ListChecks } from 'lucide-react'
 import { useCallback, useMemo } from 'react'
 import { generatePath, Link, Navigate, useParams } from 'react-router'
 import { examService } from '../../api/examService'
+import { QuestionReviewList } from '../../components/exam/QuestionReviewList'
+import { StudyPlan } from '../../components/exam/StudyPlan'
 import { ErrorScreen } from '../../components/feedback/ErrorScreen'
 import { PageLoader } from '../../components/feedback/PageLoader'
 import { buttonStyles } from '../../components/ui/buttonStyles'
@@ -70,27 +72,25 @@ export default function ExamResultPage() {
         ))}
       </section>
 
-      <section aria-labelledby="weak-topics-title" className={`${cardStyles} space-y-3`}>
-        <h2 id="weak-topics-title" className="flex items-center gap-2 text-lg font-semibold">
-          <BookOpen aria-hidden className="size-5" />
-          Temas para reforzar
-        </h2>
-        {summary.weakTopics.length === 0 ? (
-          <p className="text-ink-muted">
-            ¡Respondiste todo bien! Prueba ahora un simulacro completo.
+      <section aria-labelledby="study-plan-title" className={`${cardStyles} space-y-4`}>
+        <header className="space-y-1">
+          <h2 id="study-plan-title" className="flex items-center gap-2 text-lg font-semibold">
+            <GraduationCap aria-hidden className="size-5" />
+            Tu plan de estudio
+          </h2>
+          <p className="text-sm text-ink-muted">
+            Los temas donde más fallaste, con clases en video y libros para repasarlos.
           </p>
-        ) : (
-          <ul className="divide-y divide-line">
-            {summary.weakTopics.map((topic) => (
-              <li key={topic.temaId} className="flex flex-wrap justify-between gap-2 py-2">
-                <span className="font-medium">{topic.tema}</span>
-                <span className="text-sm text-ink-muted">
-                  {topic.incorrect} incorrectas · {topic.blank} en blanco
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
+        </header>
+        <StudyPlan topics={summary.weakTopics} />
+      </section>
+
+      <section aria-labelledby="review-title" className="space-y-3">
+        <h2 id="review-title" className="flex items-center gap-2 text-lg font-semibold">
+          <ListChecks aria-hidden className="size-5" />
+          Revisión pregunta por pregunta
+        </h2>
+        <QuestionReviewList questions={exam.preguntas} />
       </section>
 
       <Link to={paths.newExam} className={buttonStyles('primary')}>
