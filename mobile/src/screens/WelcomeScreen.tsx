@@ -1,9 +1,13 @@
+import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { StyleSheet, Text, View } from 'react-native'
 import { Button } from '../components/Button'
 import { useAuth } from '../hooks/useAuth'
+import type { RootStackParamList } from '../navigation/types'
 import { useColors } from '../theme/useColors'
 
-export default function WelcomeScreen() {
+type WelcomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>
+
+export default function WelcomeScreen({ navigation }: WelcomeScreenProps) {
   const colors = useColors()
   const { user, logout } = useAuth()
 
@@ -14,6 +18,7 @@ export default function WelcomeScreen() {
       <Text style={[styles.subtitle, { color: colors.muted }]}>
         Prepárate para el examen de admisión de la UNI y San Marcos con simulacros reales.
       </Text>
+      <Button title="Desafío de hoy" onPress={() => navigation.navigate('Challenge')} />
       <Button title="Cerrar sesión" variant="secondary" onPress={logout} />
     </View>
   )
