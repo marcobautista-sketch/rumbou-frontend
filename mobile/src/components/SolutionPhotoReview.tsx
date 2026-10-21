@@ -9,6 +9,7 @@ import { formatMath } from '../utils/formatMath'
 import { notify } from '../utils/notify'
 import { pickSolutionPhoto, type PhotoSource } from '../utils/pickSolutionPhoto'
 import { Button } from './Button'
+import { WhiteboardModal } from './WhiteboardModal'
 
 const verdicts: Record<
   SolutionVerdict,
@@ -38,7 +39,7 @@ const verdicts: Record<
     background: 'dangerSoft',
   },
   ILEGIBLE: {
-    title: 'No pude leer tu foto',
+    title: 'No pude leer tu imagen',
     icon: 'eye-off',
     color: 'muted',
     background: 'surfaceMuted',
@@ -65,19 +66,29 @@ function ReviewResult({ review }: { review: SolutionReview }) {
   )
 }
 
-// Sensor de cámara: foto del procedimiento en papel que el tutor revisa paso a paso.
-export function SolutionPhotoReview({ questionId }: { questionId: number }) {
+// Sensores: foto del procedimiento en papel (cámara) o la pizarra táctil, revisadas por el tutor.
+export function SolutionPhotoReview({
+  questionId,
+  statement,
+}: {
+  questionId: number
+  statement: string
+}) {
   const colors = useColors()
   const [photo, setPhoto] = useState<SolutionPhoto | null>(null)
   const [review, setReview] = useState<SolutionReview | null>(null)
   const [sending, setSending] = useState(false)
+  const [boardOpen, setBoardOpen] = useState(false)
+
+  const selectPhoto = (picked: SolutionPhoto) => {
+    setPhoto(picked)
+    setReview(null)
+  }
 
   const choose = async (source: PhotoSource) => {
     try {
       const picked = await pickSolutionPhoto(source)
-      if (!picked) return
-      setPhoto(picked)
-      setReview(null)
+      if (picked) selectPhoto(picked)
     } catch (error) {
       notify.error(error)
     }
@@ -99,10 +110,13 @@ export function SolutionPhotoReview({ questionId }: { questionId: number }) {
     <View style={[styles.card, { backgroundColor: colors.surface }]}>
       <View style={styles.row}>
         <Ionicons name="camera-outline" size={22} color={colors.accentText} />
-        <Text style={[styles.title, { color: colors.text }]}>¿Lo resolviste en papel?</Text>
+        <Text style={[styles.title, { color: colors.text }]}>
+          Muéstrale tu procedimiento al tutor
+        </Text>
       </View>
       <Text style={{ color: colors.muted }}>
-        Toma una foto de tu procedimiento y el tutor te dirá en qué paso está el error.
+        Tómale una foto a lo que resolviste en papel o escríbelo en la pizarra. El tutor te dirá en
+        qué paso está el error.
       </Text>
       {photo && (
         <Image
@@ -117,7 +131,7 @@ export function SolutionPhotoReview({ questionId }: { questionId: number }) {
       <View style={styles.row}>
         <View style={styles.flex}>
           <Button
-            title={photo ? 'Otra foto' : 'Tomar foto'}
+            title="Cámara"
             variant="secondary"
             disabled={sending}
             onPress={() => choose('camera')}
@@ -131,7 +145,24 @@ export function SolutionPhotoReview({ questionId }: { questionId: number }) {
             onPress={() => choose('library')}
           />
         </View>
+        <View style={styles.flex}>
+          <Button
+            title="Pizarra"
+            variant="secondary"
+            disabled={sending}
+            onPress={() => setBoardOpen(true)}
+          />
+        </View>
       </View>
+      <WhiteboardModal
+        visible={boardOpen}
+        statement={statement}
+        onCancel={() => setBoardOpen(false)}
+        onDone={(image) => {
+          setBoardOpen(false)
+          selectPhoto(image)
+        }}
+      />
     </View>
   )
 }
