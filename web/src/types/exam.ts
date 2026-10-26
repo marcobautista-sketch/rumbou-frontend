@@ -6,11 +6,19 @@ export interface Area {
   universidad: string
   codigo: string
   nombre: string
+  procesoProximo: string | null
+  fechaProximoExamen: string | null
+  fechaExamenConfirmada: boolean | null
 }
 
 export interface Topic {
   id: number
   nombre: string
+}
+
+export interface TopicDetail extends Topic {
+  cantidadPreguntas: number
+  subtemas: string[]
 }
 
 export interface ExamQuestion {

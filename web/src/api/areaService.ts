@@ -1,4 +1,4 @@
-import type { Area, Topic } from '../types/exam'
+import type { Area, TopicDetail } from '../types/exam'
 import { apiClient } from './client'
 
 export const areaService = {
@@ -8,7 +8,7 @@ export const areaService = {
   },
 
   async listTopics(areaId: number, signal?: AbortSignal) {
-    const { data } = await apiClient.get<Topic[]>(`/areas/${areaId}/temas`, { signal })
+    const { data } = await apiClient.get<TopicDetail[]>(`/areas/${areaId}/temas`, { signal })
     return data
   },
 }
