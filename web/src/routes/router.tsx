@@ -3,8 +3,10 @@ import { AppLayout } from '../components/layout/AppLayout'
 import RouteErrorPage from '../pages/route-error/RouteErrorPage'
 import { GuestRoute } from './GuestRoute'
 import {
+  AchievementsPage,
   AdminUsersPage,
   ChallengePage,
+  DashboardPage,
   ExamResultPage,
   ForgotPasswordPage,
   HomePage,
@@ -12,6 +14,7 @@ import {
   NewExamPage,
   NotFoundPage,
   ProfilePage,
+  ProgressPage,
   QuestionDetailPage,
   QuestionFormPage,
   QuestionListPage,
@@ -46,6 +49,9 @@ export const router = createBrowserRouter([
           {
             element: <AppLayout />,
             children: [
+              { path: paths.dashboard, element: <DashboardPage /> },
+              { path: paths.progress, element: <ProgressPage /> },
+              { path: paths.achievements, element: <AchievementsPage /> },
               { path: paths.profile, element: <ProfilePage /> },
               { path: paths.challenge, element: <ChallengePage /> },
               { path: paths.newExam, element: <NewExamPage /> },
