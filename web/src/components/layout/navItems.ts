@@ -1,8 +1,10 @@
 import {
+  ChartLine,
   ClipboardCheck,
   House,
   LibraryBig,
   NotebookPen,
+  Trophy,
   UserRound,
   UsersRound,
   Zap,
@@ -19,7 +21,9 @@ export interface NavItem {
 }
 
 export const navItems: NavItem[] = [
-  { label: 'Inicio', to: paths.home, icon: House },
+  { label: 'Inicio', to: paths.dashboard, icon: House },
+  { label: 'Mi progreso', to: paths.progress, icon: ChartLine },
+  { label: 'Mis logros', to: paths.achievements, icon: Trophy },
   { label: 'Desafío diario', to: paths.challenge, icon: Zap },
   { label: 'Nuevo simulacro', to: paths.newExam, icon: NotebookPen },
   { label: 'Banco de preguntas', to: paths.questions, icon: LibraryBig },
