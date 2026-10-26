@@ -111,7 +111,7 @@ function ChallengeResult({ challenge }: { challenge: DailyChallenge }) {
         </View>
       )}
       {!correct && <TutorExplanation challenge={challenge} />}
-      <SolutionPhotoReview questionId={challenge.preguntaId} />
+      <SolutionPhotoReview questionId={challenge.preguntaId} statement={challenge.enunciado} />
       <Text style={[styles.centered, { color: colors.muted }]}>
         Vuelve mañana por un nuevo desafío.
       </Text>
