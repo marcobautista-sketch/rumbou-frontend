@@ -4,4 +4,5 @@ export type RootStackParamList = {
   ForgotPassword: undefined
   Home: undefined
   Challenge: undefined
+  StudyPlan: { examId?: number } | undefined
 }

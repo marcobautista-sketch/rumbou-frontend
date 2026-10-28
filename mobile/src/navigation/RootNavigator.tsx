@@ -5,6 +5,7 @@ import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen'
 import LoginScreen from '../screens/auth/LoginScreen'
 import RegisterScreen from '../screens/auth/RegisterScreen'
 import ChallengeScreen from '../screens/ChallengeScreen'
+import StudyPlanScreen from '../screens/StudyPlanScreen'
 import WelcomeScreen from '../screens/WelcomeScreen'
 import type { RootStackParamList } from './types'
 
@@ -24,6 +25,11 @@ export function RootNavigator() {
             name="Challenge"
             component={ChallengeScreen}
             options={{ headerShown: true, title: 'Desafío diario' }}
+          />
+          <Stack.Screen
+            name="StudyPlan"
+            component={StudyPlanScreen}
+            options={{ headerShown: true, title: 'Plan de estudio' }}
           />
         </>
       ) : (
