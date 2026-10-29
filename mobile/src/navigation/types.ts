@@ -6,4 +6,9 @@ export type RootStackParamList = {
   Challenge: undefined
   Assistant: undefined
   StudyPlan: { examId?: number } | undefined
+  NewExam: undefined
+  TakeExam: { examId: number }
+  ExamResult: { examId: number }
+  ExamHistory: undefined
+  Profile: undefined
 }
