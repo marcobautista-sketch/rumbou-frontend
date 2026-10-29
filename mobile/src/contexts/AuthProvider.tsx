@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [endSession])
 
   const value = useMemo(
-    () => ({ user, status, login, register, logout, unlockWithBiometrics }),
+    () => ({ user, status, login, register, logout, unlockWithBiometrics, updateUser: setUser }),
     [user, status, login, register, logout, unlockWithBiometrics],
   )
 

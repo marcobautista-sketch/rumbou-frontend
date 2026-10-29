@@ -12,4 +12,9 @@ export const userService = {
     const { data } = await apiClient.get<Gamification>('/usuarios/me/gamificacion', { signal })
     return data
   },
+
+  async updateProfile(profile: Pick<User, 'nombre' | 'apellidos' | 'telefono'>) {
+    const { data } = await apiClient.put<User>('/usuarios/me', profile)
+    return data
+  },
 }
