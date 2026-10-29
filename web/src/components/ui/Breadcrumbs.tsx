@@ -17,7 +17,7 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
       <ol className="flex flex-wrap items-center gap-1.5 text-ink-muted">
         <li>
           <Link
-            to={paths.home}
+            to={paths.dashboard}
             aria-label="Inicio"
             className="flex items-center rounded transition hover:text-accent-ink"
           >

@@ -9,6 +9,7 @@ export const paths = {
   progress: '/progress',
   achievements: '/achievements',
   challenge: '/challenge',
+  examHistory: '/exams',
   newExam: '/exams/new',
   exam: '/exams/:examId',
   examResult: '/exams/:examId/result',

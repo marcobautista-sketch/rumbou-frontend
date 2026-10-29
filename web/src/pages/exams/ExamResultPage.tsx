@@ -52,11 +52,13 @@ export default function ExamResultPage() {
       <section aria-label="Puntaje" className={`${cardStyles} grid gap-6 sm:grid-cols-2`}>
         <div>
           <p className="text-sm text-ink-muted">Puntaje obtenido</p>
-          <p className="text-4xl font-bold text-primary">{exam.puntajeObtenido?.toFixed(2)}</p>
+          <p className="text-4xl font-bold text-primary">
+            {exam.puntajeObtenido?.toFixed(2) ?? '—'}
+          </p>
         </div>
         <div>
           <p className="text-sm text-ink-muted">Puntaje simulado proyectado (PSP)</p>
-          <p className="text-4xl font-bold">{exam.psp?.toFixed(2)}</p>
+          <p className="text-4xl font-bold">{exam.psp?.toFixed(2) ?? '—'}</p>
         </div>
       </section>
 
