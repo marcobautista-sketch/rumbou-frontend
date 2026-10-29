@@ -11,15 +11,16 @@ CS 2031 Desarrollo Basado en Plataformas (UTEC).
 | Parte | Dónde | URL |
 | --- | --- | --- |
 | API REST | AWS EC2 detrás de nginx con HTTPS, base en RDS PostgreSQL | `https://184-194-122-22.sslip.io/api/v1` (salud: `/api/v1/health`) |
-| Web | Vercel | _pendiente_ |
-| Móvil | Expo (EAS) | _pendiente_ |
+| Web | Vercel | https://rumbou-frontend.vercel.app |
+| Móvil | Expo Go con EAS Update (proyecto `@rumbou/rumbou`, canal `preview`) | Entra a la API por el mismo dominio de la web |
 
 ## Arquitectura
 
 ```mermaid
 flowchart LR
-  web["Web<br/>React + Vite + Tailwind"] -->|"/api/* (reescritura de Vercel)"| api
-  app["Móvil<br/>React Native + Expo"] -->|HTTPS + JWT| api
+  web["Web<br/>React + Vite + Tailwind"] --> vercel
+  app["Móvil<br/>React Native + Expo"] -->|HTTPS + JWT| vercel
+  vercel["Vercel<br/>reescribe /api/*"] --> api
   api["API REST<br/>Spring Boot en EC2"] --> db[("PostgreSQL<br/>RDS")]
   api --> ext["Gemini · YouTube · Google Books · Mercado Pago"]
   app --> ol["Open Library"]
