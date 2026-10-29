@@ -29,7 +29,7 @@ export function Navbar({ menuOpen, onOpenMenu }: NavbarProps) {
             <Menu aria-hidden className="size-5" />
           </button>
           <Link
-            to={paths.home}
+            to={paths.dashboard}
             aria-label="RumboU, ir al inicio"
             className="rounded-lg transition hover:opacity-80 focus-visible:outline-2 focus-visible:outline-accent"
           >

@@ -14,7 +14,7 @@ export function GuestRoute() {
   if (status === 'loading') return <PageLoader />
   if (status === 'authenticated') {
     const from = (location.state as RedirectState | null)?.from
-    return <Navigate to={from ? from.pathname + from.search : paths.home} replace />
+    return <Navigate to={from ? from.pathname + from.search : paths.dashboard} replace />
   }
   return <Outlet />
 }
