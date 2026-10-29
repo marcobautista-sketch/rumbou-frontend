@@ -1,7 +1,8 @@
 import { ArrowRight, CalendarDays, Clock, Flag, Flame, NotebookPen, Star } from 'lucide-react'
-import { useCallback, useMemo } from 'react'
-import { Link } from 'react-router'
+import { useCallback, useMemo, useState } from 'react'
+import { generatePath, Link, useNavigate } from 'react-router'
 import { areaService } from '../../api/areaService'
+import { examService } from '../../api/examService'
 import { goalService } from '../../api/goalService'
 import { progressService } from '../../api/progressService'
 import { userService } from '../../api/userService'
@@ -21,9 +22,12 @@ import { paths } from '../../routes/paths'
 import type { TopicDetail } from '../../types/exam'
 import type { ScoreHistoryEntry } from '../../types/progress'
 import { daysUntil, formatDate, formatScore } from '../../utils/format'
+import { notify } from '../../utils/notify'
 import { masteryTone, preparationTones } from '../../utils/progressLabels'
 
 const MINUTES_PER_QUESTION = 2
+const recommendationCard =
+  'block h-full rounded-2xl bg-surface p-5 shadow-card transition hover:-translate-y-0.5 hover:shadow-raised focus-visible:outline-2 focus-visible:outline-accent'
 const noHistory: ScoreHistoryEntry[] = []
 const noTopics: TopicDetail[] = []
 
@@ -54,6 +58,8 @@ function FirstExamEmptyState() {
 
 export default function DashboardPage() {
   const { user } = useAuth()
+  const navigate = useNavigate()
+  const [startingTopicId, setStartingTopicId] = useState<number | null>(null)
   const fetchGamification = useCallback(
     (signal: AbortSignal) => userService.getGamification(signal),
     [],
@@ -97,12 +103,26 @@ export default function DashboardPage() {
           const topic = topics.data?.find((candidate) => candidate.id === entry.temaId)
           return {
             ...entry,
+            inGoalArea: topic !== undefined,
             subtema: topic?.subtemas[0] ?? null,
             minutes: topic ? topic.cantidadPreguntas * MINUTES_PER_QUESTION : null,
           }
         }),
     [mastery.data, topics.data],
   )
+
+  // Un clic en un tema recomendado empieza un simulacro de ese tema en el área de la meta.
+  const practiceTopic = async (temaId: number) => {
+    if (!areaId) return
+    setStartingTopicId(temaId)
+    try {
+      const examId = await examService.start({ areaId, tipo: 'POR_TEMA', temaId })
+      navigate(generatePath(paths.exam, { examId: String(examId) }))
+    } catch (error) {
+      notify.error(error)
+      setStartingTopicId(null)
+    }
+  }
   const firstScore = history.data?.[0]?.psp ?? null
   const latestScore = mainGoal?.ultimoPsp ?? null
   const examDays = goalArea?.fechaProximoExamen ? daysUntil(goalArea.fechaProximoExamen) : null
@@ -217,7 +237,18 @@ export default function DashboardPage() {
         </div>
         {goals.loading && !goals.data ? (
           <Skeleton className="h-48 w-full" />
-        ) : !mainGoal || latestScore === null ? (
+        ) : !mainGoal ? (
+          <EmptyState
+            icon={Flag}
+            title="Elige tu carrera meta"
+            message="Compararemos tu puntaje con el del último ingresante de la carrera a la que postulas."
+            action={
+              <Link to={paths.progress} className={buttonStyles('primary')}>
+                Elegir mi carrera
+              </Link>
+            }
+          />
+        ) : latestScore === null ? (
           <FirstExamEmptyState />
         ) : (
           <>
@@ -281,12 +312,10 @@ export default function DashboardPage() {
           <FirstExamEmptyState />
         ) : (
           <ul className="grid gap-4 md:grid-cols-3">
-            {recommendations.map((topic) => (
-              <li key={topic.temaId}>
-                <Link
-                  to={paths.newExam}
-                  className="block h-full rounded-2xl bg-surface p-5 shadow-card transition hover:-translate-y-0.5 hover:shadow-raised focus-visible:outline-2 focus-visible:outline-accent"
-                >
+            {recommendations.map((topic) => {
+              const starting = startingTopicId === topic.temaId
+              const content = (
+                <>
                   <div className="flex items-start justify-between gap-2">
                     <p className="font-semibold">{topic.tema}</p>
                     <Badge tone={masteryTone(topic.porcentajeAciertos)}>
@@ -296,15 +325,41 @@ export default function DashboardPage() {
                   {topic.subtema && (
                     <p className="mt-1 text-sm text-ink-muted">Repasa: {topic.subtema}</p>
                   )}
-                  {topic.minutes !== null && (
-                    <p className="mt-3 flex items-center gap-1.5 text-sm text-ink-muted">
-                      <Clock aria-hidden className="size-4" />
-                      {topic.minutes} min
-                    </p>
+                  <p className="mt-3 flex items-center justify-between gap-2 text-sm text-ink-muted">
+                    {topic.minutes !== null && (
+                      <span className="flex items-center gap-1.5">
+                        <Clock aria-hidden className="size-4" />
+                        {topic.minutes} min
+                      </span>
+                    )}
+                    {topic.inGoalArea && (
+                      <span className="ml-auto font-semibold text-accent-ink">
+                        {starting ? 'Preparando…' : 'Practicar ahora'}
+                      </span>
+                    )}
+                  </p>
+                </>
+              )
+              return (
+                <li key={topic.temaId}>
+                  {topic.inGoalArea ? (
+                    <button
+                      type="button"
+                      onClick={() => practiceTopic(topic.temaId)}
+                      disabled={startingTopicId !== null}
+                      aria-busy={starting}
+                      className={`${recommendationCard} w-full text-left disabled:cursor-wait disabled:opacity-70`}
+                    >
+                      {content}
+                    </button>
+                  ) : (
+                    <Link to={paths.newExam} className={recommendationCard}>
+                      {content}
+                    </Link>
                   )}
-                </Link>
-              </li>
-            ))}
+                </li>
+              )
+            })}
           </ul>
         )}
       </section>

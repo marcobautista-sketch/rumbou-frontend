@@ -1,5 +1,4 @@
 import { Ionicons } from '@expo/vector-icons'
-import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useCallback, useState } from 'react'
 import {
   ActivityIndicator,
@@ -13,13 +12,13 @@ import {
 import { Button } from '../../components/Button'
 import { ErrorRetry } from '../../components/ErrorRetry'
 import { useFetch } from '../../hooks/useFetch'
-import type { RootStackParamList } from '../../navigation/types'
+import type { MainTabScreenProps } from '../../navigation/types'
 import { examService } from '../../services/examService'
 import { useColors } from '../../theme/useColors'
 import type { ExamSummary } from '../../types/exam'
 import { examTypeLabels, formatExamDate, formatScore } from '../../utils/examLabels'
 
-type ExamHistoryScreenProps = NativeStackScreenProps<RootStackParamList, 'ExamHistory'>
+type ExamHistoryScreenProps = MainTabScreenProps<'ExamHistory'>
 
 const PAGE_SIZE = 10
 
