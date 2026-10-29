@@ -16,6 +16,7 @@ import { Pagination } from '../../components/ui/Pagination'
 import { SkeletonList } from '../../components/ui/Skeleton'
 import { useAreaTopics } from '../../hooks/useAreaTopics'
 import { useAuth } from '../../hooks/useAuth'
+import { useDebounce } from '../../hooks/useDebounce'
 import { useFetch } from '../../hooks/useFetch'
 import { usePagination } from '../../hooks/usePagination'
 import { paths } from '../../routes/paths'
@@ -33,6 +34,7 @@ export default function QuestionListPage() {
   const { page, size, searchParams, apiParams, setPage, setSize, setFilters } = usePagination()
 
   const filters: QuestionFilterValues = {
+    search: searchParams.get('q') ?? '',
     area: searchParams.get('area') ?? '',
     topic: searchParams.get('topic') ?? '',
     difficulty: searchParams.get('difficulty') ?? '',
@@ -40,8 +42,10 @@ export default function QuestionListPage() {
     sort: searchParams.get('sort') ?? DEFAULT_QUESTION_SORT,
   }
   const hasActiveFilters = Boolean(
-    filters.area || filters.topic || filters.difficulty || filters.status,
+    filters.search || filters.area || filters.topic || filters.difficulty || filters.status,
   )
+  // La URL cambia con cada tecla, pero la API solo se llama cuando se deja de escribir.
+  const debouncedSearch = useDebounce(filters.search.trim())
 
   const { areas, topics } = useAreaTopics(filters.area ? Number(filters.area) : null)
 
@@ -54,16 +58,27 @@ export default function QuestionListPage() {
           temaId: filters.topic ? Number(filters.topic) : undefined,
           dificultad: isDifficulty(filters.difficulty) ? filters.difficulty : undefined,
           aprobada: canReview ? statusToApproved[filters.status] : undefined,
+          texto: debouncedSearch || undefined,
         },
         signal,
       ),
-    [apiParams, filters.sort, filters.topic, filters.difficulty, filters.status, canReview],
+    [
+      apiParams,
+      filters.sort,
+      filters.topic,
+      filters.difficulty,
+      filters.status,
+      canReview,
+      debouncedSearch,
+    ],
   )
   const questions = useFetch(fetchQuestions)
   const result = questions.data
 
   const clearFilters = () =>
-    setFilters({ area: null, topic: null, difficulty: null, status: null, sort: null })
+    setFilters({ q: null, area: null, topic: null, difficulty: null, status: null, sort: null })
+
+  const updateSearch = (search: string) => setFilters({ q: search }, { replace: true })
 
   return (
     <main className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
@@ -89,6 +104,7 @@ export default function QuestionListPage() {
         showStatus={canReview}
         hasActiveFilters={hasActiveFilters}
         onChange={setFilters}
+        onSearchChange={updateSearch}
         onClear={clearFilters}
       />
 
@@ -104,7 +120,7 @@ export default function QuestionListPage() {
             message={
               page > 1
                 ? 'La página que buscas ya no tiene resultados.'
-                : 'Prueba con otro tema o dificultad, o limpia los filtros para ver todo el banco.'
+                : 'Prueba con otras palabras, otro tema o dificultad, o limpia los filtros para ver todo el banco.'
             }
             action={
               page > 1 ? (

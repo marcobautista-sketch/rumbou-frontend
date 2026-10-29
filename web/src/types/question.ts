@@ -39,6 +39,7 @@ export interface QuestionQuery extends QuestionFilters {
   page: number
   size: number
   sort?: string
+  texto?: string
 }
 
 export interface TutorExplanation {
