@@ -33,3 +33,10 @@ export const DEFAULT_QUESTION_SORT = 'id,desc'
 export function isDifficulty(value: string | null): value is Difficulty {
   return difficulties.some((difficulty) => difficulty === value)
 }
+
+// Un orden escrito a mano en la URL que no está en la lista se reemplaza por el de siempre.
+export function readQuestionSort(value: string | null) {
+  return questionSortOptions.some((option) => option.value === value) && value
+    ? value
+    : DEFAULT_QUESTION_SORT
+}

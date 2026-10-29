@@ -1,11 +1,24 @@
-import axios, { type InternalAxiosRequestConfig } from 'axios'
+import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios'
 import type { AuthTokens } from '../types/auth'
 import { toApiError } from './apiError'
 import { tokenStore } from './tokenStore'
 
 interface RetriableRequest extends InternalAxiosRequestConfig {
   retried?: boolean
+  retriedAfterFailure?: boolean
 }
+
+const RETRY_DELAY_MS = 1000
+
+// Solo se repiten las lecturas (GET) que fallaron por la red o porque el servidor estaba
+// caído un momento (502, 503, 504): repetirlas no cambia nada en el backend.
+function canRetry(error: AxiosError, request: RetriableRequest) {
+  if (request.method !== 'get' || request.retriedAfterFailure || axios.isCancel(error)) return false
+  const status = error.response?.status
+  return status === undefined || status === 502 || status === 503 || status === 504
+}
+
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 const baseURL = import.meta.env.VITE_API_URL ?? '/api/v1'
 const clientConfig = { baseURL, timeout: 15000, withCredentials: true }
@@ -48,6 +61,13 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error: unknown) => {
     const request = axios.isAxiosError(error) ? (error.config as RetriableRequest) : undefined
+
+    if (axios.isAxiosError(error) && request && canRetry(error, request)) {
+      request.retriedAfterFailure = true
+      await wait(RETRY_DELAY_MS)
+      return apiClient(request)
+    }
+
     const sessionCanBeRenewed =
       axios.isAxiosError(error) &&
       error.response?.status === 401 &&

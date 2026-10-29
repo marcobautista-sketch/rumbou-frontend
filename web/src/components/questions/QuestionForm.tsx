@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Info } from 'lucide-react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useAreaTopics } from '../../hooks/useAreaTopics'
 import { ALTERNATIVES_COUNT, questionSchema, type QuestionFormValues } from './questionSchema'
@@ -16,7 +15,6 @@ interface QuestionFormProps {
   defaultValues: QuestionFormValues
   currentTopic?: Topic
   submitLabel: string
-  notice?: string
   onSubmit: (values: QuestionFormValues) => Promise<void>
   onCancel: () => void
 }
@@ -25,7 +23,6 @@ export function QuestionForm({
   defaultValues,
   currentTopic,
   submitLabel,
-  notice,
   onSubmit,
   onCancel,
 }: QuestionFormProps) {
@@ -50,13 +47,6 @@ export function QuestionForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-6">
-      {notice && (
-        <div className="flex gap-3 rounded-2xl border border-warning/30 bg-warning/10 p-4 text-warning">
-          <Info aria-hidden className="mt-0.5 size-5 shrink-0" />
-          <p>{notice}</p>
-        </div>
-      )}
-
       <Card className="space-y-5">
         <h2 className="text-lg font-semibold">Tema y dificultad</h2>
         <div className="grid gap-4 sm:grid-cols-2">
