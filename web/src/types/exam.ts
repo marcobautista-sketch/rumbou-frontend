@@ -47,6 +47,18 @@ export interface ExamDetail {
   preguntas: ExamQuestion[]
 }
 
+export interface ExamSummary {
+  id: number
+  tipo: ExamType
+  estado: ExamStatus
+  areaId: number
+  area: string
+  fechaInicio: string
+  fechaFin: string | null
+  puntajeObtenido: number | null
+  psp: number | null
+}
+
 export interface StartExamRequest {
   areaId: number
   tipo: ExamType

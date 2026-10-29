@@ -21,12 +21,12 @@ export default function HomePage() {
         {user ? (
           <>
             <p className="font-display text-lg font-semibold">Hola, {user.nombre}</p>
-            <Link to={paths.newExam} className={`${buttonStyles('primary')} w-full`}>
-              Rendir un simulacro
+            <Link to={paths.dashboard} className={`${buttonStyles('primary')} w-full`}>
+              Ir a mi panel
               <ArrowRight aria-hidden className="size-5" />
             </Link>
-            <Link to={paths.profile} className={`${buttonStyles('secondary')} w-full`}>
-              Ir a mi perfil
+            <Link to={paths.newExam} className={`${buttonStyles('secondary')} w-full`}>
+              Rendir un simulacro
             </Link>
           </>
         ) : (

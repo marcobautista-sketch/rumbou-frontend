@@ -21,7 +21,7 @@ function SidebarLinks({ onNavigate }: { onNavigate?: () => void }) {
         <li key={to}>
           <NavLink
             to={to}
-            end={to === paths.home || to === paths.newExam}
+            end={to === paths.home || to === paths.newExam || to === paths.examHistory}
             onClick={onNavigate}
             className={({ isActive }) =>
               `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-accent ${

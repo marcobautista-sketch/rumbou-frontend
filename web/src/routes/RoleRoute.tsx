@@ -29,7 +29,7 @@ export function RoleRoute({ roles }: RoleRouteProps) {
           Esta parte de RumboU es solo para cuentas de tipo {allowed}. Si crees que es un error,
           pídele a un administrador que revise tu rol.
         </p>
-        <Link to={paths.home} className={buttonStyles('primary')}>
+        <Link to={paths.dashboard} className={buttonStyles('primary')}>
           Volver al inicio
         </Link>
       </main>

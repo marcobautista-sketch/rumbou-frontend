@@ -9,6 +9,7 @@ export interface AuthContextValue {
   login: (credentials: LoginRequest) => Promise<void>
   register: (account: RegisterRequest) => Promise<void>
   logout: () => Promise<void>
+  updateUser: (user: User) => void
   unlockWithBiometrics: () => Promise<boolean>
 }
 
