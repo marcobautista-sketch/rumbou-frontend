@@ -34,15 +34,19 @@ export function usePagination() {
     [setSearchParams],
   )
 
+  // replace: true cambia la URL sin agregar una entrada al historial (útil al escribir en un buscador).
   const setFilters = useCallback(
-    (changes: Record<string, string | null>) =>
-      setSearchParams((params) => {
-        Object.entries(changes).forEach(([key, value]) =>
-          value ? params.set(key, value) : params.delete(key),
-        )
-        params.set('page', '1')
-        return params
-      }),
+    (changes: Record<string, string | null>, options?: { replace?: boolean }) =>
+      setSearchParams(
+        (params) => {
+          Object.entries(changes).forEach(([key, value]) =>
+            value ? params.set(key, value) : params.delete(key),
+          )
+          params.set('page', '1')
+          return params
+        },
+        { replace: options?.replace },
+      ),
     [setSearchParams],
   )
 

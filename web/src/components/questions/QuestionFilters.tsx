@@ -1,10 +1,12 @@
-import { FilterX } from 'lucide-react'
+import { FilterX, Search } from 'lucide-react'
 import type { Area, Topic } from '../../types/exam'
 import { difficulties, difficultyLabels, questionSortOptions } from '../../utils/questionLabels'
 import { Button } from '../ui/Button'
 import { SelectField } from '../ui/SelectField'
+import { TextField } from '../ui/TextField'
 
 export interface QuestionFilterValues {
+  search: string
   area: string
   topic: string
   difficulty: string
@@ -20,6 +22,7 @@ interface QuestionFiltersProps {
   showStatus: boolean
   hasActiveFilters: boolean
   onChange: (changes: Record<string, string>) => void
+  onSearchChange: (search: string) => void
   onClear: () => void
 }
 
@@ -31,10 +34,27 @@ export function QuestionFilters({
   showStatus,
   hasActiveFilters,
   onChange,
+  onSearchChange,
   onClear,
 }: QuestionFiltersProps) {
   return (
-    <div className="rounded-2xl bg-surface p-4 shadow-card">
+    <div className="space-y-4 rounded-2xl bg-surface p-4 shadow-card">
+      <div className="relative">
+        <TextField
+          label="Buscar en el enunciado"
+          type="search"
+          autoComplete="off"
+          placeholder="Ej.: triángulo, porcentaje, fotosíntesis"
+          value={values.search}
+          onChange={(event) => onSearchChange(event.target.value)}
+          className="[&_input]:pl-10"
+        />
+        <Search
+          aria-hidden
+          className="pointer-events-none absolute top-[2.15rem] left-3 size-5 text-ink-muted"
+        />
+      </div>
+
       <div
         className={`grid gap-4 sm:grid-cols-2 ${showStatus ? 'lg:grid-cols-5' : 'lg:grid-cols-4'}`}
       >
@@ -105,7 +125,7 @@ export function QuestionFilters({
       </div>
 
       {hasActiveFilters && (
-        <div className="mt-3 flex justify-end">
+        <div className="flex justify-end">
           <Button variant="ghost" size="sm" onClick={onClear}>
             <FilterX aria-hidden className="size-4" />
             Limpiar filtros
