@@ -6,6 +6,7 @@ import { QuestionReviewList } from '../../components/exam/QuestionReviewList'
 import { StudyPlan } from '../../components/exam/StudyPlan'
 import { ErrorScreen } from '../../components/feedback/ErrorScreen'
 import { PageLoader } from '../../components/feedback/PageLoader'
+import { PageHeader } from '../../components/layout/PageHeader'
 import { buttonStyles } from '../../components/ui/buttonStyles'
 import { Card } from '../../components/ui/Card'
 import { useFetch } from '../../hooks/useFetch'
@@ -45,11 +46,12 @@ export default function ExamResultPage() {
   ]
 
   return (
-    <main className="mx-auto max-w-4xl space-y-6 px-4 py-10">
-      <header className="space-y-1">
-        <p className="text-sm text-ink-muted">{examTypeLabels[exam.tipo]}</p>
-        <h1 className="text-2xl font-bold">Tu resultado</h1>
-      </header>
+    <main className="mx-auto max-w-4xl space-y-6 px-4 py-8 sm:px-6">
+      <PageHeader
+        title="Tu resultado"
+        description={examTypeLabels[exam.tipo]}
+        breadcrumbs={[{ label: 'Mis simulacros', to: paths.examHistory }, { label: 'Resultado' }]}
+      />
 
       <Card aria-label="Puntaje" className="grid gap-6 sm:grid-cols-2">
         <div>

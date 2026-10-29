@@ -5,6 +5,7 @@ import { generatePath, useNavigate } from 'react-router'
 import { z } from 'zod'
 import { areaService } from '../../api/areaService'
 import { examService } from '../../api/examService'
+import { PageHeader } from '../../components/layout/PageHeader'
 import { Button } from '../../components/ui/Button'
 import { SelectField } from '../../components/ui/SelectField'
 import { useFetch } from '../../hooks/useFetch'
@@ -80,13 +81,15 @@ export default function NewExamPage() {
   }
 
   return (
-    <main className="mx-auto max-w-3xl space-y-6 px-4 py-10">
-      <header className="space-y-1">
-        <h1 className="text-2xl font-bold">Nuevo simulacro</h1>
-        <p className="text-ink-muted">
-          Elige qué examen quieres rendir. Si lo dejas a medias, puedes continuarlo después.
-        </p>
-      </header>
+    <main className="mx-auto max-w-3xl space-y-6 px-4 py-8 sm:px-6">
+      <PageHeader
+        title="Nuevo simulacro"
+        description="Elige qué examen quieres rendir. Si lo dejas a medias, puedes continuarlo después."
+        breadcrumbs={[
+          { label: 'Mis simulacros', to: paths.examHistory },
+          { label: 'Nuevo simulacro' },
+        ]}
+      />
 
       <form
         onSubmit={handleSubmit(onSubmit)}
