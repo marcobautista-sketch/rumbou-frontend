@@ -1,6 +1,7 @@
 import * as ImagePicker from 'expo-image-picker'
 import { Alert, Linking } from 'react-native'
 import type { SolutionPhoto } from '../types/solution'
+import { askChoice } from './askChoice'
 
 export type PhotoSource = 'camera' | 'library'
 
@@ -13,20 +14,6 @@ const pickerOptions: ImagePicker.ImagePickerOptions = {
   quality: 0.6,
 }
 
-function ask(title: string, message: string, buttons: { text: string; value: string }[]) {
-  return new Promise<string | null>((resolve) =>
-    Alert.alert(
-      title,
-      message,
-      [
-        { text: 'Cancelar', style: 'cancel', onPress: () => resolve(null) },
-        ...buttons.map(({ text, value }) => ({ text, onPress: () => resolve(value) })),
-      ],
-      { cancelable: true, onDismiss: () => resolve(null) },
-    ),
-  )
-}
-
 // Antes del aviso del sistema explicamos para qué es la cámara; si la niegan, queda la galería.
 async function cameraAllowed(): Promise<PhotoSource | null> {
   const current = await ImagePicker.getCameraPermissionsAsync()
@@ -34,7 +21,7 @@ async function cameraAllowed(): Promise<PhotoSource | null> {
   if (current.canAskAgain) {
     const accepted =
       current.status !== 'undetermined' ||
-      (await ask(
+      (await askChoice(
         'Usar la cámara',
         'RumboU usa la cámara solo para fotografiar tu solución en papel y enviársela al tutor.',
         [{ text: 'Continuar', value: 'ok' }],
@@ -42,7 +29,7 @@ async function cameraAllowed(): Promise<PhotoSource | null> {
     if (!accepted) return null
     if ((await ImagePicker.requestCameraPermissionsAsync()).granted) return 'camera'
   }
-  const choice = await ask(
+  const choice = await askChoice(
     'Sin acceso a la cámara',
     'Puedes elegir una foto de tu galería o dar el permiso de la cámara en Ajustes.',
     [
