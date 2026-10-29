@@ -3,12 +3,13 @@ import { useCallback, useState } from 'react'
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { AnswerReview } from '../components/AnswerReview'
 import { Button } from '../components/Button'
+import { Chip } from '../components/Chip'
 import { ErrorRetry } from '../components/ErrorRetry'
 import { OptionList } from '../components/OptionList'
 import { ProgressBar } from '../components/ProgressBar'
 import { SolutionPhotoReview } from '../components/SolutionPhotoReview'
+import { StatCard } from '../components/StatCard'
 import { useFetch } from '../hooks/useFetch'
-import { toApiError } from '../services/apiError'
 import { challengeService } from '../services/challengeService'
 import { tutorService } from '../services/tutorService'
 import { userService } from '../services/userService'
@@ -16,25 +17,6 @@ import { useColors } from '../theme/useColors'
 import type { DailyChallenge } from '../types/challenge'
 import { formatMath } from '../utils/formatMath'
 import { notify } from '../utils/notify'
-
-function StatCard({
-  icon,
-  value,
-  label,
-}: {
-  icon: 'flame' | 'star'
-  value: string
-  label: string
-}) {
-  const colors = useColors()
-  return (
-    <View style={[styles.card, styles.stat, { backgroundColor: colors.surface }]}>
-      <Ionicons name={icon} size={26} color={colors.accentText} />
-      <Text style={[styles.statValue, { color: colors.text }]}>{value}</Text>
-      <Text style={[styles.statLabel, { color: colors.muted }]}>{label}</Text>
-    </View>
-  )
-}
 
 function TutorExplanation({ challenge }: { challenge: DailyChallenge }) {
   const colors = useColors()
@@ -46,7 +28,7 @@ function TutorExplanation({ challenge }: { challenge: DailyChallenge }) {
     try {
       setExplanation(await tutorService.explain(challenge.preguntaId, challenge.alternativaMarcada))
     } catch (error) {
-      notify.error(toApiError(error))
+      notify.error(error)
     } finally {
       setLoading(false)
     }
@@ -201,14 +183,8 @@ export default function ChallengeScreen() {
         current && (
           <View style={styles.section}>
             <View style={styles.between}>
-              <Text style={[styles.chip, { backgroundColor: colors.chip, color: colors.primary }]}>
-                {current.tema}
-              </Text>
-              <Text
-                style={[styles.chip, { backgroundColor: colors.accentSoft, color: colors.text }]}
-              >
-                5 min · +{current.xpPorAcierto} XP
-              </Text>
+              <Chip label={current.tema} />
+              <Chip label={`5 min · +${current.xpPorAcierto} XP`} tone="accent" />
             </View>
             <Text style={[styles.question, { color: colors.text }]}>
               {formatMath(current.enunciado)}
@@ -240,20 +216,10 @@ const styles = StyleSheet.create({
   content: { gap: 16, padding: 20 },
   row: { flexDirection: 'row', gap: 12 },
   card: { gap: 10, borderRadius: 16, padding: 16 },
-  stat: { flex: 1, alignItems: 'center' },
-  statValue: { fontSize: 24, fontWeight: '700' },
-  statLabel: { fontSize: 12, fontWeight: '600', letterSpacing: 0.5 },
   cardTitle: { fontSize: 16, fontWeight: '600' },
   between: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 8 },
   centered: { textAlign: 'center' },
   section: { gap: 14 },
-  chip: {
-    overflow: 'hidden',
-    borderRadius: 999,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    fontWeight: '600',
-  },
   question: { fontSize: 18, lineHeight: 26 },
   verdict: { flexDirection: 'row', alignItems: 'center', gap: 12, borderRadius: 16, padding: 16 },
   verdictTitle: { fontSize: 20, fontWeight: '700' },

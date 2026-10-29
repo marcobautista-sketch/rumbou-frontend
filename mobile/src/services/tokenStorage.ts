@@ -1,9 +1,10 @@
 import * as SecureStore from 'expo-secure-store'
 import type { AuthTokens } from '../types/auth'
 
-const ACCESS_TOKEN_KEY = 'rumbou.accessToken'
 const REFRESH_TOKEN_KEY = 'rumbou.refreshToken'
 
+// El access token dura poco y vive solo en memoria. El refresh token se guarda cifrado con
+// SecureStore para que, al volver a abrir la app, se pida un access token nuevo sin la contraseña.
 let accessToken: string | null = null
 
 export const tokenStorage = {
@@ -13,13 +14,11 @@ export const tokenStorage = {
 
   async save(tokens: AuthTokens) {
     accessToken = tokens.accessToken
-    await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, tokens.accessToken)
     await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, tokens.refreshToken)
   },
 
   async clear() {
     accessToken = null
-    await SecureStore.deleteItemAsync(ACCESS_TOKEN_KEY)
     await SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY)
   },
 }
