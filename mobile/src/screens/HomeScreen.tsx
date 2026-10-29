@@ -4,6 +4,7 @@ import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'r
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Button } from '../components/Button'
 import { ErrorRetry } from '../components/ErrorRetry'
+import { StatCard } from '../components/StatCard'
 import { useAuth } from '../hooks/useAuth'
 import { useFetch } from '../hooks/useFetch'
 import type { MainTabScreenProps } from '../navigation/types'
@@ -15,17 +16,6 @@ import { examTypeLabels, formatExamDate, formatScore } from '../utils/examLabels
 
 type HomeScreenProps = MainTabScreenProps<'Home'>
 type IconName = ComponentProps<typeof Ionicons>['name']
-
-function StatCard({ icon, value, label }: { icon: IconName; value: string; label: string }) {
-  const colors = useColors()
-  return (
-    <View style={[styles.card, styles.stat, { backgroundColor: colors.surface }]}>
-      <Ionicons name={icon} size={26} color={colors.accentText} />
-      <Text style={[styles.statValue, { color: colors.text }]}>{value}</Text>
-      <Text style={[styles.statLabel, { color: colors.muted }]}>{label}</Text>
-    </View>
-  )
-}
 
 function Shortcut({
   icon,
@@ -188,9 +178,6 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', gap: 12 },
   flex: { flex: 1 },
   card: { gap: 8, borderRadius: 16, padding: 16 },
-  stat: { flex: 1, alignItems: 'center', gap: 2 },
-  statValue: { fontSize: 22, fontWeight: '700' },
-  statLabel: { fontSize: 12, fontWeight: '600', letterSpacing: 0.5 },
   cardLabel: { fontSize: 12, fontWeight: '700', letterSpacing: 0.5 },
   cardTitle: { fontSize: 17, fontWeight: '700' },
   score: { fontSize: 36, fontWeight: '700' },
