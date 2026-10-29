@@ -20,7 +20,7 @@ import { useDebounce } from '../../hooks/useDebounce'
 import { useFetch } from '../../hooks/useFetch'
 import { usePagination } from '../../hooks/usePagination'
 import { paths } from '../../routes/paths'
-import { DEFAULT_QUESTION_SORT, isDifficulty } from '../../utils/questionLabels'
+import { isDifficulty, readQuestionSort } from '../../utils/questionLabels'
 
 const statusToApproved: Record<string, boolean | undefined> = {
   approved: true,
@@ -39,7 +39,7 @@ export default function QuestionListPage() {
     topic: searchParams.get('topic') ?? '',
     difficulty: searchParams.get('difficulty') ?? '',
     status: searchParams.get('status') ?? '',
-    sort: searchParams.get('sort') ?? DEFAULT_QUESTION_SORT,
+    sort: readQuestionSort(searchParams.get('sort')),
   }
   const hasActiveFilters = Boolean(
     filters.search || filters.area || filters.topic || filters.difficulty || filters.status,
