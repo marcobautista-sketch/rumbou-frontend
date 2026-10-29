@@ -11,7 +11,7 @@ CS 2031 Desarrollo Basado en Plataformas (UTEC).
 | Parte | Dónde | URL |
 | --- | --- | --- |
 | API REST | AWS EC2 detrás de nginx con HTTPS, base en RDS PostgreSQL | `https://184-194-122-22.sslip.io/api/v1` (salud: `/api/v1/health`) |
-| Web | Vercel | _pendiente_ |
+| Web | Vercel | https://rumbou-frontend.vercel.app |
 | Móvil | Expo (EAS) | _pendiente_ |
 
 ## Arquitectura
