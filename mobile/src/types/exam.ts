@@ -1,4 +1,16 @@
+export type ExamType = 'DIAGNOSTICO' | 'POR_TEMA' | 'COMPLETO'
 export type ExamStatus = 'EN_CURSO' | 'FINALIZADO'
+
+export interface Area {
+  id: number
+  universidad: string
+  nombre: string
+}
+
+export interface Topic {
+  id: number
+  nombre: string
+}
 
 export interface ExamQuestion {
   respuestaUsuarioId: number
@@ -15,7 +27,9 @@ export interface ExamQuestion {
 
 export interface ExamDetail {
   id: number
+  tipo: ExamType
   estado: ExamStatus
+  fechaInicio: string
   fechaFin: string | null
   puntajeObtenido: number | null
   psp: number | null
@@ -24,7 +38,16 @@ export interface ExamDetail {
 
 export interface ExamSummary {
   id: number
+  tipo: ExamType
   estado: ExamStatus
   area: string
+  fechaInicio: string
   fechaFin: string | null
+  puntajeObtenido: number | null
+}
+
+export interface StartExamRequest {
+  areaId: number
+  tipo: ExamType
+  temaId?: number
 }
