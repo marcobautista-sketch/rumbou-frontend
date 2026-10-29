@@ -19,6 +19,7 @@ export default function WelcomeScreen({ navigation }: WelcomeScreenProps) {
         Prepárate para el examen de admisión de la UNI y San Marcos con simulacros reales.
       </Text>
       <Button title="Desafío de hoy" onPress={() => navigation.navigate('Challenge')} />
+      <Button title="Asistente RumboU" onPress={() => navigation.navigate('Assistant')} />
       <Button
         title="Mi plan de estudio"
         variant="secondary"
