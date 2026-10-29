@@ -36,6 +36,12 @@
           "photosPermission": "RumboU abre tus fotos para que elijas la foto de tu solución.",
           "microphonePermission": false
         }
+      ],
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "RumboU usa el micrófono para que le hagas preguntas al asistente con tu voz."
+        }
       ]
     ]
   }
