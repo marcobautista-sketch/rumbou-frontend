@@ -12,16 +12,20 @@ import {
 import { SkeletonList } from '../../components/ui/Skeleton'
 import { useFetch } from '../../hooks/useFetch'
 import { paths } from '../../routes/paths'
-import type { Question } from '../../types/question'
+import type { AdminQuestion } from '../../types/question'
 import { notify } from '../../utils/notify'
 
-function toFormValues(question: Question): QuestionFormValues {
+function toFormValues(question: AdminQuestion): QuestionFormValues {
   return {
-    ...emptyQuestionForm,
+    areaId: '',
     temaId: String(question.temaId),
     enunciado: question.enunciado,
     alternativas: question.alternativas,
+    claveCorrecta: String(question.claveCorrecta),
+    explicacion: question.explicacion ?? '',
     dificultad: question.dificultad,
+    origen: question.origen,
+    aprobada: question.aprobada,
   }
 }
 
@@ -32,8 +36,8 @@ export default function QuestionFormPage() {
   const navigate = useNavigate()
 
   const fetchQuestion = useCallback(
-    (signal: AbortSignal): Promise<Question | null> =>
-      isEditing ? questionService.getById(id, signal) : Promise.resolve(null),
+    (signal: AbortSignal): Promise<AdminQuestion | null> =>
+      isEditing ? questionService.getComplete(id, signal) : Promise.resolve(null),
     [isEditing, id],
   )
   const existing = useFetch(fetchQuestion)
@@ -85,11 +89,6 @@ export default function QuestionFormPage() {
               : undefined
           }
           submitLabel={isEditing ? 'Guardar cambios' : 'Crear pregunta'}
-          notice={
-            isEditing
-              ? 'Por seguridad, la API no envía la clave ni la explicación actuales. Vuelve a marcar la alternativa correcta y revisa la explicación, el origen y el estado antes de guardar.'
-              : undefined
-          }
           onSubmit={saveQuestion}
           onCancel={() => navigate(isEditing ? detailPath(id) : paths.questions)}
         />
