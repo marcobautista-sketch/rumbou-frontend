@@ -7,11 +7,13 @@ import { StudyPlan } from '../../components/exam/StudyPlan'
 import { ErrorScreen } from '../../components/feedback/ErrorScreen'
 import { PageLoader } from '../../components/feedback/PageLoader'
 import { buttonStyles } from '../../components/ui/buttonStyles'
+import { Card } from '../../components/ui/Card'
 import { useFetch } from '../../hooks/useFetch'
 import { paths } from '../../routes/paths'
 import { examTypeLabels, summarizeExam } from '../../utils/examSummary'
+import { formatScore } from '../../utils/format'
 
-const cardStyles = 'rounded-2xl bg-surface p-6 shadow-card'
+const scoreOrDash = (score: number | null) => (score === null ? '—' : formatScore(score))
 
 export default function ExamResultPage() {
   const examId = Number(useParams().examId)
@@ -49,32 +51,30 @@ export default function ExamResultPage() {
         <h1 className="text-2xl font-bold">Tu resultado</h1>
       </header>
 
-      <section aria-label="Puntaje" className={`${cardStyles} grid gap-6 sm:grid-cols-2`}>
+      <Card aria-label="Puntaje" className="grid gap-6 sm:grid-cols-2">
         <div>
           <p className="text-sm text-ink-muted">Puntaje obtenido</p>
-          <p className="text-4xl font-bold text-primary">
-            {exam.puntajeObtenido?.toFixed(2) ?? '—'}
-          </p>
+          <p className="text-4xl font-bold text-primary">{scoreOrDash(exam.puntajeObtenido)}</p>
         </div>
         <div>
           <p className="text-sm text-ink-muted">Puntaje simulado proyectado (PSP)</p>
-          <p className="text-4xl font-bold">{exam.psp?.toFixed(2) ?? '—'}</p>
+          <p className="text-4xl font-bold">{scoreOrDash(exam.psp)}</p>
         </div>
-      </section>
+      </Card>
 
       <section aria-label="Respuestas" className="grid gap-4 sm:grid-cols-3">
         {stats.map(({ label, value, Icon, color }) => (
-          <div key={label} className={`${cardStyles} flex items-center gap-3`}>
+          <Card key={label} className="flex items-center gap-3">
             <Icon aria-hidden className={`size-8 ${color}`} />
             <div>
               <p className="text-2xl font-bold">{value}</p>
               <p className="text-sm text-ink-muted">{label}</p>
             </div>
-          </div>
+          </Card>
         ))}
       </section>
 
-      <section aria-labelledby="study-plan-title" className={`${cardStyles} space-y-4`}>
+      <Card aria-labelledby="study-plan-title" className="space-y-4">
         <header className="space-y-1">
           <h2 id="study-plan-title" className="flex items-center gap-2 text-lg font-semibold">
             <GraduationCap aria-hidden className="size-5" />
@@ -85,7 +85,7 @@ export default function ExamResultPage() {
           </p>
         </header>
         <StudyPlan topics={summary.weakTopics} />
-      </section>
+      </Card>
 
       <section aria-labelledby="review-title" className="space-y-3">
         <h2 id="review-title" className="flex items-center gap-2 text-lg font-semibold">
