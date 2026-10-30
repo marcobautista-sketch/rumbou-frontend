@@ -8,6 +8,7 @@ export const paths = {
   dashboard: '/dashboard',
   progress: '/progress',
   achievements: '/achievements',
+  careers: '/careers',
   challenge: '/challenge',
   examHistory: '/exams',
   newExam: '/exams/new',
