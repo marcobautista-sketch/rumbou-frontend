@@ -1,20 +1,17 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CircleAlert, Crown } from 'lucide-react'
 import { useCallback, useId, useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
-import { Link } from 'react-router'
 import { z } from 'zod'
 import { toApiError, type ApiError } from '../../api/apiError'
 import { goalService } from '../../api/goalService'
 import { offerService } from '../../api/offerService'
 import { useFetch } from '../../hooks/useFetch'
-import { paths } from '../../routes/paths'
 import type { Goal } from '../../types/goal'
 import { notify } from '../../utils/notify'
 import { universityNames } from '../../utils/universityLabels'
 import { Button } from '../ui/Button'
-import { buttonStyles } from '../ui/buttonStyles'
 import { Modal } from '../ui/Modal'
+import { GoalRejectionAlert } from './GoalRejectionAlert'
 import { SelectField } from '../ui/SelectField'
 
 const addGoalSchema = z.object({
@@ -132,23 +129,7 @@ export function AddGoalModal({ open, takenOfferIds, onClose, onAdded }: AddGoalM
           ))}
         </SelectField>
 
-        {rejection && (
-          <div
-            role="alert"
-            className="flex animate-fade-in flex-col gap-3 rounded-2xl border border-danger/30 bg-danger-soft p-4 text-danger"
-          >
-            <p className="flex gap-2">
-              <CircleAlert aria-hidden className="mt-0.5 size-5 shrink-0" />
-              {rejection.message}
-            </p>
-            {rejection.kind === 'forbidden' && (
-              <Link to={paths.profile} className={`${buttonStyles('primary', 'sm')} self-start`}>
-                <Crown aria-hidden className="size-4" />
-                Pasar a PRO para seguir hasta 3 carreras
-              </Link>
-            )}
-          </div>
-        )}
+        {rejection && <GoalRejectionAlert error={rejection} />}
       </form>
     </Modal>
   )
