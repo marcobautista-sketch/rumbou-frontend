@@ -54,7 +54,9 @@ export function OptionList<T extends string | number>({
                     : { borderColor: colors.muted },
                 ]}
               >
-                <Text style={[styles.letterText, { color: colors.text }]}>
+                <Text
+                  style={[styles.letterText, { color: active ? colors.onAccent : colors.text }]}
+                >
                   {String.fromCharCode(65 + index)}
                 </Text>
               </View>

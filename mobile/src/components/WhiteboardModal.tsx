@@ -9,9 +9,9 @@ import { formatMath } from '../utils/formatMath'
 import { notify } from '../utils/notify'
 import { Button } from './Button'
 
-// Hoja blanca y tinta azul marino también en modo oscuro: es lo que el tutor tiene que leer.
+// Hoja blanca y tinta azul lapicero también en modo oscuro: es lo que el tutor tiene que leer.
 const PAPER = '#ffffff'
-const INK = '#001430'
+const INK = '#2452c4'
 
 interface WhiteboardModalProps {
   visible: boolean

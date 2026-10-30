@@ -30,9 +30,9 @@ export function AnswerReview({ alternatives, correct, marked }: AnswerReviewProp
               aria-hidden
               className={`flex size-7 shrink-0 items-center justify-center rounded-full text-sm font-semibold ${
                 isCorrect
-                  ? 'bg-success text-white'
+                  ? 'bg-success text-surface'
                   : isWrongChoice
-                    ? 'bg-danger text-white'
+                    ? 'bg-danger text-surface'
                     : 'border-2 border-ink-muted'
               }`}
             >
