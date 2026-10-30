@@ -1,205 +1,148 @@
-import { CircleCheck, GraduationCap, Plus, SearchX } from 'lucide-react'
-import { useCallback, useMemo, useState } from 'react'
+import { Flag, SearchX } from 'lucide-react'
+import { useCallback, useMemo } from 'react'
 import { Link, useSearchParams } from 'react-router'
+import { areaService } from '../../api/areaService'
 import { goalService } from '../../api/goalService'
 import { offerService } from '../../api/offerService'
+import { CareerCard } from '../../components/careers/CareerCard'
+import { CareerDetailModal } from '../../components/careers/CareerDetailModal'
+import { CareerFilters, type CareerFilterValues } from '../../components/careers/CareerFilters'
 import { InlineError } from '../../components/feedback/InlineError'
 import { PageHeader } from '../../components/layout/PageHeader'
-import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
 import { buttonStyles } from '../../components/ui/buttonStyles'
-import { Card } from '../../components/ui/Card'
 import { EmptyState } from '../../components/ui/EmptyState'
-import { SelectField } from '../../components/ui/SelectField'
 import { SkeletonList } from '../../components/ui/Skeleton'
-import { TextField } from '../../components/ui/TextField'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useFetch } from '../../hooks/useFetch'
 import { paths } from '../../routes/paths'
-import type { AcademicOffer } from '../../types/offer'
-import { formatScore } from '../../utils/format'
-import { notify } from '../../utils/notify'
+import { readCareerSort, sortCareers } from '../../utils/careerLabels'
 
-const universities = [
-  { value: '', label: 'Todas' },
-  { value: 'UNI', label: 'UNI' },
-  { value: 'UNMSM', label: 'San Marcos' },
-]
-
-interface OfferCardProps {
-  offer: AcademicOffer
-  isGoal: boolean
-  adding: boolean
-  onAdd: (offer: AcademicOffer) => void
-}
-
-function OfferCard({ offer, isGoal, adding, onAdd }: OfferCardProps) {
-  return (
-    <Card className="flex flex-col gap-3">
-      <div className="flex items-start justify-between gap-2">
-        <h2 className="text-lg font-semibold">{offer.carrera}</h2>
-        <Badge tone="brand">{offer.universidad}</Badge>
-      </div>
-      <p className="text-sm text-ink-muted">
-        {offer.facultad} · {offer.areaNombre} · Proceso {offer.procesoAdmision}
-      </p>
-      <dl className="grid grid-cols-2 gap-2 text-sm">
-        <div>
-          <dt className="text-ink-muted">Último ingresante</dt>
-          <dd className="font-display text-xl font-bold">
-            {formatScore(offer.puntajeUltimoIngresante)}
-          </dd>
-        </div>
-        <div>
-          <dt className="text-ink-muted">Vacantes</dt>
-          <dd className="font-display text-xl font-bold">{offer.vacantes}</dd>
-        </div>
-      </dl>
-      <div className="mt-auto">
-        {isGoal ? (
-          <p className="flex items-center gap-2 font-medium text-success">
-            <CircleCheck aria-hidden className="size-5" /> Ya es una de tus metas
-          </p>
-        ) : (
-          <Button
-            variant="secondary"
-            size="sm"
-            loading={adding}
-            onClick={() => onAdd(offer)}
-            aria-label={`Agregar ${offer.carrera} de la ${offer.universidad} a mis metas`}
-          >
-            <Plus aria-hidden className="size-4" /> Agregar a mis metas
-          </Button>
-        )}
-      </div>
-    </Card>
-  )
-}
-
-// Catálogo público de carreras: el texto y la universidad viven en la URL para compartir la búsqueda.
 export default function CareersPage() {
   const [searchParams, setSearchParams] = useSearchParams()
-  const [addingId, setAddingId] = useState<number | null>(null)
-  const search = searchParams.get('q') ?? ''
-  const university = searchParams.get('universidad') ?? ''
-  const debouncedSearch = useDebounce(search.trim())
+  const filters: CareerFilterValues = {
+    search: searchParams.get('q') ?? '',
+    universidad: searchParams.get('universidad') ?? '',
+    area: searchParams.get('area') ?? '',
+    sort: readCareerSort(searchParams.get('sort')),
+  }
+  const selectedId = Number(searchParams.get('detalle'))
+  const hasActiveFilters = Boolean(filters.search || filters.universidad || filters.area)
+  const debouncedSearch = useDebounce(filters.search.trim())
 
+  const fetchAreas = useCallback((signal: AbortSignal) => areaService.list(signal), [])
+  const fetchGoals = useCallback((signal: AbortSignal) => goalService.list(signal), [])
   const fetchOffers = useCallback(
     (signal: AbortSignal) =>
       offerService.search(
-        { universidad: university || undefined, carrera: debouncedSearch || undefined },
+        {
+          universidad: filters.universidad || undefined,
+          area: filters.area || undefined,
+          carrera: debouncedSearch || undefined,
+        },
         signal,
       ),
-    [university, debouncedSearch],
+    [filters.universidad, filters.area, debouncedSearch],
   )
-  const fetchGoals = useCallback((signal: AbortSignal) => goalService.list(signal), [])
-  const offers = useFetch(fetchOffers)
+  const areas = useFetch(fetchAreas)
   const goals = useFetch(fetchGoals)
+  const offers = useFetch(fetchOffers)
+
+  const universities = useMemo(
+    () => [...new Set(areas.data?.map((area) => area.universidad))],
+    [areas.data],
+  )
+  const universityAreas = useMemo(
+    () => areas.data?.filter((area) => area.universidad === filters.universidad) ?? [],
+    [areas.data, filters.universidad],
+  )
+  const careers = useMemo(
+    () => sortCareers(offers.data ?? [], filters.sort),
+    [offers.data, filters.sort],
+  )
   const goalOfferIds = useMemo(
     () => new Set(goals.data?.map((goal) => goal.ofertaAcademicaId)),
     [goals.data],
   )
-  const sortedOffers = useMemo(
-    () =>
-      [...(offers.data ?? [])].sort(
-        (a, b) =>
-          a.carrera.localeCompare(b.carrera, 'es') || a.universidad.localeCompare(b.universidad),
-      ),
-    [offers.data],
-  )
+  const selectedOffer = careers.find((offer) => offer.id === selectedId) ?? null
 
-  const setFilter = (key: string, value: string) =>
+  const updateParams = (changes: Record<string, string | null>, replace = false) =>
     setSearchParams(
       (params) => {
-        if (value) params.set(key, value)
-        else params.delete(key)
+        Object.entries(changes).forEach(([key, value]) =>
+          value ? params.set(key, value) : params.delete(key),
+        )
         return params
       },
-      { replace: true },
+      { replace },
     )
 
-  const addGoal = async (offer: AcademicOffer) => {
-    setAddingId(offer.id)
-    try {
-      await goalService.create(offer.id)
-      notify.success(`${offer.carrera} ya es una de tus metas.`)
-      goals.retry()
-    } catch (error) {
-      // En el plan gratuito, la segunda meta responde 403 con el motivo: se muestra tal cual.
-      notify.error(error)
-    } finally {
-      setAddingId(null)
-    }
-  }
+  const clearFilters = () => updateParams({ q: null, universidad: null, area: null })
 
   return (
     <main className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
       <PageHeader
-        title="Carreras"
-        description="Compara el puntaje del último ingresante y las vacantes, y agrega a tus metas la carrera a la que postulas."
-        breadcrumbs={[{ label: 'Carreras' }]}
+        title="Catálogo de carreras"
+        description="Explora las carreras de la UNI y San Marcos, sus vacantes y el puntaje del último ingresante."
+        breadcrumbs={[{ label: 'Inicio', to: paths.dashboard }, { label: 'Carreras' }]}
         actions={
           <Link to={paths.progress} className={buttonStyles('ghost', 'sm')}>
-            <GraduationCap aria-hidden className="size-4" /> Ver mis metas
+            <Flag aria-hidden className="size-4" />
+            Ver mis objetivos
           </Link>
         }
       />
 
-      <div className="grid gap-4 sm:grid-cols-[2fr_1fr]">
-        <TextField
-          label="Buscar carrera"
-          type="search"
-          placeholder="Por ejemplo: sistemas, medicina, civil"
-          value={search}
-          onChange={(event) => setFilter('q', event.target.value)}
-        />
-        <SelectField
-          label="Universidad"
-          value={university}
-          onChange={(event) => setFilter('universidad', event.target.value)}
-        >
-          {universities.map(({ value, label }) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </SelectField>
-      </div>
+      <CareerFilters
+        values={filters}
+        universities={universities}
+        areas={universityAreas}
+        loadingAreas={areas.loading}
+        hasActiveFilters={hasActiveFilters}
+        onChange={updateParams}
+        onSearchChange={(search) => updateParams({ q: search }, true)}
+        onClear={clearFilters}
+      />
 
-      {offers.loading ? (
-        <SkeletonList rows={3} label="Buscando carreras" />
-      ) : offers.error ? (
-        <InlineError message={offers.error.message} onRetry={offers.retry} />
-      ) : sortedOffers.length === 0 ? (
-        <EmptyState
-          icon={SearchX}
-          title="No encontramos carreras"
-          message="Prueba con otra palabra o elige todas las universidades."
-          action={
-            <Button variant="secondary" onClick={() => setSearchParams({}, { replace: true })}>
-              Limpiar la búsqueda
-            </Button>
-          }
-        />
-      ) : (
-        <>
-          <p className="text-sm text-ink-muted" aria-live="polite">
-            {sortedOffers.length} {sortedOffers.length === 1 ? 'carrera' : 'carreras'}
-          </p>
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {sortedOffers.map((offer) => (
-              <li key={offer.id} className="flex">
-                <OfferCard
+      <section aria-label="Resultados" aria-busy={offers.loading} className="space-y-4">
+        {offers.loading && !offers.data ? (
+          <SkeletonList rows={4} label="Cargando carreras…" />
+        ) : offers.error ? (
+          <InlineError message={offers.error.message} onRetry={offers.retry} />
+        ) : careers.length === 0 ? (
+          <EmptyState
+            icon={SearchX}
+            title="No encontramos carreras"
+            message="Prueba con otro nombre o cambia la universidad y el área para ver más opciones."
+            action={hasActiveFilters && <Button onClick={clearFilters}>Limpiar filtros</Button>}
+          />
+        ) : (
+          <>
+            <p aria-live="polite" className="text-sm text-ink-muted">
+              {careers.length}{' '}
+              {careers.length === 1 ? 'carrera encontrada' : 'carreras encontradas'}
+            </p>
+            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {careers.map((offer) => (
+                <CareerCard
+                  key={offer.id}
                   offer={offer}
                   isGoal={goalOfferIds.has(offer.id)}
-                  adding={addingId === offer.id}
-                  onAdd={addGoal}
+                  onSelect={(selected) => updateParams({ detalle: String(selected.id) })}
                 />
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
+              ))}
+            </ul>
+          </>
+        )}
+      </section>
+
+      <CareerDetailModal
+        key={selectedOffer?.id}
+        offer={selectedOffer}
+        isGoal={selectedOffer ? goalOfferIds.has(selectedOffer.id) : false}
+        onClose={() => updateParams({ detalle: null })}
+        onAdded={goals.retry}
+      />
     </main>
   )
 }
