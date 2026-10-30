@@ -99,10 +99,15 @@ export default function ProgressPage() {
         description="Tu probabilidad de ingreso, tus temas y cómo evoluciona tu puntaje."
         breadcrumbs={[{ label: 'Inicio', to: paths.dashboard }, { label: 'Mi progreso' }]}
         actions={
-          <Button onClick={() => setAdding(true)}>
-            <Plus aria-hidden className="size-4" />
-            Agregar objetivo
-          </Button>
+          <>
+            <Link to={paths.careers} className={buttonStyles('secondary')}>
+              Explorar carreras
+            </Link>
+            <Button onClick={() => setAdding(true)}>
+              <Plus aria-hidden className="size-4" />
+              Agregar objetivo
+            </Button>
+          </>
         }
       />
 
