@@ -63,11 +63,11 @@ function ExamInProgress({ exam }: { exam: ExamDetail }) {
   const unanswered = total - answeredCount
 
   return (
-    <main className="mx-auto max-w-5xl space-y-6 px-4 py-8">
+    <main className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="text-sm text-ink-muted">{examTypeLabels[exam.tipo]}</p>
-          <h1 className="text-2xl font-bold">
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
             Pregunta {index + 1} de {total}
           </h1>
         </div>

@@ -4,7 +4,7 @@ import { toApiError } from './apiError'
 import { tokenStore } from './tokenStore'
 
 interface RetriableRequest extends InternalAxiosRequestConfig {
-  retried?: boolean
+  retriedWithNewToken?: boolean
   retriedAfterFailure?: boolean
 }
 
@@ -36,6 +36,8 @@ export function onSessionExpired(listener: () => void) {
   }
 }
 
+// Si varias peticiones reciben 401 a la vez, todas esperan la misma renovación en vez de pedir
+// un token nuevo cada una. El refresh token viaja solo en la cookie HttpOnly.
 export function refreshAccessToken(): Promise<string> {
   pendingRefresh ??= refreshClient
     .post<AuthTokens>('/auth/refresh')
@@ -68,16 +70,17 @@ apiClient.interceptors.response.use(
       return apiClient(request)
     }
 
+    // 401 = el access token venció: se renueva y se repite la petición una sola vez.
     const sessionCanBeRenewed =
       axios.isAxiosError(error) &&
       error.response?.status === 401 &&
       request !== undefined &&
-      !request.retried &&
+      !request.retriedWithNewToken &&
       tokenStore.get() !== null
 
     if (!sessionCanBeRenewed) throw toApiError(error)
 
-    request.retried = true
+    request.retriedWithNewToken = true
     try {
       await refreshAccessToken()
     } catch {
