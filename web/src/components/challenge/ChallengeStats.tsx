@@ -1,5 +1,6 @@
 import { Flame, Star } from 'lucide-react'
 import { Card } from '../ui/Card'
+import { formatDays } from '../../utils/format'
 import { Skeleton } from '../ui/Skeleton'
 
 interface ChallengeStatsProps {
@@ -28,7 +29,7 @@ export function ChallengeStats({
           {streak === null ? (
             <Skeleton className="h-7 w-20" />
           ) : (
-            <p className="font-display text-2xl font-bold">{streak} días</p>
+            <p className="font-display text-2xl font-bold">{formatDays(streak)}</p>
           )}
           <p className="text-sm font-medium tracking-wide text-ink-muted uppercase">Racha diaria</p>
         </div>
