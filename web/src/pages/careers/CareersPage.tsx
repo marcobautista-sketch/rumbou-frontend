@@ -1,6 +1,6 @@
-import { SearchX } from 'lucide-react'
+import { Flag, SearchX } from 'lucide-react'
 import { useCallback, useMemo } from 'react'
-import { useSearchParams } from 'react-router'
+import { Link, useSearchParams } from 'react-router'
 import { areaService } from '../../api/areaService'
 import { goalService } from '../../api/goalService'
 import { offerService } from '../../api/offerService'
@@ -10,6 +10,7 @@ import { CareerFilters, type CareerFilterValues } from '../../components/careers
 import { InlineError } from '../../components/feedback/InlineError'
 import { PageHeader } from '../../components/layout/PageHeader'
 import { Button } from '../../components/ui/Button'
+import { buttonStyles } from '../../components/ui/buttonStyles'
 import { EmptyState } from '../../components/ui/EmptyState'
 import { SkeletonList } from '../../components/ui/Skeleton'
 import { useDebounce } from '../../hooks/useDebounce'
@@ -84,6 +85,12 @@ export default function CareersPage() {
         title="Catálogo de carreras"
         description="Explora las carreras de la UNI y San Marcos, sus vacantes y el puntaje del último ingresante."
         breadcrumbs={[{ label: 'Inicio', to: paths.dashboard }, { label: 'Carreras' }]}
+        actions={
+          <Link to={paths.progress} className={buttonStyles('ghost', 'sm')}>
+            <Flag aria-hidden className="size-4" />
+            Ver mis objetivos
+          </Link>
+        }
       />
 
       <CareerFilters

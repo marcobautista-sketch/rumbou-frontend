@@ -32,3 +32,7 @@ export function formatDuration(totalSeconds: number) {
 export function alternativeLetter(position: number) {
   return String.fromCharCode(65 + position)
 }
+
+export function formatDays(days: number) {
+  return `${days} ${days === 1 ? 'día' : 'días'}`
+}

@@ -25,8 +25,8 @@ export interface NavItem {
 export const navItems: NavItem[] = [
   { label: 'Inicio', to: paths.dashboard, icon: House },
   { label: 'Mi progreso', to: paths.progress, icon: ChartLine },
-  { label: 'Mis logros', to: paths.achievements, icon: Trophy },
   { label: 'Carreras', to: paths.careers, icon: GraduationCap },
+  { label: 'Mis logros', to: paths.achievements, icon: Trophy },
   { label: 'Desafío diario', to: paths.challenge, icon: Zap },
   { label: 'Nuevo simulacro', to: paths.newExam, icon: NotebookPen },
   { label: 'Mis simulacros', to: paths.examHistory, icon: History },

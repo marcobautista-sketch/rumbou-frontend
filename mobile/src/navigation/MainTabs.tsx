@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import type { ComponentProps } from 'react'
 import ChallengeScreen from '../screens/ChallengeScreen'
 import ExamHistoryScreen from '../screens/exams/ExamHistoryScreen'
+import GoalsScreen from '../screens/GoalsScreen'
 import HomeScreen from '../screens/HomeScreen'
 import ProfileScreen from '../screens/ProfileScreen'
 import { useColors } from '../theme/useColors'
@@ -15,6 +16,7 @@ const Tab = createBottomTabNavigator<MainTabParamList>()
 const tabIcons: Record<keyof MainTabParamList, IconName> = {
   Home: 'home',
   ExamHistory: 'document-text',
+  Goals: 'flag',
   Challenge: 'flash',
   Profile: 'person',
 }
@@ -45,6 +47,11 @@ export function MainTabs() {
         name="ExamHistory"
         component={ExamHistoryScreen}
         options={{ title: 'Simulacros', headerTitle: 'Mis simulacros' }}
+      />
+      <Tab.Screen
+        name="Goals"
+        component={GoalsScreen}
+        options={{ title: 'Metas', headerTitle: 'Mis metas' }}
       />
       <Tab.Screen
         name="Challenge"
