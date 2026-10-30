@@ -2,10 +2,11 @@ import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import type { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 
-// Las cuatro pestañas de abajo, una vez que el usuario inició sesión.
+// Las pestañas de abajo, una vez que el usuario inició sesión.
 export type MainTabParamList = {
   Home: undefined
   ExamHistory: undefined
+  Goals: undefined
   Challenge: undefined
   Profile: undefined
 }
