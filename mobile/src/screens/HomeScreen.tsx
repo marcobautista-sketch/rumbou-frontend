@@ -13,6 +13,7 @@ import { userService } from '../services/userService'
 import { useColors } from '../theme/useColors'
 import type { ExamSummary } from '../types/exam'
 import { examTypeLabels, formatExamDate, formatScore } from '../utils/examLabels'
+import { formatDays } from '../utils/format'
 
 type HomeScreenProps = MainTabScreenProps<'Home'>
 type IconName = ComponentProps<typeof Ionicons>['name']
@@ -93,7 +94,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
       <View style={styles.row}>
         <StatCard
           icon="flame"
-          value={gamification.data ? `${gamification.data.rachaActual} días` : '–'}
+          value={gamification.data ? formatDays(gamification.data.rachaActual) : '–'}
           label="RACHA"
         />
         <StatCard

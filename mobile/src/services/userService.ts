@@ -13,6 +13,13 @@ export const userService = {
     return data
   },
 
+  async changePassword(currentPassword: string, newPassword: string) {
+    await apiClient.patch('/usuarios/me/contrasena', {
+      contrasenaActual: currentPassword,
+      contrasenaNueva: newPassword,
+    })
+  },
+
   async updateProfile(profile: Pick<User, 'nombre' | 'apellidos' | 'telefono'>) {
     const { data } = await apiClient.put<User>('/usuarios/me', profile)
     return data

@@ -15,6 +15,7 @@ import { tutorService } from '../services/tutorService'
 import { userService } from '../services/userService'
 import { useColors } from '../theme/useColors'
 import type { DailyChallenge } from '../types/challenge'
+import { formatDays } from '../utils/format'
 import { formatMath } from '../utils/formatMath'
 import { notify } from '../utils/notify'
 
@@ -145,7 +146,7 @@ export default function ChallengeScreen() {
       <View style={styles.row}>
         <StatCard
           icon="flame"
-          value={`${gamification.data?.rachaActual ?? '–'} días`}
+          value={gamification.data ? formatDays(gamification.data.rachaActual) : '–'}
           label="RACHA DIARIA"
         />
         <StatCard
