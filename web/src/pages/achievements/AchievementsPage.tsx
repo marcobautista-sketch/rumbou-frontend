@@ -11,7 +11,7 @@ import { EmptyState } from '../../components/ui/EmptyState'
 import { Skeleton, SkeletonList } from '../../components/ui/Skeleton'
 import { useFetch } from '../../hooks/useFetch'
 import { paths } from '../../routes/paths'
-import { formatLongDate } from '../../utils/format'
+import { formatDays, formatLongDate } from '../../utils/format'
 import { rankFor } from '../../utils/progressLabels'
 
 export default function AchievementsPage() {
@@ -94,13 +94,13 @@ export default function AchievementsPage() {
             <StatTile
               icon={Flame}
               label="Racha actual"
-              value={gamification.data ? `${gamification.data.rachaActual} días` : null}
+              value={gamification.data ? formatDays(gamification.data.rachaActual) : null}
             />
             <StatTile
               icon={Medal}
               tone="brand"
               label="Mejor racha"
-              value={gamification.data ? `${gamification.data.rachaMaxima} días` : null}
+              value={gamification.data ? formatDays(gamification.data.rachaMaxima) : null}
             />
             <StatTile
               icon={Award}
