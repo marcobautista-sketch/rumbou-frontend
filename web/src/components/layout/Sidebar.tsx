@@ -65,7 +65,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
             type="button"
             aria-label="Cerrar menú"
             onClick={onClose}
-            className="absolute inset-0 animate-fade-in bg-primary/60 backdrop-blur-sm"
+            className="absolute inset-0 animate-fade-in bg-black/50 backdrop-blur-sm"
           />
           <nav
             id="mobile-menu"

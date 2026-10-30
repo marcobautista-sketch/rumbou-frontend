@@ -46,7 +46,7 @@ function Bubble({ message }: { message: AssistantMessage }) {
   return (
     <View style={styles.assistantRow}>
       <View style={[styles.avatar, { backgroundColor: colors.accent }]}>
-        <Ionicons name="sparkles" size={16} color={colors.primary} />
+        <Ionicons name="sparkles" size={16} color={colors.onAccent} />
       </View>
       <View
         style={[
@@ -88,7 +88,7 @@ function RoundButton({
         (pressed || disabled) && styles.dimmed,
       ]}
     >
-      <Ionicons name={icon} size={22} color={accent ? colors.primary : colors.onPrimary} />
+      <Ionicons name={icon} size={22} color={accent ? colors.onAccent : colors.onPrimary} />
     </Pressable>
   )
 }

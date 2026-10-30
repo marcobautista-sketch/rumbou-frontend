@@ -5,7 +5,7 @@ const variants: Record<ButtonVariant, string> = {
   primary: 'bg-primary text-on-primary shadow-raised hover:bg-primary-hover',
   accent: 'bg-accent text-on-accent hover:brightness-95',
   secondary: 'border-2 border-primary text-primary hover:bg-surface-muted',
-  danger: 'bg-danger text-white hover:brightness-110',
+  danger: 'bg-danger text-surface hover:brightness-110',
   ghost: 'text-accent-ink hover:bg-surface-muted',
 }
 
