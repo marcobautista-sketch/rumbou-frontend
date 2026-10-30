@@ -25,50 +25,51 @@
   --color-danger: var(--danger);
   --color-danger-soft: var(--danger-soft);
 
-  --shadow-card: 0 4px 12px rgb(0 40 85 / 0.05);
-  --shadow-raised: 0 8px 24px rgb(0 40 85 / 0.1);
+  --shadow-card: 0 4px 12px rgb(30 36 48 / 0.05);
+  --shadow-raised: 0 8px 24px rgb(30 36 48 / 0.1);
 }
 
+/* Paleta "Cuaderno": azul lapicero sobre papel, con verde agua para el progreso. */
 :root {
-  --canvas: #f9f9ff;
-  --surface: #ffffff;
-  --surface-muted: #f0f3ff;
-  --ink: #111c2d;
-  --ink-muted: #43474f;
-  --line: #e2e8f0;
-  --primary: #001430;
-  --primary-hover: #002855;
+  --canvas: #f7f6f1;
+  --surface: #fffffd;
+  --surface-muted: #f0efe8;
+  --ink: #1e2430;
+  --ink-muted: #565c68;
+  --line: #e2e0d6;
+  --primary: #2452c4;
+  --primary-hover: #1c43a6;
   --on-primary: #ffffff;
-  --accent: #00ccf9;
-  --accent-ink: #00677f;
-  --accent-soft: #e6f9fe;
-  --on-accent: #001430;
-  --chip: #e7eeff;
-  --success: #1f7a52;
+  --accent: #12a08a;
+  --accent-ink: #0a6b5c;
+  --accent-soft: #dcf3ee;
+  --on-accent: #05302a;
+  --chip: #e6ecfa;
+  --success: #2b8445;
   --warning: #a15c00;
-  --danger: #ba1a1a;
-  --danger-soft: #ffdad6;
+  --danger: #d0342c;
+  --danger-soft: #fbe3e1;
 }
 
 .dark {
-  --canvas: #0b1220;
-  --surface: #111c2d;
-  --surface-muted: #1a2740;
-  --ink: #ecf1ff;
-  --ink-muted: #aab4c8;
-  --line: #263143;
-  --primary: #aac7fd;
-  --primary-hover: #d6e3ff;
-  --on-primary: #001430;
-  --accent: #4cd6ff;
-  --accent-ink: #4cd6ff;
-  --accent-soft: #0e3442;
-  --on-accent: #001430;
-  --chip: #263143;
-  --success: #6fd3a3;
+  --canvas: #121419;
+  --surface: #1a1d24;
+  --surface-muted: #22262f;
+  --ink: #edeef1;
+  --ink-muted: #a8adb8;
+  --line: #2e323c;
+  --primary: #8eaaff;
+  --primary-hover: #b3c6ff;
+  --on-primary: #0f1422;
+  --accent: #45cdb4;
+  --accent-ink: #45cdb4;
+  --accent-soft: #133a34;
+  --on-accent: #05302a;
+  --chip: #232c42;
+  --success: #7bcf8c;
   --warning: #f2b45b;
-  --danger: #ffb4ab;
-  --danger-soft: #4a1312;
+  --danger: #ff8c84;
+  --danger-soft: #43201e;
 }
 
 body {
