@@ -4,7 +4,7 @@ Web y app móvil de **RumboU**, la plataforma de preparación para el examen de 
 
 CS 2031 Desarrollo Basado en Plataformas (UTEC).
 
-- **Integrantes:** Marco Emilio Bautista Ortega, Fabiana Gomez, Juan Carlos Alexander Vergara Montalván y Zoe Camila Garrido Cantoni
+- **Integrantes:** Marco Emilio Bautista Ortega, Fabiana Marcela Gomez Chavez, Juan Carlos Alexander Vergara Montalván y Zoe Camila Garrido Cantoni
 
 ## En producción
 
