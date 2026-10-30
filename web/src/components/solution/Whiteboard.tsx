@@ -12,9 +12,9 @@ interface Point {
 // Resolución fija del lienzo: el CSS lo escala al ancho disponible y las coordenadas se convierten.
 const WIDTH = 1500
 const HEIGHT = 1000
-// Hoja blanca y tinta azul marino también en modo oscuro: es lo que el tutor tiene que leer.
+// Hoja blanca y tinta azul lapicero también en modo oscuro: es lo que el tutor tiene que leer.
 const PAPER = '#ffffff'
-const INK = '#001430'
+const INK = '#2452c4'
 
 function paint(context: CanvasRenderingContext2D, stroke: Point[]) {
   const [first] = stroke
