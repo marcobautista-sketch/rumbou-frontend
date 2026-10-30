@@ -17,12 +17,7 @@ import { useColors } from '../theme/useColors'
 import type { User } from '../types/auth'
 import { profileSchema, type ProfileForm } from '../utils/authSchemas'
 import { notify } from '../utils/notify'
-
-const roleLabels: Record<User['role'], string> = {
-  USER: 'Postulante',
-  REVIEWER: 'Revisor',
-  ADMIN: 'Administrador',
-}
+import { roleLabels } from '../utils/roleLabels'
 
 function EditProfileForm({ user }: { user: User }) {
   const { updateUser } = useAuth()

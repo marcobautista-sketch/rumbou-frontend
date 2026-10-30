@@ -2,6 +2,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useCallback, useEffect, useState } from 'react'
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { Button } from '../../components/Button'
+import { Chip } from '../../components/Chip'
 import { ErrorRetry } from '../../components/ErrorRetry'
 import { LoadingView } from '../../components/LoadingView'
 import { OptionList } from '../../components/OptionList'
@@ -89,9 +90,7 @@ function ExamInProgress({ exam, onFinished }: ExamInProgressProps) {
       <Text style={[styles.heading, { color: colors.text }]}>
         Pregunta {index + 1} de {total}
       </Text>
-      <Text style={[styles.chip, { backgroundColor: colors.chip, color: colors.primary }]}>
-        {question.tema}
-      </Text>
+      <Chip label={question.tema} />
       <Text style={[styles.question, { color: colors.text }]}>
         {formatMath(question.enunciado)}
       </Text>
@@ -176,13 +175,5 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', gap: 12 },
   flex: { flex: 1 },
   heading: { fontSize: 20, fontWeight: '700' },
-  chip: {
-    alignSelf: 'flex-start',
-    overflow: 'hidden',
-    borderRadius: 999,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    fontWeight: '600',
-  },
   question: { fontSize: 18, lineHeight: 26 },
 })

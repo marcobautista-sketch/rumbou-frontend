@@ -1,11 +1,11 @@
-import { Ionicons } from '@expo/vector-icons'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { useCallback, type ComponentProps } from 'react'
+import { useCallback } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { AnswerReview } from '../../components/AnswerReview'
 import { Button } from '../../components/Button'
 import { ErrorRetry } from '../../components/ErrorRetry'
 import { LoadingView } from '../../components/LoadingView'
+import { StatCard } from '../../components/StatCard'
 import { useFetch } from '../../hooks/useFetch'
 import type { RootStackParamList } from '../../navigation/types'
 import { examService } from '../../services/examService'
@@ -14,27 +14,6 @@ import { countAnswers, examTypeLabels, formatScore } from '../../utils/examLabel
 import { formatMath } from '../../utils/formatMath'
 
 type ExamResultScreenProps = NativeStackScreenProps<RootStackParamList, 'ExamResult'>
-
-function AnswerCount({
-  icon,
-  color,
-  value,
-  label,
-}: {
-  icon: ComponentProps<typeof Ionicons>['name']
-  color: string
-  value: number
-  label: string
-}) {
-  const colors = useColors()
-  return (
-    <View style={[styles.card, styles.count, { backgroundColor: colors.surface }]}>
-      <Ionicons name={icon} size={26} color={color} />
-      <Text style={[styles.countValue, { color: colors.text }]}>{value}</Text>
-      <Text style={{ color: colors.muted }}>{label}</Text>
-    </View>
-  )
-}
 
 export default function ExamResultScreen({ navigation, route }: ExamResultScreenProps) {
   const colors = useColors()
@@ -73,19 +52,19 @@ export default function ExamResultScreen({ navigation, route }: ExamResultScreen
       </View>
 
       <View style={styles.row}>
-        <AnswerCount
+        <StatCard
           icon="checkmark-circle"
-          color={colors.success}
+          iconColor={colors.success}
           value={correct}
           label="Correctas"
         />
-        <AnswerCount
+        <StatCard
           icon="close-circle"
-          color={colors.danger}
+          iconColor={colors.danger}
           value={incorrect}
           label="Incorrectas"
         />
-        <AnswerCount icon="remove-circle" color={colors.muted} value={blank} label="En blanco" />
+        <StatCard icon="remove-circle" iconColor={colors.muted} value={blank} label="En blanco" />
       </View>
 
       <Button
@@ -127,8 +106,6 @@ const styles = StyleSheet.create({
   content: { gap: 14, padding: 20 },
   row: { flexDirection: 'row', gap: 10 },
   card: { gap: 8, borderRadius: 16, padding: 16 },
-  count: { flex: 1, alignItems: 'center', paddingHorizontal: 8 },
-  countValue: { fontSize: 22, fontWeight: '700' },
   score: { fontSize: 40, fontWeight: '700' },
   heading: { fontSize: 18, fontWeight: '700' },
   questionTitle: { fontSize: 16, lineHeight: 24 },

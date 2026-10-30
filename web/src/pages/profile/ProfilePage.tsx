@@ -6,12 +6,11 @@ import { ChangePasswordForm } from '../../components/profile/ChangePasswordForm'
 import { EditProfileForm } from '../../components/profile/EditProfileForm'
 import { PlanDetails } from '../../components/profile/PlanDetails'
 import { Button } from '../../components/ui/Button'
+import { Card } from '../../components/ui/Card'
 import { useAuth } from '../../hooks/useAuth'
 import { useFetch } from '../../hooks/useFetch'
 import { notify } from '../../utils/notify'
 import { roleLabels } from '../../utils/roleLabels'
-
-const cardStyles = 'space-y-4 rounded-2xl bg-surface p-6 shadow-card'
 
 function ProfileItem({ label, value }: { label: string; value: string }) {
   return (
@@ -59,7 +58,7 @@ export default function ProfilePage() {
         }
       />
 
-      <section aria-labelledby="account-title" className={cardStyles}>
+      <Card aria-labelledby="account-title" className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 id="account-title" className="text-lg font-semibold">
             Tu cuenta
@@ -89,16 +88,16 @@ export default function ProfilePage() {
             <ProfileItem label="Rol" value={roleLabels[user.role]} />
           </dl>
         )}
-      </section>
+      </Card>
 
-      <section aria-labelledby="password-title" className={cardStyles}>
+      <Card aria-labelledby="password-title" className="space-y-4">
         <h2 id="password-title" className="text-lg font-semibold">
           Contraseña
         </h2>
         <ChangePasswordForm />
-      </section>
+      </Card>
 
-      <section aria-labelledby="plan-title" aria-busy={subscription.loading} className={cardStyles}>
+      <Card aria-labelledby="plan-title" aria-busy={subscription.loading} className="space-y-4">
         <h2 id="plan-title" className="text-lg font-semibold">
           Tu plan
         </h2>
@@ -120,7 +119,7 @@ export default function ProfilePage() {
             onUpgrade={upgradeToPro}
           />
         )}
-      </section>
+      </Card>
     </main>
   )
 }
