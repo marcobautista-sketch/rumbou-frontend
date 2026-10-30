@@ -22,6 +22,7 @@ import { useFetch } from '../../hooks/useFetch'
 import { paths } from '../../routes/paths'
 import type { TopicDetail } from '../../types/exam'
 import type { ScoreHistoryEntry } from '../../types/progress'
+import { formatDays } from '../../utils/format'
 import { notify } from '../../utils/notify'
 
 const MINUTES_PER_QUESTION = 2
@@ -124,7 +125,7 @@ export default function DashboardPage() {
           <StatTile
             icon={Flame}
             label="Racha diaria"
-            value={gamification.data ? `${gamification.data.rachaActual} días` : null}
+            value={gamification.data ? formatDays(gamification.data.rachaActual) : null}
           />
           <StatTile
             icon={Star}
