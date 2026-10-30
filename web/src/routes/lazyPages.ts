@@ -8,6 +8,7 @@ export const ResetPasswordPage = lazy(() => import('../pages/auth/ResetPasswordP
 export const ProfilePage = lazy(() => import('../pages/profile/ProfilePage'))
 export const DashboardPage = lazy(() => import('../pages/dashboard/DashboardPage'))
 export const ProgressPage = lazy(() => import('../pages/progress/ProgressPage'))
+export const CareersPage = lazy(() => import('../pages/careers/CareersPage'))
 export const AchievementsPage = lazy(() => import('../pages/achievements/AchievementsPage'))
 export const ExamHistoryPage = lazy(() => import('../pages/exams/ExamHistoryPage'))
 export const NewExamPage = lazy(() => import('../pages/exams/NewExamPage'))

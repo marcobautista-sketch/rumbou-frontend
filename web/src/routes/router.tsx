@@ -5,6 +5,7 @@ import { GuestRoute } from './GuestRoute'
 import {
   AchievementsPage,
   AdminUsersPage,
+  CareersPage,
   ChallengePage,
   DashboardPage,
   ExamHistoryPage,
@@ -53,6 +54,7 @@ export const router = createBrowserRouter([
               { path: paths.dashboard, element: <DashboardPage /> },
               { path: paths.progress, element: <ProgressPage /> },
               { path: paths.achievements, element: <AchievementsPage /> },
+              { path: paths.careers, element: <CareersPage /> },
               { path: paths.profile, element: <ProfilePage /> },
               { path: paths.challenge, element: <ChallengePage /> },
               { path: paths.examHistory, element: <ExamHistoryPage /> },
