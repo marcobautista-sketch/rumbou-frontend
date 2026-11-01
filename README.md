@@ -1,6 +1,6 @@
 # RumboU · Frontend
 
-Web y app móvil de **RumboU**, la plataforma de preparación para el examen de admisión de la UNI y la UNMSM. Consume la API de [`rumbou-backend`](https://github.com/marcobautista-sketch/rumbou-backend).
+Web y app móvil de **RumboU**, la plataforma de preparación para los exámenes de admisión de la UNI y la UNMSM. Consume la API de [`rumbou-backend`](https://github.com/marcobautista-sketch/rumbou-backend).
 
 CS 2031 Desarrollo Basado en Plataformas (UTEC).
 
@@ -89,7 +89,7 @@ Para que el celular llegue al backend de tu PC, copia `mobile/.env.example` como
 
 ### Móvil con EAS
 
-La app de producción usa la API de [`mobile/.env.production`](mobile/.env.production). Esa URL es pública, así que puede ir en el repositorio.
+La app de producción usa la API de [`mobile/.env.production`](mobile/.env.production). Esa URL es pública, por ende, puede ir en el repositorio.
 
 ```bash
 cd mobile
