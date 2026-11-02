@@ -5,8 +5,11 @@ import { AnswerReview } from '../components/AnswerReview'
 import { Button } from '../components/Button'
 import { Chip } from '../components/Chip'
 import { ErrorRetry } from '../components/ErrorRetry'
+import { MathText } from '../components/MathText'
 import { OptionList } from '../components/OptionList'
 import { ProgressBar } from '../components/ProgressBar'
+import { QuestionExplanation } from '../components/QuestionExplanation'
+import { QuestionStatement } from '../components/QuestionStatement'
 import { SolutionPhotoReview } from '../components/SolutionPhotoReview'
 import { StatCard } from '../components/StatCard'
 import { useFetch } from '../hooks/useFetch'
@@ -15,6 +18,7 @@ import { tutorService } from '../services/tutorService'
 import { userService } from '../services/userService'
 import { useColors } from '../theme/useColors'
 import type { DailyChallenge } from '../types/challenge'
+import { formattedAlternative } from '../utils/alternatives'
 import { formatDays } from '../utils/format'
 import { formatMath } from '../utils/formatMath'
 import { notify } from '../utils/notify'
@@ -77,22 +81,16 @@ function ChallengeResult({ challenge }: { challenge: DailyChallenge }) {
           </Text>
         </View>
       </View>
-      <Text style={[styles.question, { color: colors.text }]}>
-        {formatMath(challenge.enunciado)}
-      </Text>
+      <QuestionStatement question={challenge} fontSize={18} />
       {challenge.claveCorrecta !== null && (
         <AnswerReview
           alternatives={challenge.alternativas}
+          formatted={challenge.presentacion?.alternativas}
           correct={challenge.claveCorrecta}
           marked={challenge.alternativaMarcada}
         />
       )}
-      {challenge.explicacion && (
-        <View style={[styles.note, { backgroundColor: colors.surfaceMuted }]}>
-          <Text style={[styles.noteTitle, { color: colors.text }]}>Explicación</Text>
-          <Text style={{ color: colors.muted }}>{formatMath(challenge.explicacion)}</Text>
-        </View>
-      )}
+      <QuestionExplanation explanation={challenge.explicacion} steps={challenge.pasos} />
       {!correct && <TutorExplanation challenge={challenge} />}
       <SolutionPhotoReview questionId={challenge.preguntaId} statement={challenge.enunciado} />
       <Text style={[styles.centered, { color: colors.muted }]}>
@@ -187,15 +185,19 @@ export default function ChallengeScreen() {
               <Chip label={current.tema} />
               <Chip label={`5 min · +${current.xpPorAcierto} XP`} tone="accent" />
             </View>
-            <Text style={[styles.question, { color: colors.text }]}>
-              {formatMath(current.enunciado)}
-            </Text>
+            <QuestionStatement question={current} fontSize={18} />
             <OptionList
               accessibilityLabel="Alternativas"
               showLetters
               options={current.alternativas.map((text, index) => ({
                 value: index,
                 label: formatMath(text),
+                content: (
+                  <MathText
+                    text={formattedAlternative(current.presentacion?.alternativas, index)}
+                    fallback={text}
+                  />
+                ),
               }))}
               selected={selected}
               onSelect={setSelected}
@@ -221,7 +223,6 @@ const styles = StyleSheet.create({
   between: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 8 },
   centered: { textAlign: 'center' },
   section: { gap: 14 },
-  question: { fontSize: 18, lineHeight: 26 },
   verdict: { flexDirection: 'row', alignItems: 'center', gap: 12, borderRadius: 16, padding: 16 },
   verdictTitle: { fontSize: 20, fontWeight: '700' },
   flex: { flex: 1 },

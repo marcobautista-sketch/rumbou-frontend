@@ -5,13 +5,16 @@ import { Button } from '../../components/Button'
 import { Chip } from '../../components/Chip'
 import { ErrorRetry } from '../../components/ErrorRetry'
 import { LoadingView } from '../../components/LoadingView'
+import { MathText } from '../../components/MathText'
 import { OptionList } from '../../components/OptionList'
 import { ProgressBar } from '../../components/ProgressBar'
+import { QuestionStatement } from '../../components/QuestionStatement'
 import { useFetch } from '../../hooks/useFetch'
 import type { RootStackParamList } from '../../navigation/types'
 import { examService } from '../../services/examService'
 import { useColors } from '../../theme/useColors'
 import type { ExamDetail } from '../../types/exam'
+import { formattedAlternative } from '../../utils/alternatives'
 import { examTypeLabels } from '../../utils/examLabels'
 import { formatMath } from '../../utils/formatMath'
 import { notify } from '../../utils/notify'
@@ -91,15 +94,19 @@ function ExamInProgress({ exam, onFinished }: ExamInProgressProps) {
         Pregunta {index + 1} de {total}
       </Text>
       <Chip label={question.tema} />
-      <Text style={[styles.question, { color: colors.text }]}>
-        {formatMath(question.enunciado)}
-      </Text>
+      <QuestionStatement question={question} fontSize={18} />
       <OptionList
         accessibilityLabel="Alternativas"
         showLetters
         options={question.alternativas.map((text, alternative) => ({
           value: alternative,
           label: formatMath(text),
+          content: (
+            <MathText
+              text={formattedAlternative(question.presentacion?.alternativas, alternative)}
+              fallback={text}
+            />
+          ),
         }))}
         selected={answers[index]}
         onSelect={answer}
@@ -175,5 +182,4 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', gap: 12 },
   flex: { flex: 1 },
   heading: { fontSize: 20, fontWeight: '700' },
-  question: { fontSize: 18, lineHeight: 26 },
 })
