@@ -1,23 +1,30 @@
 import type { ExamQuestion } from '../../types/exam'
+import { areShortAlternatives, formattedAlternative } from '../../utils/alternatives'
 import { alternativeLetter } from '../../utils/format'
-import { formatMath } from '../../utils/formatMath'
+import { MathText } from '../questions/MathText'
+import { QuestionStatement } from '../questions/QuestionStatement'
 
 interface QuestionCardProps {
-  question: Pick<ExamQuestion, 'preguntaId' | 'tema' | 'enunciado' | 'alternativas'>
+  question: Pick<
+    ExamQuestion,
+    'preguntaId' | 'tema' | 'enunciado' | 'alternativas' | 'presentacion'
+  >
   position: number
   selected: number | null
   onSelect: (alternative: number) => void
 }
 
 export function QuestionCard({ question, position, selected, onSelect }: QuestionCardProps) {
+  const short = areShortAlternatives(question.alternativas)
+
   return (
     <fieldset className="space-y-4 rounded-2xl bg-surface p-6 shadow-card">
       <legend className="sr-only">Pregunta {position}</legend>
       <span className="inline-flex rounded-full bg-chip px-3 py-1 text-sm font-semibold text-primary">
         {question.tema}
       </span>
-      <p className="text-lg whitespace-pre-line">{formatMath(question.enunciado)}</p>
-      <div className="space-y-2">
+      <QuestionStatement question={question} className="text-lg" />
+      <div className={short ? 'grid gap-2 sm:grid-cols-3 lg:grid-cols-5' : 'space-y-2'}>
         {question.alternativas.map((text, alternative) => (
           <label
             key={alternative}
@@ -36,7 +43,11 @@ export function QuestionCard({ question, position, selected, onSelect }: Questio
             >
               {alternativeLetter(alternative)}
             </span>
-            <span>{formatMath(text)}</span>
+            <MathText
+              text={formattedAlternative(question.presentacion?.alternativas, alternative)}
+              fallback={text}
+              className="min-w-0"
+            />
           </label>
         ))}
       </div>
