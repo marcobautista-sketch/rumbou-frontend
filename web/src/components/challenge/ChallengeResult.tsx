@@ -1,7 +1,8 @@
 import { CalendarClock, CircleCheck, CircleX } from 'lucide-react'
 import type { DailyChallenge } from '../../types/challenge'
-import { formatMath } from '../../utils/formatMath'
 import { AnswerReview } from '../exam/AnswerReview'
+import { QuestionExplanation } from '../questions/QuestionExplanation'
+import { QuestionStatement } from '../questions/QuestionStatement'
 import { TutorPanel } from '../questions/TutorPanel'
 import { SolutionReviewPanel } from '../solution/SolutionReviewPanel'
 import { Card } from '../ui/Card'
@@ -33,21 +34,17 @@ export function ChallengeResult({ challenge }: { challenge: DailyChallenge }) {
       </section>
 
       <Card className="space-y-4">
-        <p className="text-lg whitespace-pre-line">{formatMath(challenge.enunciado)}</p>
+        <QuestionStatement question={challenge} className="text-lg" />
         {challenge.claveCorrecta !== null && (
           <AnswerReview
             alternatives={challenge.alternativas}
+            formatted={challenge.presentacion?.alternativas}
             correct={challenge.claveCorrecta}
             marked={challenge.alternativaMarcada}
           />
         )}
-        {challenge.explicacion && (
-          <div className="rounded-xl bg-surface-muted p-4">
-            <p className="mb-1 font-semibold">Explicación</p>
-            <p className="whitespace-pre-line text-ink-muted">
-              {formatMath(challenge.explicacion)}
-            </p>
-          </div>
+        {(challenge.explicacion || challenge.pasos) && (
+          <QuestionExplanation explanation={challenge.explicacion} steps={challenge.pasos} />
         )}
       </Card>
 

@@ -1,3 +1,5 @@
+import type { QuestionPresentation, SolutionStep } from './presentation'
+
 export type Difficulty = 'FACIL' | 'MEDIA' | 'DIFICIL'
 export type QuestionOrigin = 'SEMILLA' | 'IA_APROBADA'
 
@@ -8,6 +10,7 @@ export interface Question {
   enunciado: string
   alternativas: string[]
   dificultad: Difficulty
+  presentacion: QuestionPresentation | null
 }
 
 export interface AdminQuestion extends Question {
@@ -15,6 +18,7 @@ export interface AdminQuestion extends Question {
   explicacion: string | null
   origen: QuestionOrigin
   aprobada: boolean
+  pasos: SolutionStep[] | null
 }
 
 export function isAdminQuestion(question: Question): question is AdminQuestion {

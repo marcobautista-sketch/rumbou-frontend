@@ -1,13 +1,16 @@
 import { CircleCheck } from 'lucide-react'
+import { formattedAlternative } from '../../utils/alternatives'
 import { alternativeLetter } from '../../utils/format'
-import { formatMath } from '../../utils/formatMath'
+import { MathText } from './MathText'
 
 interface AlternativeListProps {
   alternatives: string[]
+  // Las mismas alternativas con formato (LaTeX), si la pregunta lo tiene.
+  formatted?: string[] | null
   correctIndex?: number
 }
 
-export function AlternativeList({ alternatives, correctIndex }: AlternativeListProps) {
+export function AlternativeList({ alternatives, formatted, correctIndex }: AlternativeListProps) {
   return (
     <ol className="space-y-2">
       {alternatives.map((text, index) => {
@@ -26,7 +29,11 @@ export function AlternativeList({ alternatives, correctIndex }: AlternativeListP
             >
               {alternativeLetter(index)}
             </span>
-            <span className="flex-1 pt-0.5">{formatMath(text.replace(/^[A-E]\)\s*/, ''))}</span>
+            <MathText
+              text={formattedAlternative(formatted, index)}
+              fallback={text.replace(/^[A-E]\)\s*/, '')}
+              className="min-w-0 flex-1 pt-0.5"
+            />
             {isCorrect && (
               <CircleCheck
                 aria-label="Respuesta correcta"

@@ -1,7 +1,8 @@
 import { ChevronDown, CircleCheck, CircleSlash, CircleX } from 'lucide-react'
 import { useState } from 'react'
 import type { ExamQuestion } from '../../types/exam'
-import { formatMath } from '../../utils/formatMath'
+import { QuestionExplanation } from '../questions/QuestionExplanation'
+import { QuestionStatement } from '../questions/QuestionStatement'
 import { TutorPanel } from '../questions/TutorPanel'
 import { SolutionReviewPanel } from '../solution/SolutionReviewPanel'
 import { AnswerReview } from './AnswerReview'
@@ -34,21 +35,17 @@ function ReviewItem({ question, number }: { question: ExamQuestion; number: numb
       </summary>
       {open && (
         <div className="space-y-4 border-t border-line p-4">
-          <p className="whitespace-pre-line">{formatMath(question.enunciado)}</p>
+          <QuestionStatement question={question} />
           {question.claveCorrecta !== null && (
             <AnswerReview
               alternatives={question.alternativas}
+              formatted={question.presentacion?.alternativas}
               correct={question.claveCorrecta}
               marked={question.alternativaMarcada}
             />
           )}
-          {question.explicacion && (
-            <div className="rounded-xl bg-surface-muted p-4">
-              <p className="mb-1 font-semibold">Explicación</p>
-              <p className="whitespace-pre-line text-ink-muted">
-                {formatMath(question.explicacion)}
-              </p>
-            </div>
+          {(question.explicacion || question.pasos) && (
+            <QuestionExplanation explanation={question.explicacion} steps={question.pasos} />
           )}
           {!question.esCorrecta && (
             <>

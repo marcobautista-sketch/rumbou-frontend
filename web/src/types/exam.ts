@@ -1,3 +1,5 @@
+import type { QuestionPresentation, SolutionStep } from './presentation'
+
 export type ExamType = 'DIAGNOSTICO' | 'POR_TEMA' | 'COMPLETO'
 export type ExamStatus = 'EN_CURSO' | 'FINALIZADO'
 
@@ -33,6 +35,9 @@ export interface ExamQuestion {
   esCorrecta: boolean | null
   puntajeAportado: number | null
   explicacion: string | null
+  presentacion: QuestionPresentation | null
+  // Como la explicación: llega recién al finalizar el simulacro.
+  pasos: SolutionStep[] | null
 }
 
 export interface ExamDetail {
