@@ -83,12 +83,12 @@ export default function CareersPage() {
   return (
     <Page>
       <PageHeader
-        title="Catálogo de carreras"
-        description="Explora las carreras de la UNI y San Marcos, sus vacantes y el puntaje del último ingresante."
+        title="Carreras"
+        description="Las carreras de la UNI y San Marcos con sus vacantes y el puntaje de su último ingresante. Elige la tuya como meta para compararte con ese puntaje."
         actions={
           <Link to={paths.progress} className={buttonStyles('ghost', 'sm')}>
             <Flag aria-hidden className="size-4" />
-            Ver mis objetivos
+            Ver mis metas
           </Link>
         }
       />

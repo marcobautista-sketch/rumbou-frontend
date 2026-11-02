@@ -18,3 +18,10 @@ export function sortCareers(offers: AcademicOffer[], sort: CareerSort) {
       : a.carrera.localeCompare(b.carrera, 'es') || a.universidad.localeCompare(b.universidad),
   )
 }
+
+// El catálogo guarda una sola facultad por carrera y, si la carrera existe en ambas
+// universidades, es la de la UNI (seed/carreras.csv). Para no mostrar en San Marcos el nombre de
+// una facultad de la UNI, la facultad solo se muestra en las ofertas de la UNI.
+export function careerFaculty(offer: AcademicOffer) {
+  return offer.universidad === 'UNI' ? offer.facultad : null
+}
