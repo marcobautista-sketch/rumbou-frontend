@@ -49,6 +49,7 @@
   --warning: #a15c00;
   --danger: #d0342c;
   --danger-soft: #fbe3e1;
+  --grid: #e3e8f2;
 }
 
 .dark {
@@ -70,10 +71,105 @@
   --warning: #f2b45b;
   --danger: #ff8c84;
   --danger-soft: #43201e;
+  --grid: #272c37;
 }
 
 body {
   @apply bg-canvas font-sans text-ink antialiased;
+}
+
+/* Fórmulas de MathJax. Tailwind pone display:block a todo svg; aquí se devuelve a la línea:
+   en el renglón usan su propia alineación vertical y se achican si no caben; las de renglón
+   propio se centran y se desplazan de lado si son más anchas que la pantalla. */
+.math-inline > svg {
+  display: inline;
+  max-width: 100%;
+  height: auto;
+}
+
+.math-display > svg {
+  display: inline-block;
+}
+
+/* Figuras de las preguntas: papel cuadriculado y trazos de lapicero que siguen el tema. */
+.figure-paper {
+  background-color: var(--surface);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+.fig-area {
+  fill: color-mix(in srgb, var(--primary) 8%, transparent);
+  stroke: var(--primary);
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+}
+
+.fig-ink,
+.fig-mark,
+.fig-thin,
+.fig-dash {
+  fill: none;
+  stroke: var(--primary);
+  stroke-linecap: round;
+  stroke-width: 2.2;
+}
+
+.fig-mark {
+  stroke: var(--accent);
+  stroke-width: 3.4;
+}
+
+.fig-thin {
+  stroke-width: 1.4;
+  opacity: 0.8;
+}
+
+.fig-dash {
+  stroke-width: 1.5;
+  stroke-dasharray: 5 5;
+  opacity: 0.75;
+}
+
+.fig-head-ink,
+.fig-dot {
+  fill: var(--primary);
+}
+
+.fig-head-mark {
+  fill: var(--accent);
+}
+
+.fig-hollow {
+  fill: var(--surface);
+  stroke: var(--primary);
+  stroke-width: 2;
+}
+
+.fig-text-variable,
+.fig-text-normal,
+.fig-text-small {
+  fill: var(--primary);
+}
+
+.fig-text-variable {
+  font-family: 'Cambria Math', 'Times New Roman', Georgia, serif;
+  font-style: italic;
+}
+
+.fig-text-normal {
+  font-weight: 500;
+}
+
+.fig-text-small {
+  opacity: 0.75;
+}
+
+.fig-text-mark {
+  fill: var(--accent-ink);
+  font-weight: 700;
 }
 
 h1,
