@@ -42,7 +42,7 @@ export default function ResetPasswordPage() {
       title="Crea una contraseña nueva"
       subtitle="Elige una contraseña que no hayas usado antes."
       footer={
-        <Link to={paths.forgotPassword} className="font-semibold text-accent-ink">
+        <Link to={paths.forgotPassword} className="font-semibold text-primary hover:underline">
           Pedir un enlace nuevo
         </Link>
       }

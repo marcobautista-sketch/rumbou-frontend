@@ -1,12 +1,15 @@
 export type ButtonVariant = 'primary' | 'accent' | 'secondary' | 'danger' | 'ghost'
 export type ButtonSize = 'sm' | 'md' | 'lg'
 
+// primary: la acción principal de la pantalla (una sola). secondary: acciones de apoyo.
+// ghost: acciones de texto, como un enlace.
 const variants: Record<ButtonVariant, string> = {
-  primary: 'bg-primary text-on-primary shadow-raised hover:bg-primary-hover',
+  primary: 'bg-primary text-on-primary shadow-card hover:bg-primary-hover',
   accent: 'bg-accent text-on-accent hover:brightness-95',
-  secondary: 'border-2 border-primary text-primary hover:bg-surface-muted',
+  secondary:
+    'border border-line bg-surface text-ink shadow-card hover:border-ink-muted/40 hover:bg-surface-muted',
   danger: 'bg-danger text-surface hover:brightness-110',
-  ghost: 'text-accent-ink hover:bg-surface-muted',
+  ghost: 'text-primary hover:bg-chip',
 }
 
 const sizes: Record<ButtonSize, string> = {

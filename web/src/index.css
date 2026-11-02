@@ -21,7 +21,9 @@
   --color-on-accent: var(--on-accent);
   --color-chip: var(--chip);
   --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
   --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
   --color-danger: var(--danger);
   --color-danger-soft: var(--danger-soft);
 
@@ -46,7 +48,9 @@
   --on-accent: #05302a;
   --chip: #e6ecfa;
   --success: #2b8445;
+  --success-soft: #e3f1e6;
   --warning: #a15c00;
+  --warning-soft: #fbefdc;
   --danger: #d0342c;
   --danger-soft: #fbe3e1;
   --grid: #e3e8f2;
@@ -68,7 +72,9 @@
   --on-accent: #05302a;
   --chip: #232c42;
   --success: #7bcf8c;
+  --success-soft: #17331e;
   --warning: #f2b45b;
+  --warning-soft: #3a2a12;
   --danger: #ff8c84;
   --danger-soft: #43201e;
   --grid: #272c37;
@@ -76,6 +82,19 @@
 
 body {
   @apply bg-canvas font-sans text-ink antialiased;
+}
+
+/* Hoja cuadriculada para fondos de marca (portada y acceso); se desvanece hacia abajo. */
+.paper-grid {
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(to bottom, black 40%, transparent);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 /* Fórmulas de MathJax. Tailwind pone display:block a todo svg; aquí se devuelve a la línea:
@@ -212,6 +231,10 @@ dialog::backdrop {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {

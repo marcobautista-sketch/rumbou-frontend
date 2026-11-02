@@ -2,6 +2,7 @@ import { CheckCheck, Eye, PartyPopper } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { questionService } from '../../api/questionService'
 import { InlineError } from '../../components/feedback/InlineError'
+import { Page } from '../../components/layout/Page'
 import { PageHeader } from '../../components/layout/PageHeader'
 import { DifficultyBadge } from '../../components/questions/DifficultyBadge'
 import { QuestionPreviewModal } from '../../components/review/QuestionPreviewModal'
@@ -162,11 +163,10 @@ export default function ReviewPage() {
   ]
 
   return (
-    <main className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
+    <Page>
       <PageHeader
         title="Revisión de preguntas"
         description="Las preguntas generadas con IA esperan aquí hasta que un revisor las apruebe."
-        breadcrumbs={[{ label: 'Revisión' }]}
         actions={
           <Button
             onClick={() => setConfirmingBatch(true)}
@@ -230,6 +230,6 @@ export default function ReviewPage() {
         onConfirm={approveSelected}
         onCancel={() => setConfirmingBatch(false)}
       />
-    </main>
+    </Page>
   )
 }

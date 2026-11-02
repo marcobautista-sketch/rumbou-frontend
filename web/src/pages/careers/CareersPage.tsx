@@ -8,6 +8,7 @@ import { CareerCard } from '../../components/careers/CareerCard'
 import { CareerDetailModal } from '../../components/careers/CareerDetailModal'
 import { CareerFilters, type CareerFilterValues } from '../../components/careers/CareerFilters'
 import { InlineError } from '../../components/feedback/InlineError'
+import { Page } from '../../components/layout/Page'
 import { PageHeader } from '../../components/layout/PageHeader'
 import { Button } from '../../components/ui/Button'
 import { buttonStyles } from '../../components/ui/buttonStyles'
@@ -80,11 +81,10 @@ export default function CareersPage() {
   const clearFilters = () => updateParams({ q: null, universidad: null, area: null })
 
   return (
-    <main className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
+    <Page>
       <PageHeader
         title="Catálogo de carreras"
         description="Explora las carreras de la UNI y San Marcos, sus vacantes y el puntaje del último ingresante."
-        breadcrumbs={[{ label: 'Inicio', to: paths.dashboard }, { label: 'Carreras' }]}
         actions={
           <Link to={paths.progress} className={buttonStyles('ghost', 'sm')}>
             <Flag aria-hidden className="size-4" />
@@ -143,6 +143,6 @@ export default function CareersPage() {
         onClose={() => updateParams({ detalle: null })}
         onAdded={goals.retry}
       />
-    </main>
+    </Page>
   )
 }

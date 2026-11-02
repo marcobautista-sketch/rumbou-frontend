@@ -3,6 +3,7 @@ import { useCallback } from 'react'
 import { Link } from 'react-router'
 import { questionService } from '../../api/questionService'
 import { InlineError } from '../../components/feedback/InlineError'
+import { Page } from '../../components/layout/Page'
 import { PageHeader } from '../../components/layout/PageHeader'
 import {
   QuestionFilters,
@@ -81,11 +82,10 @@ export default function QuestionListPage() {
   const updateSearch = (search: string) => setFilters({ q: search }, { replace: true })
 
   return (
-    <main className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
+    <Page>
       <PageHeader
         title="Banco de preguntas"
         description="Practica con preguntas reales de admisión, ordenadas por tema y dificultad."
-        breadcrumbs={[{ label: 'Banco de preguntas' }]}
         actions={
           isAdmin && (
             <Link to={paths.newQuestion} className={buttonStyles('primary')}>
@@ -153,6 +153,6 @@ export default function QuestionListPage() {
           </>
         )}
       </section>
-    </main>
+    </Page>
   )
 }
