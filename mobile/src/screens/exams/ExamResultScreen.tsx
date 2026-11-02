@@ -5,13 +5,14 @@ import { AnswerReview } from '../../components/AnswerReview'
 import { Button } from '../../components/Button'
 import { ErrorRetry } from '../../components/ErrorRetry'
 import { LoadingView } from '../../components/LoadingView'
+import { QuestionExplanation } from '../../components/QuestionExplanation'
+import { QuestionStatement } from '../../components/QuestionStatement'
 import { StatCard } from '../../components/StatCard'
 import { useFetch } from '../../hooks/useFetch'
 import type { RootStackParamList } from '../../navigation/types'
 import { examService } from '../../services/examService'
 import { useColors } from '../../theme/useColors'
 import { countAnswers, examTypeLabels, formatScore } from '../../utils/examLabels'
-import { formatMath } from '../../utils/formatMath'
 
 type ExamResultScreenProps = NativeStackScreenProps<RootStackParamList, 'ExamResult'>
 
@@ -83,19 +84,19 @@ export default function ExamResultScreen({ navigation, route }: ExamResultScreen
           key={question.respuestaUsuarioId}
           style={[styles.card, { backgroundColor: colors.surface }]}
         >
-          <Text style={[styles.questionTitle, { color: colors.text }]}>
-            {position + 1}. {formatMath(question.enunciado)}
+          <Text style={[styles.questionTitle, { color: colors.muted }]}>
+            Pregunta {position + 1} · {question.tema}
           </Text>
+          <QuestionStatement question={question} fontSize={16} />
           {question.claveCorrecta !== null && (
             <AnswerReview
               alternatives={question.alternativas}
+              formatted={question.presentacion?.alternativas}
               correct={question.claveCorrecta}
               marked={question.alternativaMarcada}
             />
           )}
-          {question.explicacion && (
-            <Text style={{ color: colors.muted }}>{formatMath(question.explicacion)}</Text>
-          )}
+          <QuestionExplanation explanation={question.explicacion} steps={question.pasos} />
         </View>
       ))}
     </ScrollView>
@@ -108,5 +109,5 @@ const styles = StyleSheet.create({
   card: { gap: 8, borderRadius: 16, padding: 16 },
   score: { fontSize: 40, fontWeight: '700' },
   heading: { fontSize: 18, fontWeight: '700' },
-  questionTitle: { fontSize: 16, lineHeight: 24 },
+  questionTitle: { fontSize: 13, fontWeight: '600' },
 })
