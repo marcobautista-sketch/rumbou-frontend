@@ -6,6 +6,7 @@ import { QuestionCard } from '../../components/exam/QuestionCard'
 import { QuestionNavigator } from '../../components/exam/QuestionNavigator'
 import { ErrorScreen } from '../../components/feedback/ErrorScreen'
 import { PageLoader } from '../../components/feedback/PageLoader'
+import { Page } from '../../components/layout/Page'
 import { Button } from '../../components/ui/Button'
 import { ConfirmDialog } from '../../components/ui/ConfirmDialog'
 import { useElapsedSeconds } from '../../hooks/useElapsedSeconds'
@@ -63,7 +64,7 @@ function ExamInProgress({ exam }: { exam: ExamDetail }) {
   const unanswered = total - answeredCount
 
   return (
-    <main className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
+    <Page>
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="text-sm text-ink-muted">{examTypeLabels[exam.tipo]}</p>
@@ -136,7 +137,7 @@ function ExamInProgress({ exam }: { exam: ExamDetail }) {
         onConfirm={finish}
         onCancel={() => setConfirmOpen(false)}
       />
-    </main>
+    </Page>
   )
 }
 

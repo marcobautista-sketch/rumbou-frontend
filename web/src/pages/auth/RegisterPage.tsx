@@ -123,7 +123,7 @@ export default function RegisterPage() {
       footer={
         <>
           ¿Ya tienes cuenta?{' '}
-          <Link to={paths.login} className="font-semibold text-accent-ink">
+          <Link to={paths.login} className="font-semibold text-primary hover:underline">
             Inicia sesión
           </Link>
         </>

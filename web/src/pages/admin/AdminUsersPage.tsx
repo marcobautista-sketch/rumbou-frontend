@@ -68,7 +68,6 @@ export default function AdminUsersPage() {
       <PageHeader
         title="Usuarios"
         description="Busca una cuenta por su correo para darle permisos de revisor o administrador."
-        breadcrumbs={[{ label: 'Administración' }, { label: 'Usuarios' }]}
       />
 
       <div className="relative">

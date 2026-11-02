@@ -102,7 +102,6 @@ export default function ChallengePage() {
       <PageHeader
         title="Desafío diario"
         description="Mantén tu inercia académica. Un desafío a la vez."
-        breadcrumbs={[{ label: 'Desafío diario' }]}
       />
 
       <ChallengeStats
