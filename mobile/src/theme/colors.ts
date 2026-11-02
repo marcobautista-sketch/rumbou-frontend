@@ -18,6 +18,7 @@ export const palette = {
     successSoft: '#e2f2e5',
     danger: '#d0342c',
     dangerSoft: '#fbe3e1',
+    grid: '#e3e8f2',
   },
   dark: {
     background: '#121419',
@@ -37,6 +38,7 @@ export const palette = {
     successSoft: '#17331e',
     danger: '#ff8c84',
     dangerSoft: '#43201e',
+    grid: '#272c37',
   },
 } as const
 
