@@ -7,6 +7,7 @@ import { PageHeader } from '../../components/layout/PageHeader'
 import { AlternativeList } from '../../components/questions/AlternativeList'
 import { DifficultyBadge } from '../../components/questions/DifficultyBadge'
 import { QuestionExplanation } from '../../components/questions/QuestionExplanation'
+import { QuestionStatement } from '../../components/questions/QuestionStatement'
 import { ReviewStatusBadges } from '../../components/questions/ReviewStatusBadges'
 import { TutorPanel } from '../../components/questions/TutorPanel'
 import { Badge } from '../../components/ui/Badge'
@@ -20,7 +21,6 @@ import { useAuth } from '../../hooks/useAuth'
 import { useFetch } from '../../hooks/useFetch'
 import { paths } from '../../routes/paths'
 import { isAdminQuestion, type Question } from '../../types/question'
-import { formatMath } from '../../utils/formatMath'
 import { notify } from '../../utils/notify'
 
 interface DetailLocationState {
@@ -138,14 +138,15 @@ export default function QuestionDetailPage() {
               <DifficultyBadge difficulty={data.dificultad} />
               {isAdminQuestion(data) && <ReviewStatusBadges question={data} />}
             </div>
-            <p className="text-lg leading-relaxed whitespace-pre-line">
-              {formatMath(data.enunciado)}
-            </p>
+            <QuestionStatement question={data} className="text-lg leading-relaxed" />
             <AlternativeList
               alternatives={data.alternativas}
+              formatted={data.presentacion?.alternativas}
               correctIndex={isAdminQuestion(data) ? data.claveCorrecta : undefined}
             />
-            {isAdminQuestion(data) && <QuestionExplanation explanation={data.explicacion} />}
+            {isAdminQuestion(data) && (
+              <QuestionExplanation explanation={data.explicacion} steps={data.pasos} />
+            )}
           </Card>
 
           <TutorPanel questionId={data.id} />

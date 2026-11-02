@@ -1,3 +1,5 @@
+import type { QuestionPresentation, SolutionStep } from './presentation'
+
 export interface DailyChallenge {
   fecha: string
   preguntaId: number
@@ -14,4 +16,7 @@ export interface DailyChallenge {
   xpPorAcierto: number
   desafiosDeLaSemana: number
   metaSemanal: number
+  presentacion: QuestionPresentation | null
+  // Como la explicación: llega recién después de responder.
+  pasos: SolutionStep[] | null
 }
