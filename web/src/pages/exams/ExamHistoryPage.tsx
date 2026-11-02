@@ -1,6 +1,7 @@
 import { NotebookPen, Plus } from 'lucide-react'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { generatePath, Link } from 'react-router'
+import { areaService } from '../../api/areaService'
 import { examService } from '../../api/examService'
 import { InlineError } from '../../components/feedback/InlineError'
 import { Page } from '../../components/layout/Page'
@@ -15,60 +16,20 @@ import { Table, type TableColumn } from '../../components/ui/Table'
 import { useFetch } from '../../hooks/useFetch'
 import { usePagination } from '../../hooks/usePagination'
 import { paths } from '../../routes/paths'
-import type { ExamSummary } from '../../types/exam'
+import type { Area, ExamSummary } from '../../types/exam'
 import { examTypeLabels } from '../../utils/examSummary'
 import { formatLongDate, formatScore } from '../../utils/format'
+import { scoringFor } from '../../utils/scoringRules'
+import { areaLabel } from '../../utils/universityLabels'
 
-const columns: TableColumn<ExamSummary>[] = [
-  {
-    key: 'exam',
-    header: 'Simulacro',
-    render: (exam) => (
-      <div className="space-y-1">
-        <p className="font-medium text-ink">{examTypeLabels[exam.tipo]}</p>
-        <p className="text-ink-muted">{exam.area}</p>
-      </div>
-    ),
-  },
-  {
-    key: 'date',
-    header: 'Fecha',
-    className: 'whitespace-nowrap',
-    render: (exam) => formatLongDate(exam.fechaInicio),
-  },
-  {
-    key: 'status',
-    header: 'Estado',
-    render: (exam) =>
-      exam.estado === 'FINALIZADO' ? (
-        <Badge tone="success">Terminado</Badge>
-      ) : (
-        <Badge tone="warning">En curso</Badge>
-      ),
-  },
-  {
-    key: 'score',
-    header: 'Puntaje',
-    className: 'text-right',
-    render: (exam) => (exam.puntajeObtenido === null ? '—' : formatScore(exam.puntajeObtenido)),
-  },
-  {
-    key: 'actions',
-    header: <span className="sr-only">Acciones</span>,
-    className: 'text-right whitespace-nowrap',
-    render: (exam) => {
-      const finished = exam.estado === 'FINALIZADO'
-      const to = generatePath(finished ? paths.examResult : paths.exam, {
-        examId: String(exam.id),
-      })
-      return (
-        <Link to={to} className={buttonStyles(finished ? 'secondary' : 'primary', 'sm')}>
-          {finished ? 'Ver resultado' : 'Continuar'}
-        </Link>
-      )
-    },
-  },
-]
+// El puntaje de un simulacro completo se lee sobre el máximo de su universidad; el de uno por
+// tema es solo de ese tema.
+function scoreText(exam: ExamSummary, area: Area | undefined) {
+  if (exam.puntajeObtenido === null) return '—'
+  const max = scoringFor(area?.universidad)?.maxScore
+  if (exam.tipo === 'POR_TEMA' || !max) return `${formatScore(exam.puntajeObtenido)} pts`
+  return `${formatScore(exam.puntajeObtenido)} / ${formatScore(max)}`
+}
 
 export default function ExamHistoryPage() {
   const { page, size, apiParams, setPage, setSize } = usePagination()
@@ -76,14 +37,75 @@ export default function ExamHistoryPage() {
     (signal: AbortSignal) => examService.list(apiParams, signal),
     [apiParams],
   )
+  const fetchAreas = useCallback((signal: AbortSignal) => areaService.list(signal), [])
   const exams = useFetch(fetchExams)
+  const areas = useFetch(fetchAreas)
   const result = exams.data
+
+  const columns = useMemo<TableColumn<ExamSummary>[]>(() => {
+    const areaOf = (exam: ExamSummary) => areas.data?.find((area) => area.id === exam.areaId)
+    return [
+      {
+        key: 'exam',
+        header: 'Simulacro',
+        render: (exam) => {
+          const area = areaOf(exam)
+          return (
+            <div className="space-y-0.5">
+              <p className="font-semibold text-ink">{examTypeLabels[exam.tipo]}</p>
+              <p className="text-ink-muted">
+                {area ? areaLabel(area.universidad, area.nombre) : exam.area}
+              </p>
+            </div>
+          )
+        },
+      },
+      {
+        key: 'date',
+        header: 'Fecha',
+        className: 'whitespace-nowrap',
+        render: (exam) => formatLongDate(exam.fechaFin ?? exam.fechaInicio),
+      },
+      {
+        key: 'status',
+        header: 'Estado',
+        render: (exam) =>
+          exam.estado === 'FINALIZADO' ? (
+            <Badge tone="neutral">Terminado</Badge>
+          ) : (
+            <Badge tone="warning">En curso</Badge>
+          ),
+      },
+      {
+        key: 'score',
+        header: 'Puntaje',
+        className: 'text-right whitespace-nowrap tabular-nums',
+        render: (exam) => scoreText(exam, areaOf(exam)),
+      },
+      {
+        key: 'actions',
+        header: <span className="sr-only">Acciones</span>,
+        className: 'text-right whitespace-nowrap',
+        render: (exam) => {
+          const finished = exam.estado === 'FINALIZADO'
+          const to = generatePath(finished ? paths.examResult : paths.exam, {
+            examId: String(exam.id),
+          })
+          return (
+            <Link to={to} className={buttonStyles(finished ? 'secondary' : 'primary', 'sm')}>
+              {finished ? 'Ver resultado' : 'Continuar'}
+            </Link>
+          )
+        },
+      },
+    ]
+  }, [areas.data])
 
   return (
     <Page>
       <PageHeader
-        title="Mis simulacros"
-        description="Todos los simulacros que rendiste, del más reciente al más antiguo."
+        title="Simulacros"
+        description="Retoma los que dejaste a medias y revisa el resultado de los que terminaste."
         actions={
           <Link to={paths.newExam} className={buttonStyles('primary')}>
             <Plus aria-hidden className="size-4" />
@@ -104,14 +126,14 @@ export default function ExamHistoryPage() {
             message={
               page > 1
                 ? 'La página que buscas ya no tiene resultados.'
-                : 'Rinde tu primer simulacro para medir tu puntaje y ver aquí tu avance.'
+                : 'Empieza con tu diagnóstico: mide tu punto de partida en cada tema del examen.'
             }
             action={
               page > 1 ? (
                 <Button onClick={() => setPage(1)}>Ir a la primera página</Button>
               ) : (
-                <Link to={paths.newExam} className={buttonStyles('primary')}>
-                  Rendir mi primer simulacro
+                <Link to={`${paths.newExam}?tipo=DIAGNOSTICO`} className={buttonStyles('primary')}>
+                  Rendir mi diagnóstico
                 </Link>
               )
             }
