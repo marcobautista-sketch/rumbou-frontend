@@ -15,6 +15,7 @@ import {
 } from '../../components/dashboard/RecommendedTopics'
 import { StatTile } from '../../components/dashboard/StatTile'
 import { InlineError } from '../../components/feedback/InlineError'
+import { Page } from '../../components/layout/Page'
 import { PageHeader } from '../../components/layout/PageHeader'
 import { buttonStyles } from '../../components/ui/buttonStyles'
 import { useAuth } from '../../hooks/useAuth'
@@ -106,7 +107,7 @@ export default function DashboardPage() {
   const goalsLoading = goals.loading && !goals.data
 
   return (
-    <main className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
+    <Page>
       <PageHeader
         title={`Hola, ${user.nombre}`}
         description="Este es tu rumbo hacia la universidad. Sigue sumando cada día."
@@ -170,6 +171,6 @@ export default function DashboardPage() {
         onRetry={mastery.retry}
         onPractice={practiceTopic}
       />
-    </main>
+    </Page>
   )
 }

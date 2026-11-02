@@ -4,6 +4,7 @@ import { Link } from 'react-router'
 import { userService } from '../../api/userService'
 import { StatTile } from '../../components/dashboard/StatTile'
 import { InlineError } from '../../components/feedback/InlineError'
+import { Page } from '../../components/layout/Page'
 import { PageHeader } from '../../components/layout/PageHeader'
 import { buttonStyles } from '../../components/ui/buttonStyles'
 import { Card } from '../../components/ui/Card'
@@ -34,11 +35,10 @@ export default function AchievementsPage() {
   )
 
   return (
-    <main className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
+    <Page>
       <PageHeader
         title="Mis logros"
         description="Cada simulacro y desafío te acerca a un nuevo rango."
-        breadcrumbs={[{ label: 'Inicio', to: paths.dashboard }, { label: 'Mis logros' }]}
       />
 
       {gamification.error ? (
@@ -149,6 +149,6 @@ export default function AchievementsPage() {
           </section>
         </>
       )}
-    </main>
+    </Page>
   )
 }
