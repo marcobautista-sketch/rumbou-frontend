@@ -2,11 +2,11 @@ import { useCallback } from 'react'
 import { questionService } from '../../api/questionService'
 import { useFetch } from '../../hooks/useFetch'
 import type { AdminQuestion, Question } from '../../types/question'
-import { formatMath } from '../../utils/formatMath'
 import { InlineError } from '../feedback/InlineError'
 import { AlternativeList } from '../questions/AlternativeList'
 import { DifficultyBadge } from '../questions/DifficultyBadge'
 import { QuestionExplanation } from '../questions/QuestionExplanation'
+import { QuestionStatement } from '../questions/QuestionStatement'
 import { Badge } from '../ui/Badge'
 import { Button } from '../ui/Button'
 import { Modal } from '../ui/Modal'
@@ -64,7 +64,7 @@ export function QuestionPreviewModal({
             <Badge tone="brand">{question.temaNombre}</Badge>
             <DifficultyBadge difficulty={question.dificultad} />
           </div>
-          <p className="leading-relaxed whitespace-pre-line">{formatMath(question.enunciado)}</p>
+          <QuestionStatement question={question} className="leading-relaxed" />
           {complete.loading ? (
             <div role="status" aria-label="Cargando la respuesta…" className="space-y-2">
               {Array.from({ length: 5 }, (_, index) => (
@@ -73,7 +73,10 @@ export function QuestionPreviewModal({
             </div>
           ) : complete.error || !detail ? (
             <>
-              <AlternativeList alternatives={question.alternativas} />
+              <AlternativeList
+                alternatives={question.alternativas}
+                formatted={question.presentacion?.alternativas}
+              />
               <InlineError
                 message={complete.error?.message ?? 'No pudimos cargar la respuesta.'}
                 onRetry={complete.retry}
@@ -83,9 +86,10 @@ export function QuestionPreviewModal({
             <>
               <AlternativeList
                 alternatives={detail.alternativas}
+                formatted={detail.presentacion?.alternativas}
                 correctIndex={detail.claveCorrecta}
               />
-              <QuestionExplanation explanation={detail.explicacion} />
+              <QuestionExplanation explanation={detail.explicacion} steps={detail.pasos} />
             </>
           )}
         </div>
