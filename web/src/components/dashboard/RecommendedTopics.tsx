@@ -1,13 +1,13 @@
-import { Clock } from 'lucide-react'
+import { LoaderCircle } from 'lucide-react'
 import { Link } from 'react-router'
 import type { ApiError } from '../../api/apiError'
 import { paths } from '../../routes/paths'
 import type { TopicMastery } from '../../types/progress'
 import { masteryTone } from '../../utils/progressLabels'
 import { InlineError } from '../feedback/InlineError'
-import { Badge } from '../ui/Badge'
 import { Card } from '../ui/Card'
-import { CardSkeleton, FirstExamEmptyState } from './DashboardPlaceholders'
+import { CardSkeleton } from './DashboardPlaceholders'
+import { masteryBar } from './masteryStyles'
 import { ProFeatureNotice } from './ProFeatureNotice'
 
 export interface Recommendation extends TopicMastery {
@@ -25,35 +25,10 @@ interface RecommendedTopicsProps {
   onPractice: (topicId: number) => void
 }
 
-const cardStyles =
-  'block h-full rounded-2xl bg-surface p-5 shadow-card transition hover:-translate-y-0.5 hover:shadow-raised focus-visible:outline-2 focus-visible:outline-accent'
+const actionStyles =
+  'shrink-0 rounded-lg px-2.5 py-1.5 text-sm font-semibold text-primary transition hover:bg-chip focus-visible:outline-2 focus-visible:outline-accent disabled:cursor-wait disabled:opacity-60'
 
-function TopicCardContent({ topic, starting }: { topic: Recommendation; starting: boolean }) {
-  return (
-    <>
-      <div className="flex items-start justify-between gap-2">
-        <p className="font-semibold">{topic.tema}</p>
-        <Badge tone={masteryTone(topic.porcentajeAciertos)}>{topic.porcentajeAciertos}%</Badge>
-      </div>
-      {topic.subtema && <p className="mt-1 text-sm text-ink-muted">Repasa: {topic.subtema}</p>}
-      <p className="mt-3 flex items-center justify-between gap-2 text-sm text-ink-muted">
-        {topic.minutes !== null && (
-          <span className="flex items-center gap-1.5">
-            <Clock aria-hidden className="size-4" />
-            {topic.minutes} min
-          </span>
-        )}
-        {topic.inGoalArea && (
-          <span className="ml-auto font-semibold text-accent-ink">
-            {starting ? 'Preparando…' : 'Practicar ahora'}
-          </span>
-        )}
-      </p>
-    </>
-  )
-}
-
-// Los tres temas con menos aciertos. Si el tema es del área de la meta, un clic empieza el
+// Los temas con menos aciertos. Si el tema es del área de la meta, un clic empieza el
 // simulacro; si no, lleva al formulario para elegir el área.
 export function RecommendedTopics({
   topics,
@@ -64,50 +39,72 @@ export function RecommendedTopics({
   onPractice,
 }: RecommendedTopicsProps) {
   return (
-    <section aria-labelledby="recommended-title" className="space-y-3">
-      <h2 id="recommended-title" className="text-lg font-semibold">
-        Recomendado para ti
-      </h2>
+    <Card aria-labelledby="recommended-title" className="space-y-4 p-5">
+      <div className="space-y-0.5">
+        <h2 id="recommended-title" className="text-lg font-bold">
+          Temas para reforzar
+        </h2>
+        <p className="text-sm text-ink-muted">Tus aciertos en todos los simulacros.</p>
+      </div>
       {loading ? (
-        <div className="grid gap-4 md:grid-cols-3">
-          {Array.from({ length: 3 }, (_, index) => (
-            <Card key={index}>
-              <CardSkeleton />
-            </Card>
-          ))}
-        </div>
+        <CardSkeleton />
       ) : error?.kind === 'forbidden' ? (
-        <ProFeatureNotice message="Con PRO te recomendamos los temas que más necesitas reforzar." />
+        <ProFeatureNotice message="Con PRO ves tus aciertos por tema y cuáles reforzar primero." />
       ) : error ? (
         <InlineError message={error.message} onRetry={onRetry} />
       ) : topics.length === 0 ? (
-        <FirstExamEmptyState />
+        <p className="text-sm text-ink-muted">Aparecerán cuando termines tu primer simulacro.</p>
       ) : (
-        <ul className="grid gap-4 md:grid-cols-3">
+        <ul className="divide-y divide-line">
           {topics.map((topic) => {
             const starting = startingTopicId === topic.temaId
+            const percentage = Math.round(topic.porcentajeAciertos)
             return (
-              <li key={topic.temaId}>
-                {topic.inGoalArea ? (
-                  <button
-                    type="button"
-                    onClick={() => onPractice(topic.temaId)}
-                    disabled={startingTopicId !== null}
-                    aria-busy={starting}
-                    className={`${cardStyles} w-full text-left disabled:cursor-wait disabled:opacity-70`}
-                  >
-                    <TopicCardContent topic={topic} starting={starting} />
-                  </button>
-                ) : (
-                  <Link to={paths.newExam} className={cardStyles}>
-                    <TopicCardContent topic={topic} starting={false} />
-                  </Link>
-                )}
+              <li key={topic.temaId} className="space-y-2 py-3 first:pt-0 last:pb-0">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="truncate font-semibold">{topic.tema}</p>
+                    {topic.subtema && (
+                      <p className="truncate text-sm text-ink-muted">{topic.subtema}</p>
+                    )}
+                  </div>
+                  {topic.inGoalArea ? (
+                    <button
+                      type="button"
+                      onClick={() => onPractice(topic.temaId)}
+                      disabled={startingTopicId !== null}
+                      aria-busy={starting}
+                      aria-label={`Practicar ${topic.tema}`}
+                      className={actionStyles}
+                    >
+                      {starting ? (
+                        <LoaderCircle aria-hidden className="size-4 animate-spin" />
+                      ) : (
+                        'Practicar'
+                      )}
+                    </button>
+                  ) : (
+                    <Link to={paths.newExam} className={actionStyles}>
+                      Practicar
+                    </Link>
+                  )}
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-surface-muted">
+                    <div
+                      className={`h-full rounded-full ${masteryBar[masteryTone(percentage)]}`}
+                      style={{ width: `${Math.max(percentage, 3)}%` }}
+                    />
+                  </div>
+                  <span className="w-10 text-right text-sm font-semibold tabular-nums">
+                    {percentage}%
+                  </span>
+                </div>
               </li>
             )
           })}
         </ul>
       )}
-    </section>
+    </Card>
   )
 }
