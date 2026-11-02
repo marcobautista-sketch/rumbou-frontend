@@ -49,7 +49,6 @@ export default function ProfilePage() {
     <main className="mx-auto max-w-3xl space-y-6 px-4 py-8 sm:px-6">
       <PageHeader
         title="Mi perfil"
-        breadcrumbs={[{ label: 'Mi perfil' }]}
         actions={
           <Button variant="secondary" onClick={logout}>
             <LogOut aria-hidden className="size-4" />

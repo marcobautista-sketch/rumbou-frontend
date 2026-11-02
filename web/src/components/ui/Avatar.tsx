@@ -6,13 +6,12 @@ const sizes: Record<AvatarSize, string> = {
   lg: 'size-16 text-xl',
 }
 
+// Tonos suaves de la paleta: distinguen a cada persona sin salirse de los colores de la app.
 const palette = [
-  'bg-sky-700',
-  'bg-emerald-600',
-  'bg-amber-600',
-  'bg-rose-600',
-  'bg-sky-600',
-  'bg-violet-600',
+  'bg-chip text-primary',
+  'bg-accent-soft text-accent-ink',
+  'bg-warning-soft text-warning',
+  'bg-surface-muted text-ink',
 ]
 
 interface AvatarProps {
@@ -36,7 +35,7 @@ export function Avatar({ name, size = 'md' }: AvatarProps) {
     <span
       role="img"
       aria-label={name}
-      className={`inline-flex shrink-0 items-center justify-center rounded-full font-semibold text-white select-none ${sizes[size]} ${colorOf(name)}`}
+      className={`inline-flex shrink-0 items-center justify-center rounded-full font-semibold select-none ${sizes[size]} ${colorOf(name)}`}
     >
       {initialsOf(name)}
     </span>

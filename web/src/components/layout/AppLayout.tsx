@@ -9,16 +9,16 @@ export function AppLayout() {
   const closeMenu = useCallback(() => setMenuOpen(false), [])
 
   return (
-    <div className="min-h-screen">
+    <div className="flex min-h-screen">
       <a
         href="#content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-on-primary"
       >
         Saltar al contenido
       </a>
-      <Navbar menuOpen={menuOpen} onOpenMenu={() => setMenuOpen(true)} />
-      <div className="flex">
-        <Sidebar open={menuOpen} onClose={closeMenu} />
+      <Sidebar open={menuOpen} onClose={closeMenu} />
+      <div className="flex min-w-0 flex-1 flex-col">
+        <Navbar menuOpen={menuOpen} onOpenMenu={() => setMenuOpen(true)} />
         <div id="content" className="min-w-0 flex-1 animate-fade-in">
           <Suspense
             fallback={

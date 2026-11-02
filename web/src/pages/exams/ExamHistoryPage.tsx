@@ -3,6 +3,7 @@ import { useCallback } from 'react'
 import { generatePath, Link } from 'react-router'
 import { examService } from '../../api/examService'
 import { InlineError } from '../../components/feedback/InlineError'
+import { Page } from '../../components/layout/Page'
 import { PageHeader } from '../../components/layout/PageHeader'
 import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
@@ -79,11 +80,10 @@ export default function ExamHistoryPage() {
   const result = exams.data
 
   return (
-    <main className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
+    <Page>
       <PageHeader
         title="Mis simulacros"
         description="Todos los simulacros que rendiste, del más reciente al más antiguo."
-        breadcrumbs={[{ label: 'Mis simulacros' }]}
         actions={
           <Link to={paths.newExam} className={buttonStyles('primary')}>
             <Plus aria-hidden className="size-4" />
@@ -136,6 +136,6 @@ export default function ExamHistoryPage() {
           </>
         )}
       </section>
-    </main>
+    </Page>
   )
 }

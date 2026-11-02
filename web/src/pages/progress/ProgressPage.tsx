@@ -9,6 +9,7 @@ import { ProFeatureNotice } from '../../components/dashboard/ProFeatureNotice'
 import { ScoreHistoryChart } from '../../components/dashboard/ScoreHistoryChart'
 import { TopicMasteryChart } from '../../components/dashboard/TopicMasteryChart'
 import { InlineError } from '../../components/feedback/InlineError'
+import { Page } from '../../components/layout/Page'
 import { PageHeader } from '../../components/layout/PageHeader'
 import { Button } from '../../components/ui/Button'
 import { buttonStyles } from '../../components/ui/buttonStyles'
@@ -93,11 +94,10 @@ export default function ProgressPage() {
   }
 
   return (
-    <main className="mx-auto max-w-5xl space-y-8 px-4 py-8 sm:px-6">
+    <Page>
       <PageHeader
         title="Mi progreso"
         description="Tu probabilidad de ingreso, tus temas y cómo evoluciona tu puntaje."
-        breadcrumbs={[{ label: 'Inicio', to: paths.dashboard }, { label: 'Mi progreso' }]}
         actions={
           <>
             <Link to={paths.careers} className={buttonStyles('secondary')}>
@@ -211,6 +211,6 @@ export default function ProgressPage() {
         onConfirm={confirmRemoval}
         onCancel={() => setGoalToRemove(null)}
       />
-    </main>
+    </Page>
   )
 }
