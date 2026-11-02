@@ -1,15 +1,19 @@
 import { Ionicons } from '@expo/vector-icons'
 import { StyleSheet, Text, View } from 'react-native'
 import { useColors } from '../theme/useColors'
+import { formattedAlternative } from '../utils/alternatives'
 import { formatMath } from '../utils/formatMath'
+import { MathText } from './MathText'
 
 interface AnswerReviewProps {
   alternatives: string[]
+  // Las mismas alternativas con formato (LaTeX), si la pregunta lo tiene.
+  formatted?: string[] | null
   correct: number
   marked: number | null
 }
 
-export function AnswerReview({ alternatives, correct, marked }: AnswerReviewProps) {
+export function AnswerReview({ alternatives, formatted, correct, marked }: AnswerReviewProps) {
   const colors = useColors()
 
   return (
@@ -46,11 +50,13 @@ export function AnswerReview({ alternatives, correct, marked }: AnswerReviewProp
                 {String.fromCharCode(65 + alternative)}
               </Text>
             )}
-            <Text
-              style={[styles.label, { color: colors.text }, isWrongChoice && styles.crossedOut]}
-            >
-              {formatMath(text)}
-            </Text>
+            <View style={styles.label}>
+              <MathText
+                text={formattedAlternative(formatted, alternative)}
+                fallback={text}
+                style={isWrongChoice ? styles.crossedOut : undefined}
+              />
+            </View>
           </View>
         )
       })}
