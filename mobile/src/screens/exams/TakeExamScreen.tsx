@@ -8,7 +8,9 @@ import { LoadingView } from '../../components/LoadingView'
 import { MathText } from '../../components/MathText'
 import { OptionList } from '../../components/OptionList'
 import { ProgressBar } from '../../components/ProgressBar'
+import { ScratchButton } from '../../components/ScratchButton'
 import { QuestionStatement } from '../../components/QuestionStatement'
+import { WhiteboardModal, type ScratchStroke } from '../../components/WhiteboardModal'
 import { useFetch } from '../../hooks/useFetch'
 import type { RootStackParamList } from '../../navigation/types'
 import { examService } from '../../services/examService'
@@ -31,6 +33,9 @@ function ExamInProgress({ exam, onFinished }: ExamInProgressProps) {
   const [index, setIndex] = useState(0)
   const [changes, setChanges] = useState<Record<number, number | null>>({})
   const [finishing, setFinishing] = useState(false)
+  // La pizarra de cada pregunta: solo para el postulante, vive mientras rinde el simulacro.
+  const [scratch, setScratch] = useState<Record<number, ScratchStroke[]>>({})
+  const [boardOpen, setBoardOpen] = useState(false)
 
   const total = exam.preguntas.length
   const question = exam.preguntas[index]
@@ -93,7 +98,13 @@ function ExamInProgress({ exam, onFinished }: ExamInProgressProps) {
       <Text style={[styles.heading, { color: colors.text }]}>
         Pregunta {index + 1} de {total}
       </Text>
-      <Chip label={question.tema} />
+      <View style={styles.between}>
+        <Chip label={question.tema} />
+        <ScratchButton
+          hasNotes={(scratch[question.preguntaId]?.length ?? 0) > 0}
+          onPress={() => setBoardOpen(true)}
+        />
+      </View>
       <QuestionStatement question={question} fontSize={18} />
       <OptionList
         accessibilityLabel="Alternativas"
@@ -136,6 +147,16 @@ function ExamInProgress({ exam, onFinished }: ExamInProgressProps) {
         onPress={() => answer(null)}
       />
       <Button title="Finalizar simulacro" loading={finishing} onPress={confirmFinish} />
+      <WhiteboardModal
+        key={question.preguntaId}
+        visible={boardOpen}
+        statement={question.enunciado}
+        initialStrokes={scratch[question.preguntaId] ?? []}
+        onClose={(strokes) => {
+          setScratch((current) => ({ ...current, [question.preguntaId]: strokes }))
+          setBoardOpen(false)
+        }}
+      />
     </ScrollView>
   )
 }
@@ -178,7 +199,7 @@ export default function TakeExamScreen({ navigation, route }: TakeExamScreenProp
 
 const styles = StyleSheet.create({
   content: { gap: 14, padding: 20 },
-  between: { flexDirection: 'row', justifyContent: 'space-between' },
+  between: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   row: { flexDirection: 'row', gap: 12 },
   flex: { flex: 1 },
   heading: { fontSize: 20, fontWeight: '700' },

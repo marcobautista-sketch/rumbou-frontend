@@ -5,7 +5,6 @@ import {
   CircleX,
   EyeOff,
   Lock,
-  PenLine,
   type LucideIcon,
 } from 'lucide-react'
 import { useEffect, useState, type ChangeEvent } from 'react'
@@ -18,8 +17,6 @@ import { formatMath } from '../../utils/formatMath'
 import { Button } from '../ui/Button'
 import { buttonStyles } from '../ui/buttonStyles'
 import { Card } from '../ui/Card'
-import { Modal } from '../ui/Modal'
-import { Whiteboard } from './Whiteboard'
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024
 const ACCEPTED_TYPES = 'image/jpeg,image/png,image/webp,image/heic,image/heif'
@@ -55,16 +52,14 @@ interface SolutionImage {
 
 interface SolutionReviewPanelProps {
   questionId: number
-  statement: string
 }
 
-// Sensores de la web: foto del procedimiento en papel o la pizarra, revisadas por el tutor.
-export function SolutionReviewPanel({ questionId, statement }: SolutionReviewPanelProps) {
+// Sensor de la web: la foto del procedimiento hecho en papel, revisada por el tutor.
+export function SolutionReviewPanel({ questionId }: SolutionReviewPanelProps) {
   const [image, setImage] = useState<SolutionImage | null>(null)
   const [review, setReview] = useState<SolutionReview | null>(null)
   const [error, setError] = useState<ApiError | string | null>(null)
   const [sending, setSending] = useState(false)
-  const [boardOpen, setBoardOpen] = useState(false)
 
   useEffect(() => {
     if (!image) return
@@ -106,16 +101,16 @@ export function SolutionReviewPanel({ questionId, statement }: SolutionReviewPan
   return (
     <Card aria-labelledby="solution-title" aria-busy={sending} className="space-y-4">
       <div className="flex items-center gap-3">
-        <span className="rounded-xl bg-accent p-2 text-on-accent">
-          <PenLine aria-hidden className="size-5" />
+        <span className="rounded-xl bg-chip p-2 text-primary">
+          <Camera aria-hidden className="size-5" />
         </span>
         <div>
           <h2 id="solution-title" className="font-semibold">
             Muéstrale tu procedimiento al tutor
           </h2>
           <p className="text-sm text-ink-muted">
-            Sube una foto de lo que resolviste en papel o escríbelo en la pizarra. El tutor te dirá
-            en qué paso está el error.
+            Sube una foto de lo que resolviste en papel y el tutor te dirá en qué paso está el
+            error.
           </p>
         </div>
       </div>
@@ -133,9 +128,6 @@ export function SolutionReviewPanel({ questionId, statement }: SolutionReviewPan
             className="sr-only"
           />
         </label>
-        <Button variant="secondary" size="sm" onClick={() => setBoardOpen(true)} disabled={sending}>
-          <PenLine aria-hidden className="size-4" /> Usar la pizarra
-        </Button>
       </div>
 
       {image && (
@@ -186,23 +178,6 @@ export function SolutionReviewPanel({ questionId, statement }: SolutionReviewPan
           </p>
         </div>
       )}
-
-      <Modal
-        open={boardOpen}
-        title="Pizarra"
-        description="Resuelve la pregunta como lo harías en papel. Con un lápiz de tablet, la palma no dibuja."
-        size="lg"
-        onClose={() => setBoardOpen(false)}
-      >
-        <Whiteboard
-          statement={statement}
-          onCancel={() => setBoardOpen(false)}
-          onDone={(blob) => {
-            setBoardOpen(false)
-            selectImage(blob, 'pizarra.png')
-          }}
-        />
-      </Modal>
     </Card>
   )
 }
