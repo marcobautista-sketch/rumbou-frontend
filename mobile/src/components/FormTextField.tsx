@@ -1,12 +1,18 @@
-import { Ionicons } from '@expo/vector-icons'
 import { useState } from 'react'
 import { useController, type Control, type FieldValues, type Path } from 'react-hook-form'
-import { Pressable, StyleSheet, Text, TextInput, View, type TextInputProps } from 'react-native'
+import { StyleSheet, View, type TextInputProps } from 'react-native'
+import { HelperText, TextInput } from 'react-native-paper'
 import { useColors } from '../theme/useColors'
 
-interface FormTextFieldProps<T extends FieldValues> extends Omit<
+interface FormTextFieldProps<T extends FieldValues> extends Pick<
   TextInputProps,
-  'value' | 'onChangeText' | 'onBlur'
+  | 'autoComplete'
+  | 'autoCapitalize'
+  | 'keyboardType'
+  | 'maxLength'
+  | 'placeholder'
+  | 'secureTextEntry'
+  | 'textContentType'
 > {
   control: Control<T>
   name: Path<T>
@@ -14,6 +20,8 @@ interface FormTextFieldProps<T extends FieldValues> extends Omit<
   hint?: string
 }
 
+// Campo de formulario conectado a react-hook-form. Por dentro es el TextInput "outlined" de
+// React Native Paper (con la etiqueta dentro del recuadro) y su HelperText para la ayuda o el error.
 export function FormTextField<T extends FieldValues>({
   control,
   name,
@@ -29,73 +37,40 @@ export function FormTextField<T extends FieldValues>({
   const message = error ?? hint
 
   return (
-    <View style={styles.container}>
-      <Text style={[styles.label, { color: colors.text }]}>{label}</Text>
-      <View
-        style={[
-          styles.inputRow,
-          { backgroundColor: colors.surface, borderColor: error ? colors.danger : colors.border },
-        ]}
-      >
-        <TextInput
-          accessibilityLabel={label}
-          value={String(field.value ?? '')}
-          onChangeText={field.onChange}
-          onBlur={field.onBlur}
-          secureTextEntry={hidden}
-          placeholderTextColor={colors.muted}
-          style={[styles.input, { color: colors.text }]}
-          {...inputProps}
-        />
-        {secureTextEntry && (
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={hidden ? 'Mostrar contraseña' : 'Ocultar contraseña'}
-            onPress={() => setHidden((value) => !value)}
-            hitSlop={12}
-          >
-            <Ionicons
-              name={hidden ? 'eye-outline' : 'eye-off-outline'}
-              size={20}
-              color={colors.muted}
+    <View>
+      <TextInput
+        mode="outlined"
+        label={label}
+        accessibilityLabel={label}
+        value={String(field.value ?? '')}
+        onChangeText={field.onChange}
+        onBlur={field.onBlur}
+        secureTextEntry={hidden}
+        error={Boolean(error)}
+        outlineColor={colors.border}
+        activeOutlineColor={colors.primary}
+        outlineStyle={styles.outline}
+        style={{ backgroundColor: colors.surface }}
+        right={
+          secureTextEntry ? (
+            <TextInput.Icon
+              icon={hidden ? 'eye-outline' : 'eye-off-outline'}
+              accessibilityLabel={hidden ? 'Mostrar contraseña' : 'Ocultar contraseña'}
+              onPress={() => setHidden((value) => !value)}
             />
-          </Pressable>
-        )}
-      </View>
+          ) : undefined
+        }
+        {...inputProps}
+      />
       {message && (
-        <Text
-          accessibilityLiveRegion={error ? 'polite' : 'none'}
-          style={[styles.message, { color: error ? colors.danger : colors.muted }]}
-        >
+        <HelperText type={error ? 'error' : 'info'} visible padding="none">
           {message}
-        </Text>
+        </HelperText>
       )}
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    gap: 6,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  inputRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingHorizontal: 12,
-  },
-  input: {
-    flex: 1,
-    minHeight: 48,
-    fontSize: 16,
-  },
-  message: {
-    fontSize: 13,
-  },
+  outline: { borderRadius: 12 },
 })
