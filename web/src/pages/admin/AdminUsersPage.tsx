@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { userService } from '../../api/userService'
 import { UserRoleCard } from '../../components/admin/UserRoleCard'
 import { InlineError } from '../../components/feedback/InlineError'
+import { Page } from '../../components/layout/Page'
 import { PageHeader } from '../../components/layout/PageHeader'
 import { ConfirmDialog } from '../../components/ui/ConfirmDialog'
 import { EmptyState } from '../../components/ui/EmptyState'
@@ -64,7 +65,7 @@ export default function AdminUsersPage() {
   const typedButInvalid = email.trim() !== '' && !emailSchema.safeParse(email.trim()).success
 
   return (
-    <main className="mx-auto max-w-3xl space-y-6 px-4 py-8 sm:px-6">
+    <Page narrow>
       <PageHeader
         title="Usuarios"
         description="Busca una cuenta por su correo para darle permisos de revisor o administrador."
@@ -146,6 +147,6 @@ export default function AdminUsersPage() {
         onConfirm={changeRole}
         onCancel={() => setPendingChange(null)}
       />
-    </main>
+    </Page>
   )
 }

@@ -139,13 +139,14 @@ function ExamInProgress({ exam, examName }: { exam: ExamDetail; examName: string
           />
           <nav
             aria-label="Moverse entre preguntas"
-            className="flex flex-wrap justify-between gap-3"
+            className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 sm:gap-3"
           >
             <Button variant="secondary" disabled={index === 0} onClick={() => goTo(index - 1)}>
               Anterior
             </Button>
             <Button variant="ghost" disabled={answers[index] === null} onClick={() => answer(null)}>
-              Dejar en blanco
+              <span className="sm:hidden">En blanco</span>
+              <span className="hidden sm:inline">Dejar en blanco</span>
             </Button>
             {isLast ? (
               <Button onClick={() => setConfirmOpen(true)}>Finalizar simulacro</Button>
