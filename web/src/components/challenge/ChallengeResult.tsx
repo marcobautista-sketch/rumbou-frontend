@@ -55,7 +55,7 @@ export function ChallengeResult({ challenge }: { challenge: DailyChallenge }) {
         />
       )}
 
-      <SolutionReviewPanel questionId={challenge.preguntaId} statement={challenge.enunciado} />
+      <SolutionReviewPanel questionId={challenge.preguntaId} />
 
       <p className="flex items-center justify-center gap-2 text-ink-muted">
         <CalendarClock aria-hidden className="size-5" />

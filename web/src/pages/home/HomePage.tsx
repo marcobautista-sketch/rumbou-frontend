@@ -51,7 +51,7 @@ const features: { icon: LucideIcon; title: string; text: string }[] = [
   {
     icon: NotebookPen,
     title: 'Simulacros como el examen real',
-    text: 'Por tema o completos, con la estructura, el puntaje y la penalidad de cada universidad.',
+    text: 'Por tema o completos, con el puntaje y la penalidad de cada universidad, y una pizarra para resolver con el dedo o un lápiz de tablet.',
   },
   {
     icon: ListOrdered,
@@ -66,7 +66,7 @@ const features: { icon: LucideIcon; title: string; text: string }[] = [
   {
     icon: Sparkles,
     title: 'Tutor con inteligencia artificial',
-    text: 'Te explica en qué te equivocaste y revisa la foto de tu solución o lo que escribas en la pizarra.',
+    text: 'Te explica en qué te equivocaste y revisa la foto de tu procedimiento en papel.',
   },
   {
     icon: Flame,

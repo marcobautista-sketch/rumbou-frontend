@@ -16,6 +16,8 @@ import { useFetch } from '../hooks/useFetch'
 import { challengeService } from '../services/challengeService'
 import { tutorService } from '../services/tutorService'
 import { userService } from '../services/userService'
+import { ScratchButton } from '../components/ScratchButton'
+import { WhiteboardModal, type ScratchStroke } from '../components/WhiteboardModal'
 import { useColors } from '../theme/useColors'
 import type { DailyChallenge } from '../types/challenge'
 import { formattedAlternative } from '../utils/alternatives'
@@ -92,7 +94,7 @@ function ChallengeResult({ challenge }: { challenge: DailyChallenge }) {
       )}
       <QuestionExplanation explanation={challenge.explicacion} steps={challenge.pasos} />
       {!correct && <TutorExplanation challenge={challenge} />}
-      <SolutionPhotoReview questionId={challenge.preguntaId} statement={challenge.enunciado} />
+      <SolutionPhotoReview questionId={challenge.preguntaId} />
       <Text style={[styles.centered, { color: colors.muted }]}>
         Vuelve mañana por un nuevo desafío.
       </Text>
@@ -112,6 +114,9 @@ export default function ChallengeScreen() {
   const [answered, setAnswered] = useState<DailyChallenge | null>(null)
   const [selected, setSelected] = useState<number | null>(null)
   const [sending, setSending] = useState(false)
+  // Pizarra para resolver el desafío: solo para el postulante, se descarta al responder.
+  const [scratch, setScratch] = useState<ScratchStroke[]>([])
+  const [boardOpen, setBoardOpen] = useState(false)
   const current = answered ?? challenge.data
   const done = current?.desafiosDeLaSemana ?? 0
   const goal = current?.metaSemanal ?? 5
@@ -185,6 +190,9 @@ export default function ChallengeScreen() {
               <Chip label={current.tema} />
               <Chip label={`5 min · +${current.xpPorAcierto} XP`} tone="accent" />
             </View>
+            <View style={styles.end}>
+              <ScratchButton hasNotes={scratch.length > 0} onPress={() => setBoardOpen(true)} />
+            </View>
             <QuestionStatement question={current} fontSize={18} />
             <OptionList
               accessibilityLabel="Alternativas"
@@ -208,6 +216,15 @@ export default function ChallengeScreen() {
               loading={sending}
               onPress={submit}
             />
+            <WhiteboardModal
+              visible={boardOpen}
+              statement={current.enunciado}
+              initialStrokes={scratch}
+              onClose={(strokes) => {
+                setScratch(strokes)
+                setBoardOpen(false)
+              }}
+            />
           </View>
         )
       )}
@@ -222,6 +239,7 @@ const styles = StyleSheet.create({
   cardTitle: { fontSize: 16, fontWeight: '600' },
   between: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 8 },
   centered: { textAlign: 'center' },
+  end: { alignItems: 'flex-end' },
   section: { gap: 14 },
   verdict: { flexDirection: 'row', alignItems: 'center', gap: 12, borderRadius: 16, padding: 16 },
   verdictTitle: { fontSize: 20, fontWeight: '700' },
