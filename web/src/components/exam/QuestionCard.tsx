@@ -28,7 +28,7 @@ export function QuestionCard({ question, position, selected, onSelect }: Questio
         {question.alternativas.map((text, alternative) => (
           <label
             key={alternative}
-            className="flex min-h-14 cursor-pointer items-center gap-3 rounded-xl border-2 border-line bg-surface px-4 py-3 transition hover:bg-surface-muted has-checked:border-accent has-checked:bg-accent-soft has-focus-visible:ring-2 has-focus-visible:ring-accent"
+            className="flex min-h-14 cursor-pointer items-center gap-3 rounded-xl border-2 border-line bg-surface px-4 py-3 transition hover:bg-surface-muted has-checked:border-primary has-checked:bg-chip has-focus-visible:ring-2 has-focus-visible:ring-accent"
           >
             <input
               type="radio"
@@ -39,7 +39,7 @@ export function QuestionCard({ question, position, selected, onSelect }: Questio
             />
             <span
               aria-hidden
-              className="flex size-7 shrink-0 items-center justify-center rounded-full border-2 border-ink-muted text-sm font-semibold peer-checked:border-accent peer-checked:bg-accent peer-checked:text-on-accent"
+              className="flex size-7 shrink-0 items-center justify-center rounded-full border-2 border-ink-muted/60 text-sm font-semibold peer-checked:border-primary peer-checked:bg-primary peer-checked:text-on-primary"
             >
               {alternativeLetter(alternative)}
             </span>

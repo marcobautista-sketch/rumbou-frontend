@@ -38,7 +38,7 @@ export function Table<T>({ caption, columns, rows, rowKey, isRowSelected }: Tabl
             <tr
               key={rowKey(row)}
               className={`transition ${
-                isRowSelected?.(row) ? 'bg-accent-soft' : 'hover:bg-surface-muted'
+                isRowSelected?.(row) ? 'bg-chip' : 'hover:bg-surface-muted'
               }`}
             >
               {columns.map((column) => (

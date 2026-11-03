@@ -1,6 +1,7 @@
-import { Timer } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { Keyboard, Timer } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
 import { generatePath, Navigate, useNavigate, useParams, useSearchParams } from 'react-router'
+import { areaService } from '../../api/areaService'
 import { examService } from '../../api/examService'
 import { QuestionCard } from '../../components/exam/QuestionCard'
 import { QuestionNavigator } from '../../components/exam/QuestionNavigator'
@@ -14,10 +15,13 @@ import { useFetch } from '../../hooks/useFetch'
 import { paths } from '../../routes/paths'
 import type { ExamDetail } from '../../types/exam'
 import { examTypeLabels } from '../../utils/examSummary'
-import { formatDuration } from '../../utils/format'
+import { alternativeLetter, formatDuration } from '../../utils/format'
 import { notify } from '../../utils/notify'
+import { areaLabel } from '../../utils/universityLabels'
 
-function ExamInProgress({ exam }: { exam: ExamDetail }) {
+const LETTERS = ['a', 'b', 'c', 'd', 'e']
+
+function ExamInProgress({ exam, examName }: { exam: ExamDetail; examName: string }) {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const [changes, setChanges] = useState<Record<number, number | null>>({})
@@ -62,25 +66,52 @@ function ExamInProgress({ exam }: { exam: ExamDetail }) {
   }
 
   const unanswered = total - answeredCount
+  const isLast = index === total - 1
+
+  // Atajos de teclado: A–E marcan una alternativa y las flechas cambian de pregunta. No se
+  // activan mientras se escribe ni con el diálogo de finalizar abierto.
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (confirmOpen || event.altKey || event.ctrlKey || event.metaKey) return
+      const target = event.target as HTMLElement
+      if (target.closest('textarea, select, input:not([type="radio"])')) return
+      const letter = LETTERS.indexOf(event.key.toLowerCase())
+      if (letter >= 0 && letter < question.alternativas.length) {
+        event.preventDefault()
+        void answer(letter)
+      } else if (target.tagName !== 'INPUT' && event.key === 'ArrowRight' && !isLast) {
+        goTo(index + 1)
+      } else if (target.tagName !== 'INPUT' && event.key === 'ArrowLeft' && index > 0) {
+        goTo(index - 1)
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  })
 
   return (
     <Page>
-      <header className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <p className="text-sm text-ink-muted">{examTypeLabels[exam.tipo]}</p>
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            Pregunta {index + 1} de {total}
+      <header className="flex flex-wrap items-end justify-between gap-4">
+        <div className="space-y-1">
+          <p className="text-sm font-semibold text-primary">
+            {examTypeLabels[exam.tipo]}
+            {examName && ` · ${examName}`}
+          </p>
+          <h1 className="text-[1.75rem] leading-tight font-bold tracking-tight sm:text-3xl">
+            Pregunta {index + 1} <span className="text-ink-muted">de {total}</span>
           </h1>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <span
-            className="flex items-center gap-2 rounded-full bg-chip px-4 py-1.5 font-mono text-lg font-semibold text-primary"
+            className="flex items-center gap-2 rounded-xl bg-surface px-3 py-2 font-mono text-lg font-semibold tabular-nums shadow-card"
             aria-label="Tiempo transcurrido"
           >
             <Timer aria-hidden className="size-5 text-primary" />
             {formatDuration(elapsedSeconds)}
           </span>
-          <Button onClick={() => setConfirmOpen(true)}>Finalizar</Button>
+          <Button variant="secondary" onClick={() => setConfirmOpen(true)}>
+            Finalizar
+          </Button>
         </div>
       </header>
 
@@ -98,31 +129,42 @@ function ExamInProgress({ exam }: { exam: ExamDetail }) {
         />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_17rem]">
-        <QuestionCard
-          question={question}
-          position={index + 1}
-          selected={answers[index]}
-          onSelect={answer}
-        />
+      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
+        <div className="space-y-5">
+          <QuestionCard
+            question={question}
+            position={index + 1}
+            selected={answers[index]}
+            onSelect={answer}
+          />
+          <nav
+            aria-label="Moverse entre preguntas"
+            className="flex flex-wrap justify-between gap-3"
+          >
+            <Button variant="secondary" disabled={index === 0} onClick={() => goTo(index - 1)}>
+              Anterior
+            </Button>
+            <Button variant="ghost" disabled={answers[index] === null} onClick={() => answer(null)}>
+              Dejar en blanco
+            </Button>
+            {isLast ? (
+              <Button onClick={() => setConfirmOpen(true)}>Finalizar simulacro</Button>
+            ) : (
+              <Button onClick={() => goTo(index + 1)}>Siguiente</Button>
+            )}
+          </nav>
+          <p className="hidden items-center gap-2 text-sm text-ink-muted lg:flex">
+            <Keyboard aria-hidden className="size-4" />
+            Atajos: {alternativeLetter(0)}–{alternativeLetter(question.alternativas.length - 1)}{' '}
+            marcan una alternativa y las flechas ← → cambian de pregunta.
+          </p>
+        </div>
         <QuestionNavigator
           answered={answers.map((item) => item !== null)}
           current={index}
           onSelect={goTo}
         />
       </div>
-
-      <nav aria-label="Moverse entre preguntas" className="flex flex-wrap justify-between gap-3">
-        <Button variant="secondary" disabled={index === 0} onClick={() => goTo(index - 1)}>
-          Anterior
-        </Button>
-        <Button variant="ghost" disabled={answers[index] === null} onClick={() => answer(null)}>
-          Dejar en blanco
-        </Button>
-        <Button disabled={index === total - 1} onClick={() => goTo(index + 1)}>
-          Siguiente
-        </Button>
-      </nav>
 
       <ConfirmDialog
         open={confirmOpen}
@@ -148,6 +190,8 @@ export default function TakeExamPage() {
     [examId],
   )
   const { data: exam, error, loading, retry } = useFetch(fetchExam)
+  const fetchAreas = useCallback((signal: AbortSignal) => areaService.list(signal), [])
+  const areas = useFetch(fetchAreas)
 
   if (loading) return <PageLoader />
   if (error || !exam) {
@@ -162,5 +206,8 @@ export default function TakeExamPage() {
   if (exam.estado === 'FINALIZADO') {
     return <Navigate to={generatePath(paths.examResult, { examId: String(exam.id) })} replace />
   }
-  return <ExamInProgress exam={exam} />
+  const area = areas.data?.find((candidate) => candidate.id === exam.areaId)
+  return (
+    <ExamInProgress exam={exam} examName={area ? areaLabel(area.universidad, area.nombre) : ''} />
+  )
 }

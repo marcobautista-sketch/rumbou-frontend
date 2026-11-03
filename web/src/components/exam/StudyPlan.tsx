@@ -63,7 +63,7 @@ function TopicVideos({ topicId }: { topicId: number }) {
         href={data.busquedaUrl}
         target="_blank"
         rel="noreferrer"
-        className="inline-flex items-center gap-1 text-sm font-semibold text-accent-ink hover:underline"
+        className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
       >
         {data.videos.length > 0
           ? 'Ver más videos en YouTube'

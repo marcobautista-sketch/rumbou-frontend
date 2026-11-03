@@ -6,7 +6,7 @@ import { Button } from '../ui/Button'
 const proBenefits = [
   'Simulacros ilimitados de la UNI y San Marcos',
   'Tutor de IA que explica en qué te equivocaste',
-  'Hasta 3 carreras objetivo para comparar',
+  'Hasta 3 carreras meta para comparar',
 ]
 
 interface PlanDetailsProps {
