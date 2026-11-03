@@ -1,5 +1,5 @@
 import { Check, X } from 'lucide-react'
-import { areShortAlternatives, formattedAlternative } from '../../utils/alternatives'
+import { alternativesLayout, formattedAlternative } from '../../utils/alternatives'
 import { alternativeLetter } from '../../utils/format'
 import { MathText } from '../questions/MathText'
 
@@ -12,10 +12,10 @@ interface AnswerReviewProps {
 }
 
 export function AnswerReview({ alternatives, formatted, correct, marked }: AnswerReviewProps) {
-  const short = areShortAlternatives(alternatives)
+  const layout = alternativesLayout(alternatives)
 
   return (
-    <ol className={short ? 'grid gap-2 sm:grid-cols-3 lg:grid-cols-5' : 'space-y-2'}>
+    <ol className={layout}>
       {alternatives.map((text, alternative) => {
         const isCorrect = alternative === correct
         const isWrongChoice = alternative === marked && !isCorrect
@@ -52,7 +52,7 @@ export function AnswerReview({ alternatives, formatted, correct, marked }: Answe
             <MathText
               text={formattedAlternative(formatted, alternative)}
               fallback={text}
-              className={`min-w-0 ${isWrongChoice ? 'line-through' : ''}`}
+              className={`min-w-0 break-words ${isWrongChoice ? 'line-through' : ''}`}
             />
             {isCorrect && <span className="sr-only">(respuesta correcta)</span>}
             {isWrongChoice && <span className="sr-only">(tu respuesta)</span>}

@@ -1,5 +1,5 @@
 import type { ExamQuestion } from '../../types/exam'
-import { areShortAlternatives, formattedAlternative } from '../../utils/alternatives'
+import { alternativesLayout, formattedAlternative } from '../../utils/alternatives'
 import { alternativeLetter } from '../../utils/format'
 import { MathText } from '../questions/MathText'
 import { QuestionStatement } from '../questions/QuestionStatement'
@@ -15,7 +15,7 @@ interface QuestionCardProps {
 }
 
 export function QuestionCard({ question, position, selected, onSelect }: QuestionCardProps) {
-  const short = areShortAlternatives(question.alternativas)
+  const layout = alternativesLayout(question.alternativas)
 
   return (
     <fieldset className="space-y-4 rounded-2xl bg-surface p-6 shadow-card">
@@ -24,7 +24,7 @@ export function QuestionCard({ question, position, selected, onSelect }: Questio
         {question.tema}
       </span>
       <QuestionStatement question={question} className="text-lg" />
-      <div className={short ? 'grid gap-2 sm:grid-cols-3 lg:grid-cols-5' : 'space-y-2'}>
+      <div className={layout}>
         {question.alternativas.map((text, alternative) => (
           <label
             key={alternative}
@@ -46,7 +46,7 @@ export function QuestionCard({ question, position, selected, onSelect }: Questio
             <MathText
               text={formattedAlternative(question.presentacion?.alternativas, alternative)}
               fallback={text}
-              className="min-w-0"
+              className="min-w-0 break-words"
             />
           </label>
         ))}
