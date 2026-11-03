@@ -1,9 +1,13 @@
 import { ActivityIndicator, Pressable, StyleSheet, Text, type PressableProps } from 'react-native'
 import { useColors } from '../theme/useColors'
 
+// primary: la acción principal de la pantalla. secondary: acciones de apoyo. ghost: una
+// acción de texto, como un enlace. Las mismas variantes que en la web.
+type ButtonVariant = 'primary' | 'secondary' | 'ghost'
+
 interface ButtonProps extends Omit<PressableProps, 'children' | 'style' | 'onPress'> {
   title: string
-  variant?: 'primary' | 'secondary'
+  variant?: ButtonVariant
   loading?: boolean
   onPress?: () => void
 }
@@ -16,8 +20,9 @@ export function Button({
   ...props
 }: ButtonProps) {
   const colors = useColors()
-  const isPrimary = variant === 'primary'
   const inactive = disabled || loading
+  const textColor =
+    variant === 'primary' ? colors.onPrimary : variant === 'ghost' ? colors.primary : colors.text
 
   return (
     <Pressable
@@ -26,19 +31,21 @@ export function Button({
       disabled={inactive}
       style={({ pressed }) => [
         styles.button,
-        isPrimary
-          ? { backgroundColor: colors.primary }
-          : { borderColor: colors.primary, borderWidth: 2 },
+        variant === 'primary' && { backgroundColor: colors.primary },
+        variant === 'secondary' && {
+          backgroundColor: colors.surface,
+          borderColor: colors.border,
+          borderWidth: 1,
+        },
+        variant === 'ghost' && styles.ghost,
         (pressed || inactive) && styles.dimmed,
       ]}
       {...props}
     >
       {loading ? (
-        <ActivityIndicator color={isPrimary ? colors.onPrimary : colors.primary} />
+        <ActivityIndicator color={textColor} />
       ) : (
-        <Text style={[styles.title, { color: isPrimary ? colors.onPrimary : colors.primary }]}>
-          {title}
-        </Text>
+        <Text style={[styles.title, { color: textColor }]}>{title}</Text>
       )}
     </Pressable>
   )
@@ -52,8 +59,11 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 16,
   },
+  ghost: {
+    minHeight: 40,
+  },
   dimmed: {
-    opacity: 0.7,
+    opacity: 0.6,
   },
   title: {
     fontSize: 16,

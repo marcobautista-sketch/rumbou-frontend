@@ -1,4 +1,4 @@
-import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native'
 import { StatusBar } from 'expo-status-bar'
 import { useColorScheme } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
@@ -6,6 +6,7 @@ import Toast from 'react-native-toast-message'
 import { OfflineBanner } from './src/components/OfflineBanner'
 import { AuthProvider } from './src/contexts/AuthProvider'
 import { RootNavigator } from './src/navigation/RootNavigator'
+import { navigationThemes } from './src/theme/navigationTheme'
 import { toastConfig } from './src/utils/toastConfig'
 
 export default function App() {
@@ -15,7 +16,7 @@ export default function App() {
     <SafeAreaProvider>
       <OfflineBanner />
       <AuthProvider>
-        <NavigationContainer theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <NavigationContainer theme={navigationThemes[colorScheme === 'dark' ? 'dark' : 'light']}>
           <RootNavigator />
         </NavigationContainer>
         <Toast config={toastConfig} />
