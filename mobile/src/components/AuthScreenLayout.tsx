@@ -1,17 +1,8 @@
 import type { ReactNode } from 'react'
-import {
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native'
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useColors } from '../theme/useColors'
-
-const logo = require('../../assets/logo.png')
+import { BrandMark } from './BrandMark'
 
 interface AuthScreenLayoutProps {
   title: string
@@ -30,10 +21,7 @@ export function AuthScreenLayout({ title, subtitle, children }: AuthScreenLayout
       >
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
           <View style={styles.header}>
-            <View style={styles.logoTile}>
-              <Image source={logo} style={styles.logo} accessibilityIgnoresInvertColors />
-            </View>
-            <Text style={[styles.brand, { color: colors.primary }]}>RumboU</Text>
+            <BrandMark size={44} />
             <Text accessibilityRole="header" style={[styles.title, { color: colors.text }]}>
               {title}
             </Text>
@@ -58,25 +46,13 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
-    gap: 6,
+    gap: 8,
     marginBottom: 8,
   },
-  logoTile: {
-    borderRadius: 16,
-    padding: 8,
-    backgroundColor: '#ffffff',
-  },
-  logo: {
-    width: 64,
-    height: 60,
-  },
-  brand: {
-    fontSize: 32,
-    fontWeight: '700',
-  },
   title: {
-    fontSize: 22,
-    fontWeight: '600',
+    fontSize: 24,
+    fontWeight: '700',
+    marginTop: 16,
   },
   subtitle: {
     fontSize: 15,

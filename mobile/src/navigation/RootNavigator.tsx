@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { LoadingView } from '../components/LoadingView'
+import { useColors } from '../theme/useColors'
 import { useAuth } from '../hooks/useAuth'
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen'
 import LoginScreen from '../screens/auth/LoginScreen'
@@ -16,11 +17,21 @@ const Stack = createNativeStackNavigator<RootStackParamList>()
 
 export function RootNavigator() {
   const { status } = useAuth()
+  const colors = useColors()
 
   if (status === 'loading') return <LoadingView />
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        headerStyle: { backgroundColor: colors.background },
+        headerShadowVisible: false,
+        headerTintColor: colors.primary,
+        headerTitleStyle: { fontWeight: '700', color: colors.text },
+        headerBackTitle: 'Atrás',
+      }}
+    >
       {status === 'authenticated' ? (
         <>
           <Stack.Screen name="Main" component={MainTabs} />
