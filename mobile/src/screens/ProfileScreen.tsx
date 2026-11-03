@@ -82,6 +82,12 @@ function EditProfileForm({ user }: { user: User }) {
   )
 }
 
+function initialsOf(name: string) {
+  const words = name.trim().split(/s+/).filter(Boolean)
+  const initials = words.length > 1 ? words[0][0] + words[1][0] : (words[0]?.slice(0, 2) ?? '?')
+  return initials.toUpperCase()
+}
+
 export default function ProfileScreen() {
   const colors = useColors()
   const { user, logout } = useAuth()
@@ -104,11 +110,21 @@ export default function ProfileScreen() {
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"
       >
-        <View style={[styles.card, { backgroundColor: colors.surface }]}>
-          <Text style={{ color: colors.muted }}>Correo</Text>
-          <Text style={[styles.value, { color: colors.text }]}>{user.email}</Text>
-          <Text style={{ color: colors.muted }}>Tipo de cuenta</Text>
-          <Text style={[styles.value, { color: colors.text }]}>{roleLabels[user.role]}</Text>
+        <View style={[styles.card, styles.identity, { backgroundColor: colors.surface }]}>
+          <View style={[styles.avatar, { backgroundColor: colors.chip }]}>
+            <Text style={[styles.avatarText, { color: colors.primary }]}>
+              {initialsOf(user.nombre)}
+            </Text>
+          </View>
+          <View style={styles.flex}>
+            <Text style={[styles.name, { color: colors.text }]} numberOfLines={1}>
+              {[user.nombre, user.apellidos].filter(Boolean).join(' ')}
+            </Text>
+            <Text style={{ color: colors.muted }} numberOfLines={1}>
+              {user.email}
+            </Text>
+            <Text style={[styles.role, { color: colors.primary }]}>{roleLabels[user.role]}</Text>
+          </View>
         </View>
 
         <Text style={[styles.heading, { color: colors.text }]}>Tu plan</Text>
@@ -131,6 +147,16 @@ const styles = StyleSheet.create({
   content: { gap: 16, padding: 20 },
   section: { gap: 14 },
   card: { gap: 4, borderRadius: 16, padding: 16 },
-  value: { fontSize: 16, fontWeight: '600', marginBottom: 8 },
-  heading: { fontSize: 18, fontWeight: '700' },
+  identity: { flexDirection: 'row', alignItems: 'center', gap: 14 },
+  avatar: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarText: { fontSize: 20, fontWeight: '800' },
+  name: { fontSize: 18, fontWeight: '800' },
+  role: { marginTop: 2, fontSize: 13, fontWeight: '700' },
+  heading: { fontSize: 18, fontWeight: '800', marginTop: 4 },
 })

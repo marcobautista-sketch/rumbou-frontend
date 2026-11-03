@@ -145,12 +145,12 @@ export default function ChallengeScreen() {
         <StatCard
           icon="flame"
           value={gamification.data ? formatDays(gamification.data.rachaActual) : '–'}
-          label="RACHA DIARIA"
+          label="Racha"
         />
         <StatCard
           icon="star"
           value={`${gamification.data?.xpSemanal ?? '–'} XP`}
-          label="ESTA SEMANA"
+          label="Esta semana"
         />
       </View>
       <View style={[styles.card, { backgroundColor: colors.surface }]}>

@@ -37,7 +37,7 @@ export function PlanCard({ isAdmin }: { isAdmin: boolean }) {
 
   const row = (icon: 'shield-checkmark' | 'star', text: string) => (
     <View style={styles.row}>
-      <Ionicons name={icon} size={22} color={colors.accentText} />
+      <Ionicons name={icon} size={22} color={colors.warning} />
       <Text style={[styles.flex, { color: colors.text }]}>{text}</Text>
     </View>
   )

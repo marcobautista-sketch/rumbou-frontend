@@ -1,7 +1,9 @@
+import { Ionicons } from '@expo/vector-icons'
 import { useCallback, useMemo, useState } from 'react'
 import {
   ActivityIndicator,
   Alert,
+  Pressable,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -11,66 +13,37 @@ import {
 } from 'react-native'
 import { Button } from '../components/Button'
 import { ErrorRetry } from '../components/ErrorRetry'
-import { ProgressBar } from '../components/ProgressBar'
+import { GoalSummary } from '../components/GoalSummary'
 import { useFetch } from '../hooks/useFetch'
 import { goalService } from '../services/goalService'
-import type { Palette } from '../theme/colors'
 import { useColors } from '../theme/useColors'
-import type { Goal, PreparationStatus } from '../types/goal'
+import type { Goal } from '../types/goal'
 import type { AcademicOffer } from '../types/offer'
 import { formatScore } from '../utils/examLabels'
 import { notify } from '../utils/notify'
+import { areaLabel } from '../utils/universityLabels'
 
 const MAX_RESULTS = 15
 
-const statusTones: Record<PreparationStatus, { color: keyof Palette; background: keyof Palette }> =
-  {
-    HOLGADO: { color: 'success', background: 'successSoft' },
-    AJUSTADO: { color: 'accentText', background: 'accentSoft' },
-    CERCA: { color: 'primary', background: 'chip' },
-    REFORZAR: { color: 'danger', background: 'dangerSoft' },
-  }
-
 function GoalCard({ goal, onRemove }: { goal: Goal; onRemove: (goal: Goal) => void }) {
   const colors = useColors()
-  const tone = goal.estado ? statusTones[goal.estado] : null
 
   return (
     <View style={[styles.card, { backgroundColor: colors.surface }]}>
-      <Text style={[styles.title, { color: colors.text }]}>{goal.carrera}</Text>
-      <Text style={{ color: colors.muted }}>
-        {goal.universidad} · {goal.area} · Proceso {goal.procesoAdmision}
-      </Text>
-      {goal.ultimoPsp === null ? (
-        <Text style={{ color: colors.muted }}>
-          Rinde un simulacro completo o un diagnóstico para calcular tu probabilidad de ingreso.
-        </Text>
-      ) : (
-        <>
-          <View style={styles.between}>
-            <Text style={{ color: colors.text }}>Tu puntaje: {formatScore(goal.ultimoPsp)}</Text>
-            <Text style={{ color: colors.muted }}>
-              Último ingresante: {formatScore(goal.puntajeUltimoIngresante)}
-            </Text>
-          </View>
-          <ProgressBar
-            value={Math.min(goal.ultimoPsp, goal.puntajeUltimoIngresante)}
-            max={goal.puntajeUltimoIngresante}
-            label="Tu puntaje frente al del último ingresante"
-          />
-          {tone && goal.estadoDescripcion && (
-            <Text
-              style={[
-                styles.badge,
-                { color: colors[tone.color], backgroundColor: colors[tone.background] },
-              ]}
-            >
-              {goal.estadoDescripcion}
-            </Text>
-          )}
-        </>
-      )}
-      <Button title="Quitar de mis metas" variant="secondary" onPress={() => onRemove(goal)} />
+      <GoalSummary
+        goal={goal}
+        footer={
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`Quitar ${goal.carrera} de tus metas`}
+            onPress={() => onRemove(goal)}
+            style={({ pressed }) => [styles.remove, { opacity: pressed ? 0.6 : 1 }]}
+          >
+            <Ionicons name="trash-outline" size={16} color={colors.muted} />
+            <Text style={{ color: colors.muted, fontWeight: '600' }}>Quitar meta</Text>
+          </Pressable>
+        }
+      />
     </View>
   )
 }
@@ -90,7 +63,8 @@ function OfferRow({
       <View style={styles.flex}>
         <Text style={[styles.offerTitle, { color: colors.text }]}>{offer.carrera}</Text>
         <Text style={{ color: colors.muted }}>
-          {offer.universidad} · Último ingresante: {formatScore(offer.puntajeUltimoIngresante)}
+          {areaLabel(offer.universidad, offer.areaNombre)} · Último ingresante:{' '}
+          {formatScore(offer.puntajeUltimoIngresante)}
         </Text>
       </View>
       <Button title="Agregar" loading={adding} onPress={() => onAdd(offer)} />
@@ -162,14 +136,14 @@ export default function GoalsScreen() {
       keyboardShouldPersistTaps="handled"
       refreshControl={<RefreshControl refreshing={false} onRefresh={goals.retry} />}
     >
-      <Text style={[styles.heading, { color: colors.text }]}>Mis metas</Text>
       {goals.loading ? (
         <ActivityIndicator color={colors.primary} accessibilityLabel="Cargando tus metas" />
       ) : goals.error ? (
         <ErrorRetry message={goals.error.message} onRetry={goals.retry} />
       ) : goals.data?.length === 0 ? (
         <Text style={{ color: colors.muted }}>
-          Aún no eliges una carrera. Búscala abajo y agrégala para ver tu probabilidad de ingreso.
+          Aún no eliges una carrera. Búscala abajo y agrégala para compararte con su último
+          ingresante.
         </Text>
       ) : (
         goals.data?.map((goal) => <GoalCard key={goal.id} goal={goal} onRemove={remove} />)
@@ -202,18 +176,9 @@ export default function GoalsScreen() {
 
 const styles = StyleSheet.create({
   content: { gap: 14, padding: 20 },
-  heading: { fontSize: 18, fontWeight: '700' },
+  heading: { fontSize: 18, fontWeight: '800', marginTop: 8 },
   card: { gap: 10, borderRadius: 16, padding: 16 },
-  title: { fontSize: 17, fontWeight: '700' },
-  between: { flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap', gap: 6 },
-  badge: {
-    alignSelf: 'flex-start',
-    overflow: 'hidden',
-    borderRadius: 999,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    fontWeight: '600',
-  },
+  remove: { flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end', gap: 6, padding: 4 },
   search: { minHeight: 48, borderWidth: 1, borderRadius: 12, paddingHorizontal: 12, fontSize: 16 },
   offer: {
     flexDirection: 'row',
