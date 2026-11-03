@@ -1,8 +1,25 @@
 import { lazy } from 'react'
 
-export const HomePage = lazy(() => import('../pages/home/HomePage'))
-export const LoginPage = lazy(() => import('../pages/auth/LoginPage'))
-export const RegisterPage = lazy(() => import('../pages/auth/RegisterPage'))
+const loadHomePage = () => import('../pages/home/HomePage')
+const loadLoginPage = () => import('../pages/auth/LoginPage')
+const loadRegisterPage = () => import('../pages/auth/RegisterPage')
+
+// Portada, login y registro se descargan apenas el navegador queda libre, para que moverse entre
+// ellas sea inmediato.
+export function preloadPublicPages() {
+  const preload = () =>
+    [loadHomePage, loadLoginPage, loadRegisterPage].forEach((load) => void load())
+  if ('requestIdleCallback' in window) {
+    const id = requestIdleCallback(preload)
+    return () => cancelIdleCallback(id)
+  }
+  const timer = setTimeout(preload, 500)
+  return () => clearTimeout(timer)
+}
+
+export const HomePage = lazy(loadHomePage)
+export const LoginPage = lazy(loadLoginPage)
+export const RegisterPage = lazy(loadRegisterPage)
 export const ForgotPasswordPage = lazy(() => import('../pages/auth/ForgotPasswordPage'))
 export const ResetPasswordPage = lazy(() => import('../pages/auth/ResetPasswordPage'))
 export const ProfilePage = lazy(() => import('../pages/profile/ProfilePage'))

@@ -1,10 +1,9 @@
-import { LoaderCircle } from 'lucide-react'
+import { Spinner } from '../ui/Spinner'
 
 export function PageLoader() {
   return (
-    <div role="status" className="flex min-h-screen items-center justify-center">
-      <LoaderCircle aria-hidden className="size-10 animate-spin text-accent" />
-      <span className="sr-only">Cargando…</span>
+    <div className="flex min-h-screen items-center justify-center">
+      <Spinner size="lg" />
     </div>
   )
 }
