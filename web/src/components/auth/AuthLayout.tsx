@@ -12,8 +12,8 @@ const highlights = [
 ]
 
 interface AuthLayoutProps {
-  title: string
-  subtitle: string
+  title: ReactNode
+  subtitle: ReactNode
   footer: ReactNode
   children: ReactNode
 }

@@ -3,7 +3,8 @@ interface SkeletonProps {
 }
 
 export function Skeleton({ className = 'h-4 w-full' }: SkeletonProps) {
-  return <div aria-hidden className={`animate-pulse rounded-lg bg-line ${className}`} />
+  // Es un <span> para que también pueda ir dentro de títulos y párrafos.
+  return <span aria-hidden className={`block animate-pulse rounded-lg bg-line ${className}`} />
 }
 
 interface SkeletonListProps {

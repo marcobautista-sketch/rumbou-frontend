@@ -1,5 +1,4 @@
 import { Navigate, Outlet, useLocation } from 'react-router'
-import { PageLoader } from '../components/feedback/PageLoader'
 import { useAuth } from '../hooks/useAuth'
 import { paths } from './paths'
 
@@ -11,7 +10,8 @@ export function GuestRoute() {
   const { status } = useAuth()
   const location = useLocation()
 
-  if (status === 'loading') return <PageLoader />
+  // Mientras se comprueba la sesión ya se muestra el formulario: el visitante no espera a la API
+  // y, si resulta que tenía sesión, se le redirige en cuanto se confirma.
   if (status === 'authenticated') {
     const from = (location.state as RedirectState | null)?.from
     return <Navigate to={from ? from.pathname + from.search : paths.dashboard} replace />

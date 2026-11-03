@@ -20,7 +20,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
-    authService.restoreSession().then(loadUser).catch(endSession)
+    // Si esta comprobación termina después de un login hecho a mano, no debe cerrar esa sesión.
+    authService
+      .restoreSession()
+      .then(loadUser)
+      .catch(() => setStatus((current) => (current === 'loading' ? 'anonymous' : current)))
     return onSessionExpired(endSession)
   }, [endSession, loadUser])
 

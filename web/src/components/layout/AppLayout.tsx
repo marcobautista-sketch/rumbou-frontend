@@ -1,6 +1,6 @@
 import { Suspense, useCallback, useState } from 'react'
 import { Outlet } from 'react-router'
-import { Spinner } from '../ui/Spinner'
+import { PageContentSkeleton } from '../feedback/RouteSkeletons'
 import { Navbar } from './Navbar'
 import { Sidebar } from './Sidebar'
 
@@ -20,13 +20,7 @@ export function AppLayout() {
       <div className="flex min-w-0 flex-1 flex-col">
         <Navbar menuOpen={menuOpen} onOpenMenu={() => setMenuOpen(true)} />
         <div id="content" className="min-w-0 flex-1 animate-fade-in">
-          <Suspense
-            fallback={
-              <div className="flex justify-center py-24">
-                <Spinner size="lg" />
-              </div>
-            }
-          >
+          <Suspense fallback={<PageContentSkeleton />}>
             <Outlet />
           </Suspense>
         </div>

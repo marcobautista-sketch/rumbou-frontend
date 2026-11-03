@@ -1,6 +1,7 @@
 import { Toaster } from 'react-hot-toast'
 import { RouterProvider } from 'react-router'
 import { ErrorBoundary } from './components/feedback/ErrorBoundary'
+import { OfflineBanner } from './components/feedback/OfflineBanner'
 import { AuthProvider } from './contexts/AuthProvider'
 import { ThemeProvider } from './contexts/ThemeProvider'
 import { router } from './routes/router'
@@ -11,6 +12,7 @@ export default function App() {
       <ThemeProvider>
         <AuthProvider>
           <RouterProvider router={router} />
+          <OfflineBanner />
           <Toaster
             position="top-right"
             toastOptions={{

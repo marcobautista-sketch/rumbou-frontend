@@ -8,13 +8,15 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "format": "prettier --write src"
+    "format": "prettier --write src",
+    "latency": "node scripts/measure-latency.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "5.9.2",
     "axios": "1.20.0",
     "lucide-react": "1.59.0",
     "mathjax-full": "3.2.2",
+    "qrcode.react": "4.2.0",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "react-hook-form": "7.90.0",

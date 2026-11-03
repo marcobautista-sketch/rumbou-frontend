@@ -16,6 +16,7 @@ import { offerService } from '../../api/offerService'
 import { BrandMark } from '../../components/brand/BrandMark'
 import { CareerLookup } from '../../components/landing/CareerLookup'
 import { HeroPreview } from '../../components/landing/HeroPreview'
+import { MobileAppDownload } from '../../components/landing/MobileAppDownload'
 import { SampleQuestion } from '../../components/landing/SampleQuestion'
 import { ScoringRules } from '../../components/landing/ScoringRules'
 import { buttonStyles } from '../../components/ui/buttonStyles'
@@ -30,6 +31,7 @@ const sections = [
   { id: 'que-incluye', label: 'Qué incluye' },
   { id: 'calificacion', label: 'Calificación' },
   { id: 'planes', label: 'Planes' },
+  { id: 'app-movil', label: 'App móvil' },
 ]
 
 const steps = [
@@ -227,7 +229,13 @@ export default function HomePage() {
                 )}
               </div>
               <p className="text-sm text-ink-muted">
-                Gratis para empezar · En la web, Android y iPhone
+                Gratis para empezar · En la web,{' '}
+                <a
+                  href="#app-movil"
+                  className="font-medium text-primary underline underline-offset-2"
+                >
+                  Android y iPhone
+                </a>
               </p>
             </div>
             <HeroPreview />
@@ -380,6 +388,15 @@ export default function HomePage() {
               )
             })}
           </div>
+        </Section>
+
+        <Section
+          id="app-movil"
+          eyebrow="App móvil"
+          title="Lleva RumboU en tu celular"
+          description="Practica desde Android o iPhone con la misma cuenta y el mismo progreso que en la web."
+        >
+          <MobileAppDownload />
         </Section>
 
         <section className="px-4 pb-20 sm:px-6">
