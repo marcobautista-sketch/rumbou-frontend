@@ -15,7 +15,7 @@ export function ChallengeResult({ challenge }: { challenge: DailyChallenge }) {
       <section
         role="status"
         className={`flex animate-fade-in items-center gap-4 rounded-2xl p-6 ${
-          correct ? 'bg-success/10' : 'bg-danger-soft'
+          correct ? 'bg-success-soft' : 'bg-danger-soft'
         }`}
       >
         {correct ? (

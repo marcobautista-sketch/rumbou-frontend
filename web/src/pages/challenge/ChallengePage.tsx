@@ -6,6 +6,7 @@ import { ChallengeResult } from '../../components/challenge/ChallengeResult'
 import { ChallengeStats } from '../../components/challenge/ChallengeStats'
 import { QuestionCard } from '../../components/exam/QuestionCard'
 import { InlineError } from '../../components/feedback/InlineError'
+import { Page } from '../../components/layout/Page'
 import { PageHeader } from '../../components/layout/PageHeader'
 import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
@@ -56,8 +57,12 @@ function PendingChallenge({
         <div className="flex items-center gap-2">
           <span
             aria-label="Tiempo sugerido"
-            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-sm font-semibold ${
-              remaining > 0 ? 'bg-danger-soft text-danger' : 'bg-surface-muted text-ink-muted'
+            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-sm font-semibold tabular-nums ${
+              remaining === 0
+                ? 'bg-surface-muted text-ink-muted'
+                : remaining <= 60
+                  ? 'bg-warning-soft text-warning'
+                  : 'bg-surface text-ink shadow-card'
             }`}
           >
             <Timer aria-hidden className="size-4" />
@@ -75,7 +80,7 @@ function PendingChallenge({
         loading={sending}
         className="w-full sm:w-auto"
       >
-        Responder desafío
+        Responder
       </Button>
     </section>
   )
@@ -98,28 +103,31 @@ export default function ChallengePage() {
   }
 
   return (
-    <main className="mx-auto max-w-3xl space-y-6 px-4 py-8 sm:px-6">
+    <Page>
       <PageHeader
         title="Desafío diario"
-        description="Mantén tu inercia académica. Un desafío a la vez."
+        description="Una pregunta nueva cada día. Respóndela para mantener tu racha y sumar experiencia, aciertes o no."
       />
 
-      <ChallengeStats
-        streak={gamification.data?.rachaActual ?? null}
-        weeklyXp={gamification.data?.xpSemanal ?? null}
-        completedThisWeek={current?.desafiosDeLaSemana ?? 0}
-        weeklyGoal={current?.metaSemanal ?? 5}
-      />
-
-      {challenge.loading && !current ? (
-        <SkeletonList rows={4} label="Cargando el desafío de hoy…" />
-      ) : challenge.error && !current ? (
-        <InlineError message={challenge.error.message} onRetry={challenge.retry} />
-      ) : current?.respondido ? (
-        <ChallengeResult challenge={current} />
-      ) : (
-        current && <PendingChallenge challenge={current} onAnswered={handleAnswered} />
-      )}
-    </main>
+      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
+        <div>
+          {challenge.loading && !current ? (
+            <SkeletonList rows={4} label="Cargando el desafío de hoy…" />
+          ) : challenge.error && !current ? (
+            <InlineError message={challenge.error.message} onRetry={challenge.retry} />
+          ) : current?.respondido ? (
+            <ChallengeResult challenge={current} />
+          ) : (
+            current && <PendingChallenge challenge={current} onAnswered={handleAnswered} />
+          )}
+        </div>
+        <ChallengeStats
+          streak={gamification.data?.rachaActual ?? null}
+          weeklyXp={gamification.data?.xpSemanal ?? null}
+          completedThisWeek={current?.desafiosDeLaSemana ?? 0}
+          weeklyGoal={current?.metaSemanal ?? 5}
+        />
+      </div>
+    </Page>
   )
 }

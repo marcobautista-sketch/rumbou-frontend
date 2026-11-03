@@ -1,6 +1,9 @@
-import { ChevronRight, Flag, Trophy, UsersRound } from 'lucide-react'
+import { ChevronRight, Flag } from 'lucide-react'
 import type { AcademicOffer } from '../../types/offer'
+import { careerFaculty } from '../../utils/careerLabels'
 import { formatScore } from '../../utils/format'
+import { scoringFor } from '../../utils/scoringRules'
+import { areaLabel } from '../../utils/universityLabels'
 import { Badge } from '../ui/Badge'
 
 interface CareerCardProps {
@@ -10,44 +13,54 @@ interface CareerCardProps {
 }
 
 export function CareerCard({ offer, isGoal, onSelect }: CareerCardProps) {
+  const faculty = careerFaculty(offer)
+  const maxScore = scoringFor(offer.universidad)?.maxScore
+
   return (
     <li>
       <button
         type="button"
         onClick={() => onSelect(offer)}
-        className="flex h-full w-full flex-col gap-3 rounded-2xl bg-surface p-5 text-left shadow-card transition hover:-translate-y-0.5 hover:shadow-raised focus-visible:outline-2 focus-visible:outline-accent"
+        className="group flex h-full w-full flex-col gap-4 rounded-2xl bg-surface p-5 text-left shadow-card transition hover:-translate-y-0.5 hover:shadow-raised focus-visible:outline-2 focus-visible:outline-accent"
       >
         <div className="flex w-full items-start justify-between gap-2">
-          <p className="text-sm font-semibold tracking-wide text-accent-ink uppercase">
-            {offer.universidad} · {offer.areaNombre}
+          <p className="text-sm font-semibold text-primary">
+            {areaLabel(offer.universidad, offer.areaNombre)}
           </p>
-          {isGoal && (
+          {isGoal ? (
             <Badge tone="success">
               <Flag aria-hidden className="size-3.5" />
-              Tu objetivo
+              Tu meta
             </Badge>
+          ) : (
+            <ChevronRight
+              aria-hidden
+              className="size-5 text-ink-muted transition group-hover:translate-x-0.5 group-hover:text-primary"
+            />
           )}
         </div>
         <div className="space-y-1">
-          <h2 className="text-lg font-semibold break-words">{offer.carrera}</h2>
-          <p className="text-sm text-ink-muted">{offer.facultad}</p>
+          <h2 className="text-lg leading-snug font-bold break-words">{offer.carrera}</h2>
+          {faculty && <p className="text-sm text-ink-muted">{faculty}</p>}
         </div>
-        <dl className="mt-auto flex flex-wrap gap-x-5 gap-y-1 text-sm text-ink-muted">
-          <div className="flex items-center gap-1.5">
-            <UsersRound aria-hidden className="size-4" />
-            <dt className="sr-only">Vacantes</dt>
-            <dd>{offer.vacantes} vacantes</dd>
+        <dl className="mt-auto grid grid-cols-2 gap-3 border-t border-line pt-4">
+          <div>
+            <dt className="text-xs text-ink-muted">Último ingresante</dt>
+            <dd className="font-display text-xl font-bold tabular-nums">
+              {formatScore(offer.puntajeUltimoIngresante)}
+              {maxScore && (
+                <span className="text-sm font-medium text-ink-muted">
+                  {' '}
+                  / {formatScore(maxScore)}
+                </span>
+              )}
+            </dd>
           </div>
-          <div className="flex items-center gap-1.5">
-            <Trophy aria-hidden className="size-4" />
-            <dt className="sr-only">Puntaje del último ingresante</dt>
-            <dd>Último ingresante: {formatScore(offer.puntajeUltimoIngresante)}</dd>
+          <div>
+            <dt className="text-xs text-ink-muted">Vacantes</dt>
+            <dd className="font-display text-xl font-bold tabular-nums">{offer.vacantes}</dd>
           </div>
         </dl>
-        <span className="flex items-center gap-1 text-sm font-semibold text-accent-ink">
-          Ver detalle
-          <ChevronRight aria-hidden className="size-4" />
-        </span>
       </button>
     </li>
   )

@@ -4,6 +4,7 @@ import { Link } from 'react-router'
 import { paths } from '../../routes/paths'
 import type { AcademicOffer } from '../../types/offer'
 import { formatScore } from '../../utils/format'
+import { scoringFor } from '../../utils/scoringRules'
 import { buttonStyles } from '../ui/buttonStyles'
 import { SelectField } from '../ui/SelectField'
 import { Skeleton } from '../ui/Skeleton'
@@ -101,7 +102,7 @@ export function CareerLookup({ offers, failed }: CareerLookupProps) {
                   {formatScore(offer.puntajeUltimoIngresante)}
                 </dd>
                 <dd className="text-xs text-ink-muted">
-                  de {offer.universidad === 'UNI' ? '1,800' : '2,000'} puntos
+                  de {formatScore(scoringFor(offer.universidad)?.maxScore ?? 0)} puntos
                 </dd>
               </div>
               <div className="space-y-1">

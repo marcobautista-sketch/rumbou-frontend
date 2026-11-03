@@ -36,7 +36,7 @@ export function ScoreHistoryChart({ history, cutoff, height = 260 }: ScoreHistor
   return (
     <figure>
       <figcaption className="sr-only">
-        Evolución de tu PSP:{' '}
+        Evolución de tu puntaje proyectado:{' '}
         {data.map((point) => `${point.fecha} ${formatScore(point.psp)}`).join(', ')}
       </figcaption>
       <ResponsiveContainer width="100%" height={height}>
@@ -51,7 +51,7 @@ export function ScoreHistoryChart({ history, cutoff, height = 260 }: ScoreHistor
           />
           <Tooltip
             contentStyle={tooltipStyle}
-            formatter={(value) => [formatScore(Number(value)), 'PSP']}
+            formatter={(value) => [formatScore(Number(value)), 'Puntaje proyectado']}
           />
           {cutoff !== undefined && (
             <ReferenceLine
@@ -69,10 +69,10 @@ export function ScoreHistoryChart({ history, cutoff, height = 260 }: ScoreHistor
           <Line
             type="monotone"
             dataKey="psp"
-            stroke="var(--accent)"
-            strokeWidth={3}
-            dot={{ r: 4, fill: 'var(--accent)' }}
-            activeDot={{ r: 6 }}
+            stroke="var(--primary)"
+            strokeWidth={2.5}
+            dot={{ r: 4, fill: 'var(--surface)', stroke: 'var(--primary)', strokeWidth: 2 }}
+            activeDot={{ r: 6, fill: 'var(--primary)' }}
           />
         </LineChart>
       </ResponsiveContainer>

@@ -71,7 +71,7 @@ export function AddGoalModal({ open, takenOfferIds, onClose, onAdded }: AddGoalM
     setRejection(null)
     try {
       const goal = await goalService.create(Number(form.ofertaAcademicaId))
-      notify.success(`Agregamos ${goal.carrera} a tus objetivos`)
+      notify.success(`Agregamos ${goal.carrera} a tus metas`)
       reset()
       onAdded(goal)
     } catch (error) {
@@ -84,7 +84,7 @@ export function AddGoalModal({ open, takenOfferIds, onClose, onAdded }: AddGoalM
   return (
     <Modal
       open={open}
-      title="Agregar carrera objetivo"
+      title="Agregar una carrera meta"
       description="Compararemos tus simulacros con el puntaje del último ingresante de esa carrera."
       dismissible={!isSubmitting}
       onClose={close}
@@ -94,7 +94,7 @@ export function AddGoalModal({ open, takenOfferIds, onClose, onAdded }: AddGoalM
             Cancelar
           </Button>
           <Button type="submit" form={formId} loading={isSubmitting}>
-            Agregar objetivo
+            Agregar meta
           </Button>
         </>
       }

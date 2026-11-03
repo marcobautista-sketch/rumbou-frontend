@@ -2,9 +2,10 @@ import { Trash2 } from 'lucide-react'
 import type { Goal } from '../../types/goal'
 import { formatScore } from '../../utils/format'
 import { preparationTones } from '../../utils/progressLabels'
+import { universityShort } from '../../utils/universityLabels'
 import { Badge } from '../ui/Badge'
-import { Button } from '../ui/Button'
 import { Card } from '../ui/Card'
+import { GoalProgress } from './GoalProgress'
 
 interface GoalCardProps {
   goal: Goal
@@ -12,57 +13,55 @@ interface GoalCardProps {
 }
 
 export function GoalCard({ goal, onRemove }: GoalCardProps) {
-  const { indicePreparacion, ultimoPsp, estado } = goal
-  const progress =
-    indicePreparacion === null ? 0 : Math.min(100, Math.round(indicePreparacion * 100))
+  const { ultimoPsp, estado, puntajeUltimoIngresante: cutoff } = goal
 
   return (
-    <Card className="flex flex-col gap-4">
+    <Card className="flex flex-col gap-5">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 space-y-1">
-          <p className="text-sm font-semibold tracking-wide text-accent-ink uppercase">
-            {goal.universidad} · {goal.procesoAdmision}
+          <p className="text-sm font-semibold text-primary">
+            {universityShort(goal.universidad)} · Proceso {goal.procesoAdmision}
           </p>
-          <h3 className="text-lg font-semibold break-words">{goal.carrera}</h3>
+          <h3 className="text-lg leading-snug font-bold break-words">{goal.carrera}</h3>
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
+        <button
+          type="button"
           onClick={() => onRemove(goal)}
-          aria-label={`Quitar ${goal.carrera} de tus objetivos`}
+          aria-label={`Quitar ${goal.carrera} de tus metas`}
+          title="Quitar meta"
+          className="rounded-lg p-2 text-ink-muted transition hover:bg-danger-soft hover:text-danger focus-visible:outline-2 focus-visible:outline-accent"
         >
           <Trash2 aria-hidden className="size-4" />
-        </Button>
+        </button>
       </div>
 
-      {estado && indicePreparacion !== null && ultimoPsp !== null ? (
-        <div className="space-y-3">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <Badge tone={preparationTones[estado]}>{goal.estadoDescripcion}</Badge>
-            <span className="font-display text-2xl font-bold">{indicePreparacion.toFixed(2)}</span>
+      {ultimoPsp !== null ? (
+        <>
+          <dl className="grid grid-cols-2 gap-4">
+            <div>
+              <dt className="text-sm text-ink-muted">Tu puntaje proyectado</dt>
+              <dd className="font-display text-2xl font-bold text-primary tabular-nums">
+                {formatScore(ultimoPsp)}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-sm text-ink-muted">Último ingresante</dt>
+              <dd className="font-display text-2xl font-bold tabular-nums">
+                {formatScore(cutoff)}
+              </dd>
+            </div>
+          </dl>
+          <GoalProgress score={ultimoPsp} cutoff={cutoff} />
+          <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-ink-muted">
+            <span>Estás al {Math.round((ultimoPsp / cutoff) * 100)} % del último ingresante</span>
+            {estado && <Badge tone={preparationTones[estado]}>{goal.estadoDescripcion}</Badge>}
           </div>
-          <div
-            role="progressbar"
-            aria-label="Índice de preparación"
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-valuenow={progress}
-            className="h-2 overflow-hidden rounded-full bg-surface-muted"
-          >
-            <div
-              className="h-full rounded-full bg-accent transition-all"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <p className="text-sm text-ink-muted">
-            Tu último PSP es <strong className="text-ink">{formatScore(ultimoPsp)}</strong> y el
-            último ingresante obtuvo {formatScore(goal.puntajeUltimoIngresante)}.
-          </p>
-        </div>
+        </>
       ) : (
-        <p className="text-sm text-ink-muted">
-          Rinde un simulacro de esta área para calcular tu probabilidad de ingreso. El último
-          ingresante obtuvo {formatScore(goal.puntajeUltimoIngresante)}.
+        <p className="rounded-xl bg-surface-muted p-4 text-sm text-ink-muted">
+          El último ingresante obtuvo{' '}
+          <strong className="text-ink">{formatScore(cutoff)} puntos</strong>. Rinde un simulacro
+          completo de esta área para calcular tu puntaje proyectado.
         </p>
       )}
     </Card>

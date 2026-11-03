@@ -1,4 +1,4 @@
-import { ChartColumn, NotebookPen, Plus, Target } from 'lucide-react'
+import { NotebookPen, Plus, Target } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { Link } from 'react-router'
 import { goalService } from '../../api/goalService'
@@ -7,7 +7,7 @@ import { AddGoalModal } from '../../components/dashboard/AddGoalModal'
 import { GoalCard } from '../../components/dashboard/GoalCard'
 import { ProFeatureNotice } from '../../components/dashboard/ProFeatureNotice'
 import { ScoreHistoryChart } from '../../components/dashboard/ScoreHistoryChart'
-import { TopicMasteryChart } from '../../components/dashboard/TopicMasteryChart'
+import { TopicMasteryList } from '../../components/dashboard/TopicMasteryList'
 import { InlineError } from '../../components/feedback/InlineError'
 import { Page } from '../../components/layout/Page'
 import { PageHeader } from '../../components/layout/PageHeader'
@@ -22,6 +22,7 @@ import { useFetch } from '../../hooks/useFetch'
 import { paths } from '../../routes/paths'
 import type { Goal } from '../../types/goal'
 import type { ScoreHistoryEntry } from '../../types/progress'
+import { fullExamHistory } from '../../utils/examSummary'
 import { notify } from '../../utils/notify'
 
 const noHistory: ScoreHistoryEntry[] = []
@@ -73,6 +74,7 @@ export default function ProgressPage() {
     [historyAreaId],
   )
   const history = useFetch(fetchHistory)
+  const fullExams = useMemo(() => fullExamHistory(history.data ?? []), [history.data])
   const takenOfferIds = useMemo(
     () => goals.data?.map((goal) => goal.ofertaAcademicaId) ?? [],
     [goals.data],
@@ -83,7 +85,7 @@ export default function ProgressPage() {
     setRemoving(true)
     try {
       await goalService.remove(goalToRemove.id)
-      notify.success(`Quitamos ${goalToRemove.carrera} de tus objetivos`)
+      notify.success(`Quitamos ${goalToRemove.carrera} de tus metas`)
       setGoalToRemove(null)
       goals.retry()
     } catch (error) {
@@ -96,8 +98,8 @@ export default function ProgressPage() {
   return (
     <Page>
       <PageHeader
-        title="Mi progreso"
-        description="Tu probabilidad de ingreso, tus temas y cómo evoluciona tu puntaje."
+        title="Progreso"
+        description="Qué tan cerca estás de tu meta, cómo cambia tu puntaje proyectado y cuánto dominas cada tema."
         actions={
           <>
             <Link to={paths.careers} className={buttonStyles('secondary')}>
@@ -105,7 +107,7 @@ export default function ProgressPage() {
             </Link>
             <Button onClick={() => setAdding(true)}>
               <Plus aria-hidden className="size-4" />
-              Agregar objetivo
+              Agregar meta
             </Button>
           </>
         }
@@ -113,18 +115,18 @@ export default function ProgressPage() {
 
       <section aria-labelledby="goals-title" className="space-y-4">
         <h2 id="goals-title" className="text-xl font-bold">
-          Probabilidad de ingreso
+          Tus metas
         </h2>
         {goals.loading && !goals.data ? (
-          <SkeletonList rows={2} label="Cargando tus objetivos…" />
+          <SkeletonList rows={2} label="Cargando tus metas…" />
         ) : goals.error ? (
           <InlineError message={goals.error.message} onRetry={goals.retry} />
         ) : goals.data?.length === 0 ? (
           <EmptyState
             icon={Target}
-            title="Aún no tienes carreras objetivo"
-            message="Elige a qué carrera postulas para comparar tus simulacros con su puntaje de ingreso."
-            action={<Button onClick={() => setAdding(true)}>Agregar objetivo</Button>}
+            title="Aún no eliges tu carrera meta"
+            message="Elige a qué carrera postulas para comparar tus simulacros con el puntaje de su último ingresante."
+            action={<Button onClick={() => setAdding(true)}>Agregar meta</Button>}
           />
         ) : (
           <div className="grid gap-4 md:grid-cols-2">
@@ -137,9 +139,14 @@ export default function ProgressPage() {
 
       <Card aria-labelledby="history-title" className="space-y-4">
         <div className="flex flex-wrap items-end justify-between gap-3">
-          <h2 id="history-title" className="text-lg font-semibold">
-            Evolución de tu puntaje
-          </h2>
+          <div className="space-y-0.5">
+            <h2 id="history-title" className="text-lg font-bold">
+              Evolución de tu puntaje proyectado
+            </h2>
+            <p className="text-sm text-ink-muted">
+              Diagnóstico y simulacros completos, frente al último ingresante.
+            </p>
+          </div>
           {areaOptions.length > 1 && (
             <SelectField
               label="Área"
@@ -158,23 +165,27 @@ export default function ProgressPage() {
         {(goals.loading && !goals.data) || (history.loading && !history.data) ? (
           <Skeleton className="h-64 w-full" />
         ) : history.error?.kind === 'forbidden' ? (
-          <ProFeatureNotice message="Con PRO ves cómo evoluciona tu PSP simulacro a simulacro." />
+          <ProFeatureNotice message="Con PRO ves cómo cambia tu puntaje proyectado en cada simulacro completo." />
         ) : history.error ? (
           <InlineError message={history.error.message} onRetry={history.retry} />
         ) : !historyGoal ? (
-          <p className="text-ink-muted">Agrega una carrera objetivo para ver tu evolución.</p>
-        ) : history.data && history.data.length > 0 ? (
-          <ScoreHistoryChart history={history.data} cutoff={historyGoal.puntajeUltimoIngresante} />
+          <p className="text-ink-muted">Agrega una carrera meta para ver tu evolución.</p>
+        ) : fullExams.length > 0 ? (
+          <ScoreHistoryChart history={fullExams} cutoff={historyGoal.puntajeUltimoIngresante} />
         ) : (
-          <NoResultsYet message="Cuando finalices un simulacro de esta área verás aquí tu PSP." />
+          <NoResultsYet message="Tu diagnóstico y tus simulacros completos de esta área aparecerán aquí." />
         )}
       </Card>
 
       <Card aria-labelledby="mastery-title" className="space-y-4">
-        <h2 id="mastery-title" className="flex items-center gap-2 text-lg font-semibold">
-          <ChartColumn aria-hidden className="size-5 text-accent-ink" />
-          Dominio por tema
-        </h2>
+        <div className="space-y-0.5">
+          <h2 id="mastery-title" className="text-lg font-bold">
+            Aciertos por tema
+          </h2>
+          <p className="text-sm text-ink-muted">
+            Todos tus simulacros, del tema que más te cuesta al que mejor dominas.
+          </p>
+        </div>
         {mastery.loading && !mastery.data ? (
           <Skeleton className="h-64 w-full" />
         ) : mastery.error?.kind === 'forbidden' ? (
@@ -182,7 +193,7 @@ export default function ProgressPage() {
         ) : mastery.error ? (
           <InlineError message={mastery.error.message} onRetry={mastery.retry} />
         ) : mastery.data && mastery.data.length > 0 ? (
-          <TopicMasteryChart topics={mastery.data} />
+          <TopicMasteryList topics={mastery.data} />
         ) : (
           <NoResultsYet message="Tus aciertos por tema aparecerán cuando finalices un simulacro." />
         )}
@@ -199,13 +210,13 @@ export default function ProgressPage() {
       />
       <ConfirmDialog
         open={goalToRemove !== null}
-        title="¿Quitar este objetivo?"
+        title="¿Quitar esta meta?"
         message={
           goalToRemove
             ? `Dejarás de seguir ${goalToRemove.carrera} (${goalToRemove.universidad}). Puedes volver a agregarla cuando quieras.`
             : ''
         }
-        confirmLabel="Quitar objetivo"
+        confirmLabel="Quitar meta"
         confirmVariant="danger"
         loading={removing}
         onConfirm={confirmRemoval}
