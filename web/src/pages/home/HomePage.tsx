@@ -23,6 +23,7 @@ import { ThemeToggle } from '../../components/ui/ThemeToggle'
 import { useAuth } from '../../hooks/useAuth'
 import { useFetch } from '../../hooks/useFetch'
 import { paths } from '../../routes/paths'
+import { freePlanBenefits, PRO_PRICE, proPlanBenefits } from '../../utils/plans'
 
 const sections = [
   { id: 'como-funciona', label: 'Cómo funciona' },
@@ -85,28 +86,14 @@ const plans = [
     price: 'S/ 0',
     period: 'para siempre',
     description: 'Para empezar a prepararte.',
-    benefits: [
-      'Simulacro diagnóstico',
-      '3 simulacros por tema a la semana',
-      '1 simulacro completo al mes',
-      'Resolución paso a paso de cada pregunta',
-      'Desafío diario, racha y logros',
-      '1 carrera meta',
-    ],
+    benefits: freePlanBenefits,
   },
   {
     name: 'PRO',
-    price: 'S/ 39',
+    price: PRO_PRICE,
     period: 'al mes',
     description: 'Para prepararte sin límites.',
-    benefits: [
-      'Simulacros ilimitados por tema y completos',
-      'Tutor con IA: 30 consultas al día',
-      'Revisión de tu solución por foto o pizarra',
-      'Evolución de tu puntaje y dominio por tema',
-      'Asistente por voz en la app',
-      'Hasta 3 carreras meta',
-    ],
+    benefits: proPlanBenefits,
   },
 ]
 

@@ -85,7 +85,7 @@ export default function QuestionListPage() {
     <Page>
       <PageHeader
         title="Banco de preguntas"
-        description="Practica con preguntas reales de admisión, ordenadas por tema y dificultad."
+        description="Preguntas de elaboración propia con el estilo del examen de admisión, ordenadas por tema y dificultad."
         actions={
           isAdmin && (
             <Link to={paths.newQuestion} className={buttonStyles('primary')}>
