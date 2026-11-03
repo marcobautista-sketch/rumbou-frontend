@@ -45,8 +45,8 @@ export function OptionList<T extends string | number>({
             style={[
               styles.option,
               {
-                borderColor: active ? colors.accent : colors.border,
-                backgroundColor: active ? colors.accentSoft : colors.surface,
+                borderColor: active ? colors.primary : colors.border,
+                backgroundColor: active ? colors.chip : colors.surface,
               },
             ]}
           >
@@ -55,12 +55,12 @@ export function OptionList<T extends string | number>({
                 style={[
                   styles.letter,
                   active
-                    ? { backgroundColor: colors.accent, borderColor: colors.accent }
+                    ? { backgroundColor: colors.primary, borderColor: colors.primary }
                     : { borderColor: colors.muted },
                 ]}
               >
                 <Text
-                  style={[styles.letterText, { color: active ? colors.onAccent : colors.text }]}
+                  style={[styles.letterText, { color: active ? colors.onPrimary : colors.text }]}
                 >
                   {String.fromCharCode(65 + index)}
                 </Text>

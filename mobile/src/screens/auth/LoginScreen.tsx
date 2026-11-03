@@ -106,9 +106,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
         onPress={() => navigation.navigate('ForgotPassword')}
         style={styles.link}
       >
-        <Text style={[styles.linkText, { color: colors.accentText }]}>
-          ¿Olvidaste tu contraseña?
-        </Text>
+        <Text style={[styles.linkText, { color: colors.primary }]}>¿Olvidaste tu contraseña?</Text>
       </Pressable>
       <Button
         title="Iniciar sesión"

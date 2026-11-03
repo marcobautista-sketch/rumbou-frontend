@@ -69,10 +69,10 @@ function TopicVideos({ topicId }: { topicId: number }) {
         onPress={() => open(data.busquedaUrl)}
         style={styles.link}
       >
-        <Text style={[styles.linkText, { color: colors.accentText }]}>
+        <Text style={[styles.linkText, { color: colors.primary }]}>
           {data.videos.length > 0 ? 'Ver más videos en YouTube' : `Buscar clases de ${data.tema}`}
         </Text>
-        <Ionicons name="open-outline" size={16} color={colors.accentText} />
+        <Ionicons name="open-outline" size={16} color={colors.primary} />
       </Pressable>
     </View>
   )

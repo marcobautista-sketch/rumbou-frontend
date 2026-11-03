@@ -27,8 +27,13 @@ export function MainTabs() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarActiveTintColor: colors.accentText,
+        tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.muted,
+        tabBarStyle: { backgroundColor: colors.surface, borderTopColor: colors.border },
+        tabBarLabelStyle: { fontSize: 11, fontWeight: '600' },
+        headerStyle: { backgroundColor: colors.background },
+        headerShadowVisible: false,
+        headerTitleStyle: { fontWeight: '700', fontSize: 20, color: colors.text },
         tabBarIcon: ({ color, size, focused }) => (
           <Ionicons
             name={focused ? tabIcons[route.name] : (`${tabIcons[route.name]}-outline` as IconName)}
@@ -46,7 +51,7 @@ export function MainTabs() {
       <Tab.Screen
         name="ExamHistory"
         component={ExamHistoryScreen}
-        options={{ title: 'Simulacros', headerTitle: 'Mis simulacros' }}
+        options={{ title: 'Simulacros', headerTitle: 'Simulacros' }}
       />
       <Tab.Screen
         name="Goals"

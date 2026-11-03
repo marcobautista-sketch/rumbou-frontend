@@ -7,6 +7,9 @@ export interface Area {
   id: number
   universidad: string
   nombre: string
+  procesoProximo?: string | null
+  fechaProximoExamen?: string | null
+  fechaExamenConfirmada?: boolean | null
 }
 
 export interface Topic {
@@ -34,6 +37,7 @@ export interface ExamDetail {
   id: number
   tipo: ExamType
   estado: ExamStatus
+  areaId: number
   fechaInicio: string
   fechaFin: string | null
   puntajeObtenido: number | null
@@ -45,6 +49,7 @@ export interface ExamSummary {
   id: number
   tipo: ExamType
   estado: ExamStatus
+  areaId: number
   area: string
   fechaInicio: string
   fechaFin: string | null
