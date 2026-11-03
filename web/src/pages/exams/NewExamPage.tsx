@@ -61,6 +61,7 @@ export default function NewExamPage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const requestedType = searchParams.get('tipo') as ExamType | null
+  const requestedTopic = searchParams.get('tema')
   const fetchAreas = useCallback((signal: AbortSignal) => areaService.list(signal), [])
   const fetchGoals = useCallback((signal: AbortSignal) => goalService.list(signal), [])
   const areas = useFetch(fetchAreas)
@@ -95,6 +96,15 @@ export default function NewExamPage() {
     [areaId],
   )
   const topics = useFetch(fetchTopics)
+  useEffect(() => {
+    if (
+      requestedTopic &&
+      !getValues('temaId') &&
+      topics.data?.some((t) => String(t.id) === requestedTopic)
+    ) {
+      setValue('temaId', requestedTopic)
+    }
+  }, [requestedTopic, topics.data, getValues, setValue])
   const area = useMemo(
     () => areas.data?.find((candidate) => String(candidate.id) === areaId) ?? null,
     [areas.data, areaId],
