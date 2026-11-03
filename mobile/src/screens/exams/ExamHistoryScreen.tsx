@@ -13,16 +13,34 @@ import { Button } from '../../components/Button'
 import { ErrorRetry } from '../../components/ErrorRetry'
 import { useFetch } from '../../hooks/useFetch'
 import type { MainTabScreenProps } from '../../navigation/types'
+import { areaService } from '../../services/areaService'
 import { examService } from '../../services/examService'
 import { useColors } from '../../theme/useColors'
-import type { ExamSummary } from '../../types/exam'
+import type { Area, ExamSummary } from '../../types/exam'
 import { examTypeLabels, formatExamDate, formatScore } from '../../utils/examLabels'
+import { areaLabel, universityMaxScore } from '../../utils/universityLabels'
 
 type ExamHistoryScreenProps = MainTabScreenProps<'ExamHistory'>
 
 const PAGE_SIZE = 10
 
-function ExamItem({ exam, onPress }: { exam: ExamSummary; onPress: () => void }) {
+// El puntaje de un simulacro completo se lee sobre el máximo de su universidad; el de uno por
+// tema es solo de ese tema. Igual que en la web.
+function scoreText(exam: ExamSummary, area: Area | undefined) {
+  const max = universityMaxScore(area?.universidad)
+  if (exam.tipo === 'POR_TEMA' || !max) return `${formatScore(exam.puntajeObtenido)} pts`
+  return `${formatScore(exam.puntajeObtenido)} / ${formatScore(max)}`
+}
+
+function ExamItem({
+  exam,
+  area,
+  onPress,
+}: {
+  exam: ExamSummary
+  area: Area | undefined
+  onPress: () => void
+}) {
   const colors = useColors()
   const finished = exam.estado === 'FINALIZADO'
 
@@ -38,24 +56,24 @@ function ExamItem({ exam, onPress }: { exam: ExamSummary; onPress: () => void })
     >
       <View style={styles.flex}>
         <Text style={[styles.title, { color: colors.text }]}>{examTypeLabels[exam.tipo]}</Text>
-        <Text style={{ color: colors.muted }}>{exam.area}</Text>
-        <Text style={{ color: colors.muted }}>{formatExamDate(exam.fechaInicio)}</Text>
+        <Text style={{ color: colors.muted }}>
+          {area ? areaLabel(area.universidad, area.nombre) : exam.area} ·{' '}
+          {formatExamDate(exam.fechaFin ?? exam.fechaInicio)}
+        </Text>
       </View>
       <View style={styles.side}>
         <Text
           style={[
             styles.status,
             finished
-              ? { backgroundColor: colors.successSoft, color: colors.success }
-              : { backgroundColor: colors.accentSoft, color: colors.accentText },
+              ? { backgroundColor: colors.surfaceMuted, color: colors.muted }
+              : { backgroundColor: colors.warningSoft, color: colors.warning },
           ]}
         >
           {finished ? 'Terminado' : 'En curso'}
         </Text>
         {finished && (
-          <Text style={[styles.title, { color: colors.primary }]}>
-            {formatScore(exam.puntajeObtenido)}
-          </Text>
+          <Text style={[styles.score, { color: colors.primary }]}>{scoreText(exam, area)}</Text>
         )}
       </View>
       <Ionicons name="chevron-forward" size={20} color={colors.muted} />
@@ -71,6 +89,8 @@ export default function ExamHistoryScreen({ navigation }: ExamHistoryScreenProps
     [page],
   )
   const exams = useFetch(fetchExams)
+  const fetchAreas = useCallback((signal: AbortSignal) => areaService.list(signal), [])
+  const areas = useFetch(fetchAreas)
   const result = exams.data
 
   const open = (exam: ExamSummary) =>
@@ -139,7 +159,13 @@ export default function ExamHistoryScreen({ navigation }: ExamHistoryScreenProps
       contentContainerStyle={styles.content}
       data={result.content}
       keyExtractor={(exam) => String(exam.id)}
-      renderItem={({ item }) => <ExamItem exam={item} onPress={() => open(item)} />}
+      renderItem={({ item }) => (
+        <ExamItem
+          exam={item}
+          area={areas.data?.find((candidate) => candidate.id === item.areaId)}
+          onPress={() => open(item)}
+        />
+      )}
       ListHeaderComponent={
         <Text style={{ color: colors.muted }}>
           {result.totalElements} {result.totalElements === 1 ? 'simulacro' : 'simulacros'} en total
@@ -158,6 +184,7 @@ const styles = StyleSheet.create({
   flex: { flex: 1, gap: 2 },
   side: { alignItems: 'flex-end', gap: 6 },
   title: { fontSize: 16, fontWeight: '700' },
+  score: { fontSize: 15, fontWeight: '700', fontVariant: ['tabular-nums'] },
   status: {
     overflow: 'hidden',
     borderRadius: 999,

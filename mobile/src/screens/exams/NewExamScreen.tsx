@@ -8,28 +8,34 @@ import { useFetch } from '../../hooks/useFetch'
 import type { RootStackParamList } from '../../navigation/types'
 import { areaService } from '../../services/areaService'
 import { examService } from '../../services/examService'
+import { goalService } from '../../services/goalService'
 import { useColors } from '../../theme/useColors'
 import type { ExamType, Topic } from '../../types/exam'
 import { notify } from '../../utils/notify'
+import { areaLabel } from '../../utils/universityLabels'
 
 type NewExamScreenProps = NativeStackScreenProps<RootStackParamList, 'NewExam'>
 
 const examTypes: { value: ExamType; label: string }[] = [
-  { value: 'POR_TEMA', label: 'Por tema: practica un solo tema' },
-  { value: 'COMPLETO', label: 'Completo: el examen entero con su puntaje' },
-  { value: 'DIAGNOSTICO', label: 'Diagnóstico: mide tu punto de partida' },
+  { value: 'DIAGNOSTICO', label: 'Diagnóstico: el examen completo para medir tu punto de partida' },
+  { value: 'POR_TEMA', label: 'Por tema: solo las preguntas de un tema' },
+  { value: 'COMPLETO', label: 'Completo: el examen entero, con su puntaje y penalidad' },
 ]
 
 const noTopics: Topic[] = []
 
 export default function NewExamScreen({ navigation }: NewExamScreenProps) {
   const colors = useColors()
-  const [areaId, setAreaId] = useState<number | null>(null)
+  const [chosenAreaId, setAreaId] = useState<number | null>(null)
   const [type, setType] = useState<ExamType>('POR_TEMA')
   const [topicId, setTopicId] = useState<number | null>(null)
   const [starting, setStarting] = useState(false)
 
   const fetchAreas = useCallback((signal: AbortSignal) => areaService.list(signal), [])
+  const fetchGoals = useCallback((signal: AbortSignal) => goalService.list(signal), [])
+  const goals = useFetch(fetchGoals)
+  // El examen de la carrera meta viene elegido: es el que el postulante va a rendir.
+  const areaId = chosenAreaId ?? goals.data?.[0]?.areaId ?? null
   const fetchTopics = useCallback(
     (signal: AbortSignal) =>
       areaId ? areaService.listTopics(areaId, signal) : Promise.resolve(noTopics),
@@ -67,17 +73,17 @@ export default function NewExamScreen({ navigation }: NewExamScreenProps) {
       style={{ backgroundColor: colors.background }}
       contentContainerStyle={styles.content}
     >
-      <Text style={[styles.heading, { color: colors.text }]}>Universidad y área</Text>
+      <Text style={[styles.heading, { color: colors.text }]}>Examen</Text>
       {areas.loading ? (
         <ActivityIndicator color={colors.primary} accessibilityLabel="Cargando áreas" />
       ) : areas.error ? (
         <ErrorRetry message={areas.error.message} onRetry={areas.retry} />
       ) : (
         <OptionList
-          accessibilityLabel="Universidad y área"
+          accessibilityLabel="Examen"
           options={(areas.data ?? []).map((area) => ({
             value: area.id,
-            label: `${area.universidad} · ${area.nombre}`,
+            label: areaLabel(area.universidad, area.nombre),
           }))}
           selected={areaId}
           onSelect={chooseArea}
@@ -96,7 +102,7 @@ export default function NewExamScreen({ navigation }: NewExamScreenProps) {
         <View style={styles.section}>
           <Text style={[styles.heading, { color: colors.text }]}>Tema</Text>
           {areaId === null ? (
-            <Text style={{ color: colors.muted }}>Primero elige tu universidad y área.</Text>
+            <Text style={{ color: colors.muted }}>Primero elige el examen.</Text>
           ) : topics.loading ? (
             <ActivityIndicator color={colors.primary} accessibilityLabel="Cargando temas" />
           ) : topics.error ? (
@@ -118,9 +124,7 @@ export default function NewExamScreen({ navigation }: NewExamScreenProps) {
       <Button title="Empezar simulacro" disabled={!ready} loading={starting} onPress={start} />
       {!ready && (
         <Text style={[styles.hint, { color: colors.muted }]}>
-          {areaId === null
-            ? 'Elige tu universidad y área.'
-            : 'Elige el tema que quieres practicar.'}
+          {areaId === null ? 'Elige el examen.' : 'Elige el tema que quieres practicar.'}
         </Text>
       )}
     </ScrollView>
@@ -130,6 +134,6 @@ export default function NewExamScreen({ navigation }: NewExamScreenProps) {
 const styles = StyleSheet.create({
   content: { gap: 14, padding: 20 },
   section: { gap: 14 },
-  heading: { fontSize: 18, fontWeight: '700' },
+  heading: { fontSize: 18, fontWeight: '800' },
   hint: { textAlign: 'center' },
 })
