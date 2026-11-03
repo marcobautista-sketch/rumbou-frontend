@@ -73,10 +73,7 @@ function ReviewItem({ question, number }: { question: ExamQuestion; number: numb
                 questionId={question.preguntaId}
                 markedAlternative={question.alternativaMarcada}
               />
-              <SolutionReviewPanel
-                questionId={question.preguntaId}
-                statement={question.enunciado}
-              />
+              <SolutionReviewPanel questionId={question.preguntaId} />
             </>
           )}
         </div>

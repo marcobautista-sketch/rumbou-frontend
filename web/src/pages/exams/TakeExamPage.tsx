@@ -5,6 +5,7 @@ import { areaService } from '../../api/areaService'
 import { examService } from '../../api/examService'
 import { QuestionCard } from '../../components/exam/QuestionCard'
 import { QuestionNavigator } from '../../components/exam/QuestionNavigator'
+import { ScratchpadButton } from '../../components/exam/ScratchpadButton'
 import { ErrorScreen } from '../../components/feedback/ErrorScreen'
 import { PageLoader } from '../../components/feedback/PageLoader'
 import { Page } from '../../components/layout/Page'
@@ -17,6 +18,7 @@ import type { ExamDetail } from '../../types/exam'
 import { examTypeLabels } from '../../utils/examSummary'
 import { alternativeLetter, formatDuration } from '../../utils/format'
 import { notify } from '../../utils/notify'
+import { clearScratch } from '../../utils/scratchpad'
 import { areaLabel } from '../../utils/universityLabels'
 
 const LETTERS = ['a', 'b', 'c', 'd', 'e']
@@ -56,6 +58,7 @@ function ExamInProgress({ exam, examName }: { exam: ExamDetail; examName: string
     setFinishing(true)
     try {
       await examService.finish(exam.id)
+      clearScratch(`examen-${exam.id}`)
       notify.success('¡Terminaste el simulacro! Este es tu resultado.')
       navigate(generatePath(paths.examResult, { examId: String(exam.id) }), { replace: true })
     } catch (error) {
@@ -72,7 +75,9 @@ function ExamInProgress({ exam, examName }: { exam: ExamDetail; examName: string
   // activan mientras se escribe ni con el diálogo de finalizar abierto.
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (confirmOpen || event.altKey || event.ctrlKey || event.metaKey) return
+      if (event.altKey || event.ctrlKey || event.metaKey) return
+      // Con un diálogo abierto (la pizarra o finalizar), las teclas son de ese diálogo.
+      if (document.querySelector('dialog[open]')) return
       const target = event.target as HTMLElement
       if (target.closest('textarea, select, input:not([type="radio"])')) return
       const letter = LETTERS.indexOf(event.key.toLowerCase())
@@ -136,6 +141,14 @@ function ExamInProgress({ exam, examName }: { exam: ExamDetail; examName: string
             position={index + 1}
             selected={answers[index]}
             onSelect={answer}
+            actions={
+              <ScratchpadButton
+                key={question.preguntaId}
+                scope={`examen-${exam.id}`}
+                question={question}
+                position={index + 1}
+              />
+            }
           />
           <nav
             aria-label="Moverse entre preguntas"

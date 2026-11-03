@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type { ExamQuestion } from '../../types/exam'
 import { alternativesLayout, formattedAlternative } from '../../utils/alternatives'
 import { alternativeLetter } from '../../utils/format'
@@ -12,17 +13,28 @@ interface QuestionCardProps {
   position: number
   selected: number | null
   onSelect: (alternative: number) => void
+  // Botones junto al tema, como la pizarra.
+  actions?: ReactNode
 }
 
-export function QuestionCard({ question, position, selected, onSelect }: QuestionCardProps) {
+export function QuestionCard({
+  question,
+  position,
+  selected,
+  onSelect,
+  actions,
+}: QuestionCardProps) {
   const layout = alternativesLayout(question.alternativas)
 
   return (
     <fieldset className="space-y-4 rounded-2xl bg-surface p-6 shadow-card">
       <legend className="sr-only">Pregunta {position}</legend>
-      <span className="inline-flex rounded-full bg-chip px-3 py-1 text-sm font-semibold text-primary">
-        {question.tema}
-      </span>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <span className="inline-flex rounded-full bg-chip px-3 py-1 text-sm font-semibold text-primary">
+          {question.tema}
+        </span>
+        {actions}
+      </div>
       <QuestionStatement question={question} className="text-lg" />
       <div className={layout}>
         {question.alternativas.map((text, alternative) => (
