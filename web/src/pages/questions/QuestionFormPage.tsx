@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 import { generatePath, useNavigate, useParams } from 'react-router'
 import { questionService } from '../../api/questionService'
 import { InlineError } from '../../components/feedback/InlineError'
+import { Page } from '../../components/layout/Page'
 import { PageHeader } from '../../components/layout/PageHeader'
 import { QuestionForm } from '../../components/questions/QuestionForm'
 import {
@@ -61,7 +62,7 @@ export default function QuestionFormPage() {
   const title = isEditing ? `Editar pregunta #${questionId}` : 'Nueva pregunta'
 
   return (
-    <main className="mx-auto max-w-3xl space-y-6 px-4 py-8 sm:px-6">
+    <Page narrow>
       <PageHeader
         title={title}
         description={
@@ -93,6 +94,6 @@ export default function QuestionFormPage() {
           onCancel={() => navigate(isEditing ? detailPath(id) : paths.questions)}
         />
       )}
-    </main>
+    </Page>
   )
 }

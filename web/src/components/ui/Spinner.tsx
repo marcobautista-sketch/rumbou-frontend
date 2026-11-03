@@ -16,7 +16,7 @@ interface SpinnerProps {
 export function Spinner({ size = 'md', label = 'Cargando…' }: SpinnerProps) {
   return (
     <span role="status" className="inline-flex items-center gap-2">
-      <LoaderCircle aria-hidden className={`animate-spin text-accent-ink ${sizes[size]}`} />
+      <LoaderCircle aria-hidden className={`animate-spin text-primary ${sizes[size]}`} />
       <span className="sr-only">{label}</span>
     </span>
   )

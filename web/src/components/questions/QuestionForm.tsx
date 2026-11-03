@@ -10,6 +10,7 @@ import { Card } from '../ui/Card'
 import { fieldStyles } from '../ui/fieldStyles'
 import { SelectField } from '../ui/SelectField'
 import { TextAreaField } from '../ui/TextAreaField'
+import { areaLabel } from '../../utils/universityLabels'
 
 interface QuestionFormProps {
   defaultValues: QuestionFormValues
@@ -63,7 +64,7 @@ export function QuestionForm({
             </option>
             {areas.data?.map((area) => (
               <option key={area.id} value={area.id}>
-                {area.universidad} · {area.nombre}
+                {areaLabel(area.universidad, area.nombre)}
               </option>
             ))}
           </SelectField>

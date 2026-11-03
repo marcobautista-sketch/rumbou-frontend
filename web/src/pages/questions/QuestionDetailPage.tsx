@@ -1,8 +1,9 @@
-import { ArrowLeft, FileQuestion, Pencil, Trash2 } from 'lucide-react'
+import { ArrowLeft, FileQuestion, Lightbulb, NotebookPen, Pencil, Trash2 } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { generatePath, Link, useLocation, useNavigate, useParams } from 'react-router'
 import { questionService } from '../../api/questionService'
 import { InlineError } from '../../components/feedback/InlineError'
+import { Page } from '../../components/layout/Page'
 import { PageHeader } from '../../components/layout/PageHeader'
 import { AlternativeList } from '../../components/questions/AlternativeList'
 import { DifficultyBadge } from '../../components/questions/DifficultyBadge'
@@ -79,7 +80,7 @@ export default function QuestionDetailPage() {
 
   if (!Number.isInteger(id) || question.error?.kind === 'notFound') {
     return (
-      <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
+      <Page>
         <EmptyState
           icon={FileQuestion}
           title="Esta pregunta no existe"
@@ -90,14 +91,14 @@ export default function QuestionDetailPage() {
             </Link>
           }
         />
-      </main>
+      </Page>
     )
   }
 
   const data = question.data
 
   return (
-    <main className="mx-auto max-w-3xl space-y-6 px-4 py-8 sm:px-6">
+    <Page>
       {question.loading ? (
         <DetailSkeleton />
       ) : question.error || !data ? (
@@ -132,29 +133,62 @@ export default function QuestionDetailPage() {
             }
           />
 
-          <Card className="space-y-5">
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge tone="brand">{data.temaNombre}</Badge>
-              <DifficultyBadge difficulty={data.dificultad} />
-              {isAdminQuestion(data) && <ReviewStatusBadges question={data} />}
+          <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
+            <div className="space-y-6">
+              <Card className="space-y-5">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge tone="brand">{data.temaNombre}</Badge>
+                  <DifficultyBadge difficulty={data.dificultad} />
+                  {isAdminQuestion(data) && <ReviewStatusBadges question={data} />}
+                </div>
+                <QuestionStatement question={data} className="text-lg leading-relaxed" />
+                <AlternativeList
+                  alternatives={data.alternativas}
+                  formatted={data.presentacion?.alternativas}
+                  correctIndex={isAdminQuestion(data) ? data.claveCorrecta : undefined}
+                />
+                {isAdminQuestion(data) && (
+                  <QuestionExplanation explanation={data.explicacion} steps={data.pasos} />
+                )}
+              </Card>
+              <TutorPanel questionId={data.id} />
+              <Link to={listUrl} className={buttonStyles('ghost')}>
+                <ArrowLeft aria-hidden className="size-4" />
+                Volver al banco
+              </Link>
             </div>
-            <QuestionStatement question={data} className="text-lg leading-relaxed" />
-            <AlternativeList
-              alternatives={data.alternativas}
-              formatted={data.presentacion?.alternativas}
-              correctIndex={isAdminQuestion(data) ? data.claveCorrecta : undefined}
-            />
-            {isAdminQuestion(data) && (
-              <QuestionExplanation explanation={data.explicacion} steps={data.pasos} />
-            )}
-          </Card>
 
-          <TutorPanel questionId={data.id} />
-
-          <Link to={listUrl} className={buttonStyles('ghost')}>
-            <ArrowLeft aria-hidden className="size-4" />
-            Volver al listado
-          </Link>
+            <aside className="space-y-5 lg:sticky lg:top-6">
+              <Card className="space-y-3 p-5">
+                <h2 className="flex items-center gap-2 font-bold">
+                  <NotebookPen aria-hidden className="size-4 text-primary" />
+                  Practica {data.temaNombre}
+                </h2>
+                <p className="text-sm text-ink-muted">
+                  Rinde un simulacro de este tema con preguntas como esta, calificado como en el
+                  examen.
+                </p>
+                <Link
+                  to={`${paths.newExam}?tipo=POR_TEMA&tema=${data.temaId}`}
+                  className={`${buttonStyles('primary', 'sm')} w-full`}
+                >
+                  Practicar este tema
+                </Link>
+              </Card>
+              {!isAdminQuestion(data) && (
+                <Card className="space-y-2 p-5">
+                  <h2 className="flex items-center gap-2 font-bold">
+                    <Lightbulb aria-hidden className="size-4 text-warning" />
+                    ¿Y la respuesta?
+                  </h2>
+                  <p className="text-sm text-ink-muted">
+                    La clave y la resolución paso a paso aparecen al terminar un simulacro o al
+                    responder el desafío diario. Si te trabas, pídele una pista al tutor.
+                  </p>
+                </Card>
+              )}
+            </aside>
+          </div>
 
           <ConfirmDialog
             open={confirmingDelete}
@@ -168,6 +202,6 @@ export default function QuestionDetailPage() {
           />
         </>
       )}
-    </main>
+    </Page>
   )
 }
