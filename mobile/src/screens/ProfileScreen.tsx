@@ -9,6 +9,7 @@ import {
   Text,
   View,
 } from 'react-native'
+import { Avatar } from 'react-native-paper'
 import { Button } from '../components/Button'
 import { ChangePasswordForm } from '../components/ChangePasswordForm'
 import { FormTextField } from '../components/FormTextField'
@@ -111,11 +112,13 @@ export default function ProfileScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={[styles.card, styles.identity, { backgroundColor: colors.surface }]}>
-          <View style={[styles.avatar, { backgroundColor: colors.chip }]}>
-            <Text style={[styles.avatarText, { color: colors.primary }]}>
-              {initialsOf(user.nombre)}
-            </Text>
-          </View>
+          <Avatar.Text
+            size={56}
+            label={initialsOf(user.nombre)}
+            color={colors.primary}
+            style={{ backgroundColor: colors.chip }}
+            labelStyle={styles.avatarText}
+          />
           <View style={styles.flex}>
             <Text style={[styles.name, { color: colors.text }]} numberOfLines={1}>
               {[user.nombre, user.apellidos].filter(Boolean).join(' ')}
@@ -148,13 +151,6 @@ const styles = StyleSheet.create({
   section: { gap: 14 },
   card: { gap: 4, borderRadius: 16, padding: 16 },
   identity: { flexDirection: 'row', alignItems: 'center', gap: 14 },
-  avatar: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   avatarText: { fontSize: 20, fontWeight: '800' },
   name: { fontSize: 18, fontWeight: '800' },
   role: { marginTop: 2, fontSize: 13, fontWeight: '700' },

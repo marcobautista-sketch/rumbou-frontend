@@ -1,6 +1,6 @@
-import { Ionicons } from '@expo/vector-icons'
-import { useState, type ComponentProps } from 'react'
-import { Modal, PanResponder, Pressable, StyleSheet, Text, View } from 'react-native'
+import { useState } from 'react'
+import { Modal, PanResponder, StyleSheet, Text, View } from 'react-native'
+import { IconButton, SegmentedButtons } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Svg, { Defs, Path, Pattern, Rect } from 'react-native-svg'
 import { useColors } from '../theme/useColors'
@@ -24,43 +24,6 @@ interface WhiteboardModalProps {
   initialStrokes: ScratchStroke[]
   // Al volver a la pregunta, la pantalla guarda los trazos de esa pregunta.
   onClose: (strokes: ScratchStroke[]) => void
-}
-
-function Tool({
-  icon,
-  label,
-  active,
-  disabled,
-  onPress,
-}: {
-  icon: ComponentProps<typeof Ionicons>['name']
-  label: string
-  active?: boolean
-  disabled?: boolean
-  onPress: () => void
-}) {
-  const colors = useColors()
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      accessibilityState={{ selected: active, disabled }}
-      disabled={disabled}
-      onPress={onPress}
-      style={({ pressed }) => [
-        styles.tool,
-        {
-          backgroundColor: active ? colors.chip : 'transparent',
-          opacity: disabled ? 0.4 : pressed ? 0.7 : 1,
-        },
-      ]}
-    >
-      <Ionicons name={icon} size={18} color={active ? colors.primary : colors.muted} />
-      <Text style={[styles.toolText, { color: active ? colors.primary : colors.muted }]}>
-        {label}
-      </Text>
-    </Pressable>
-  )
 }
 
 // La pizarra de borrador de una pregunta: es solo para el postulante, no se envía a nadie.
@@ -133,23 +96,25 @@ export function WhiteboardModal({
           {formatMath(statement)}
         </Text>
         <View style={styles.tools}>
-          <Tool icon="pencil" label="Lápiz" active={!erasing} onPress={() => chooseTool(false)} />
-          <Tool
-            icon="remove-circle-outline"
-            label="Borrador"
-            active={erasing}
-            onPress={() => chooseTool(true)}
+          <SegmentedButtons
+            value={erasing ? 'eraser' : 'pen'}
+            onValueChange={(value) => chooseTool(value === 'eraser')}
+            density="small"
+            style={styles.flex}
+            buttons={[
+              { value: 'pen', label: 'Lápiz', icon: 'pencil' },
+              { value: 'eraser', label: 'Borrador', icon: 'eraser' },
+            ]}
           />
-          <View style={styles.flex} />
-          <Tool
-            icon="arrow-undo"
-            label="Deshacer"
+          <IconButton
+            icon="undo"
+            accessibilityLabel="Deshacer"
             disabled={strokes.length === 0}
             onPress={() => setStrokes((previous) => previous.slice(0, -1))}
           />
-          <Tool
-            icon="trash-outline"
-            label="Borrar"
+          <IconButton
+            icon="delete-outline"
+            accessibilityLabel="Borrar hoja"
             disabled={strokes.length === 0}
             onPress={() => setStrokes([])}
           />
@@ -160,8 +125,9 @@ export function WhiteboardModal({
           style={[styles.board, { borderColor: colors.border }]}
           {...board.handlers}
         >
-          {/* Sin toques en el SVG: así las coordenadas siempre son relativas a la hoja. */}
-          <Svg style={StyleSheet.absoluteFill} pointerEvents="none">
+          {/* Sin toques en el SVG: así las coordenadas siempre son relativas a la hoja. El
+              100% explícito hace que también llene la hoja en la versión web. */}
+          <Svg style={StyleSheet.absoluteFill} width="100%" height="100%" pointerEvents="none">
             {[...strokes, ...(current ? [current] : [])].map((stroke, index) => (
               <Path
                 key={index}
@@ -195,15 +161,6 @@ const styles = StyleSheet.create({
   screen: { flex: 1, gap: 12, paddingHorizontal: 16 },
   title: { fontSize: 22, fontWeight: '800' },
   tools: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  tool: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-  },
-  toolText: { fontSize: 13, fontWeight: '600' },
   board: {
     flex: 1,
     overflow: 'hidden',

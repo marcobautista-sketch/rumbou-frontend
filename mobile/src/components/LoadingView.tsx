@@ -1,4 +1,5 @@
-import { ActivityIndicator, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import { ActivityIndicator } from 'react-native-paper'
 import { useColors } from '../theme/useColors'
 
 export function LoadingView() {
@@ -9,7 +10,7 @@ export function LoadingView() {
       accessibilityLabel="Cargando"
       style={[styles.container, { backgroundColor: colors.background }]}
     >
-      <ActivityIndicator size="large" color={colors.primary} />
+      <ActivityIndicator size="large" />
     </View>
   )
 }
