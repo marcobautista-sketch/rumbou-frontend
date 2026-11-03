@@ -9,7 +9,6 @@ import { formatMath } from '../utils/formatMath'
 import { notify } from '../utils/notify'
 import { pickSolutionPhoto, type PhotoSource } from '../utils/pickSolutionPhoto'
 import { Button } from './Button'
-import { WhiteboardModal } from './WhiteboardModal'
 
 const verdicts: Record<
   SolutionVerdict,
@@ -66,19 +65,12 @@ function ReviewResult({ review }: { review: SolutionReview }) {
   )
 }
 
-// Sensores: foto del procedimiento en papel (cámara) o la pizarra táctil, revisadas por el tutor.
-export function SolutionPhotoReview({
-  questionId,
-  statement,
-}: {
-  questionId: number
-  statement: string
-}) {
+// Sensor de cámara: la foto del procedimiento hecho en papel, revisada por el tutor.
+export function SolutionPhotoReview({ questionId }: { questionId: number }) {
   const colors = useColors()
   const [photo, setPhoto] = useState<SolutionPhoto | null>(null)
   const [review, setReview] = useState<SolutionReview | null>(null)
   const [sending, setSending] = useState(false)
-  const [boardOpen, setBoardOpen] = useState(false)
 
   const selectPhoto = (picked: SolutionPhoto) => {
     setPhoto(picked)
@@ -109,14 +101,13 @@ export function SolutionPhotoReview({
   return (
     <View style={[styles.card, { backgroundColor: colors.surface }]}>
       <View style={styles.row}>
-        <Ionicons name="camera-outline" size={22} color={colors.accentText} />
+        <Ionicons name="camera-outline" size={22} color={colors.primary} />
         <Text style={[styles.title, { color: colors.text }]}>
           Muéstrale tu procedimiento al tutor
         </Text>
       </View>
       <Text style={{ color: colors.muted }}>
-        Tómale una foto a lo que resolviste en papel o escríbelo en la pizarra. El tutor te dirá en
-        qué paso está el error.
+        Tómale una foto a lo que resolviste en papel y el tutor te dirá en qué paso está el error.
       </Text>
       {photo && (
         <Image
@@ -145,24 +136,7 @@ export function SolutionPhotoReview({
             onPress={() => choose('library')}
           />
         </View>
-        <View style={styles.flex}>
-          <Button
-            title="Pizarra"
-            variant="secondary"
-            disabled={sending}
-            onPress={() => setBoardOpen(true)}
-          />
-        </View>
       </View>
-      <WhiteboardModal
-        visible={boardOpen}
-        statement={statement}
-        onCancel={() => setBoardOpen(false)}
-        onDone={(image) => {
-          setBoardOpen(false)
-          selectPhoto(image)
-        }}
-      />
     </View>
   )
 }
