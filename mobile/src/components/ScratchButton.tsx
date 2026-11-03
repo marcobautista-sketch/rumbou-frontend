@@ -1,37 +1,32 @@
-import { Ionicons } from '@expo/vector-icons'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import { Badge, Button } from 'react-native-paper'
 import { useColors } from '../theme/useColors'
 
-// Botón "Pizarra" de una pregunta; el punto verde avisa que ya tiene apuntes.
+// Botón "Pizarra" de una pregunta (botón de React Native Paper con ícono); el punto verde
+// (Badge) avisa que ya tiene apuntes.
 export function ScratchButton({ hasNotes, onPress }: { hasNotes: boolean; onPress: () => void }) {
   const colors = useColors()
   return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={hasNotes ? 'Pizarra, con apuntes' : 'Pizarra'}
-      onPress={onPress}
-      style={({ pressed }) => [
-        styles.button,
-        { borderColor: colors.border, backgroundColor: colors.surface, opacity: pressed ? 0.7 : 1 },
-      ]}
-    >
-      <Ionicons name="pencil" size={16} color={colors.primary} />
-      <Text style={[styles.text, { color: colors.text }]}>Pizarra</Text>
-      {hasNotes && <View style={[styles.dot, { backgroundColor: colors.accent }]} />}
-    </Pressable>
+    <View>
+      <Button
+        mode="outlined"
+        icon="pencil"
+        compact
+        onPress={onPress}
+        textColor={colors.text}
+        accessibilityLabel={hasNotes ? 'Pizarra, con apuntes' : 'Pizarra'}
+        style={[styles.button, { borderColor: colors.border }]}
+        labelStyle={styles.label}
+      >
+        Pizarra
+      </Button>
+      {hasNotes && <Badge size={10} style={[styles.badge, { backgroundColor: colors.accent }]} />}
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
-  button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    borderWidth: 1,
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 7,
-  },
-  text: { fontSize: 14, fontWeight: '600' },
-  dot: { width: 8, height: 8, borderRadius: 4 },
+  button: { borderRadius: 10 },
+  label: { fontSize: 14, fontWeight: '600', letterSpacing: 0 },
+  badge: { position: 'absolute', top: -3, right: -3 },
 })
