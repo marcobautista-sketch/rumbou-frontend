@@ -4,6 +4,7 @@ import { difficulties, difficultyLabels, questionSortOptions } from '../../utils
 import { Button } from '../ui/Button'
 import { SelectField } from '../ui/SelectField'
 import { TextField } from '../ui/TextField'
+import { areaLabel } from '../../utils/universityLabels'
 
 export interface QuestionFilterValues {
   search: string
@@ -59,14 +60,14 @@ export function QuestionFilters({
         className={`grid gap-4 sm:grid-cols-2 ${showStatus ? 'lg:grid-cols-5' : 'lg:grid-cols-4'}`}
       >
         <SelectField
-          label="Universidad y área"
+          label="Examen"
           value={values.area}
           onChange={(event) => onChange({ area: event.target.value, topic: '' })}
         >
           <option value="">Todas</option>
           {areas.map((area) => (
             <option key={area.id} value={area.id}>
-              {area.universidad} · {area.nombre}
+              {areaLabel(area.universidad, area.nombre)}
             </option>
           ))}
         </SelectField>
@@ -78,7 +79,7 @@ export function QuestionFilters({
           title={values.area ? undefined : 'Primero elige una universidad y área'}
           onChange={(event) => onChange({ topic: event.target.value })}
         >
-          <option value="">{values.area ? 'Todos' : 'Elige un área primero'}</option>
+          <option value="">{values.area ? 'Todos' : 'Elige el examen'}</option>
           {topics.map((topic) => (
             <option key={topic.id} value={topic.id}>
               {topic.nombre}
