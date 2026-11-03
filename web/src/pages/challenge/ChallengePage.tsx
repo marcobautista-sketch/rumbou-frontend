@@ -5,6 +5,7 @@ import { userService } from '../../api/userService'
 import { ChallengeResult } from '../../components/challenge/ChallengeResult'
 import { ChallengeStats } from '../../components/challenge/ChallengeStats'
 import { QuestionCard } from '../../components/exam/QuestionCard'
+import { ScratchpadButton } from '../../components/exam/ScratchpadButton'
 import { InlineError } from '../../components/feedback/InlineError'
 import { Page } from '../../components/layout/Page'
 import { PageHeader } from '../../components/layout/PageHeader'
@@ -16,6 +17,7 @@ import { useFetch } from '../../hooks/useFetch'
 import type { DailyChallenge } from '../../types/challenge'
 import { formatDuration } from '../../utils/format'
 import { notify } from '../../utils/notify'
+import { clearScratch } from '../../utils/scratchpad'
 
 const SUGGESTED_SECONDS = 5 * 60
 
@@ -36,6 +38,7 @@ function PendingChallenge({
     setSending(true)
     try {
       const result = await challengeService.answer(selected)
+      clearScratch(`desafio-${challenge.fecha}`)
       notify.success(
         result.esCorrecta
           ? `¡Correcto! Ganaste ${result.xpGanado} XP.`
@@ -73,7 +76,13 @@ function PendingChallenge({
           </Badge>
         </div>
       </div>
-      <QuestionCard question={challenge} position={1} selected={selected} onSelect={setSelected} />
+      <QuestionCard
+        question={challenge}
+        position={1}
+        selected={selected}
+        onSelect={setSelected}
+        actions={<ScratchpadButton scope={`desafio-${challenge.fecha}`} question={challenge} />}
+      />
       <Button
         onClick={submit}
         disabled={selected === null}
