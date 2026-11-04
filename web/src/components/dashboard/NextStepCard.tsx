@@ -155,7 +155,7 @@ export function NextStepCard({ step, starting, onPractice }: NextStepCardProps) 
         <Content
           icon={NotebookPen}
           title="Practica por tema"
-          text="Los simulacros por tema son la forma más rápida de subir tu puntaje proyectado."
+          text="Refuerza un tema a la vez y mide tu avance en tu próximo simulacro completo."
           action={
             <Link to={paths.newExam} className={actionStyles}>
               Elegir tema

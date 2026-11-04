@@ -31,6 +31,53 @@ function scoreText(exam: ExamSummary, area: Area | undefined) {
   return `${formatScore(exam.puntajeObtenido)} / ${formatScore(max)}`
 }
 
+function ExamStatus({ exam }: { exam: ExamSummary }) {
+  return exam.estado === 'FINALIZADO' ? (
+    <Badge tone="neutral">Terminado</Badge>
+  ) : (
+    <Badge tone="warning">En curso</Badge>
+  )
+}
+
+function ExamLink({ exam }: { exam: ExamSummary }) {
+  const finished = exam.estado === 'FINALIZADO'
+  const to = generatePath(finished ? paths.examResult : paths.exam, { examId: String(exam.id) })
+  return (
+    <Link to={to} className={buttonStyles(finished ? 'secondary' : 'primary', 'sm')}>
+      {finished ? 'Ver resultado' : 'Continuar'}
+    </Link>
+  )
+}
+
+// En celulares cada simulacro es una tarjeta: en una tabla, el puntaje y el botón quedarían
+// fuera de la pantalla.
+function ExamCard({ exam, area }: { exam: ExamSummary; area: Area | undefined }) {
+  return (
+    <li className="space-y-3 rounded-2xl bg-surface p-4 shadow-card">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="font-semibold text-ink">{examTypeLabels[exam.tipo]}</p>
+          <p className="text-sm text-ink-muted">
+            {area ? areaLabel(area.universidad, area.nombre) : exam.area}
+          </p>
+          <p className="text-sm text-ink-muted">
+            {formatLongDate(exam.fechaFin ?? exam.fechaInicio)}
+          </p>
+        </div>
+        <ExamStatus exam={exam} />
+      </div>
+      <div className="flex items-center justify-end gap-3">
+        {exam.puntajeObtenido !== null && (
+          <p className="mr-auto font-display text-lg font-bold text-primary tabular-nums">
+            {scoreText(exam, area)}
+          </p>
+        )}
+        <ExamLink exam={exam} />
+      </div>
+    </li>
+  )
+}
+
 export default function ExamHistoryPage() {
   const { page, size, apiParams, setPage, setSize } = usePagination()
   const fetchExams = useCallback(
@@ -42,9 +89,13 @@ export default function ExamHistoryPage() {
   const areas = useFetch(fetchAreas)
   const result = exams.data
 
-  const columns = useMemo<TableColumn<ExamSummary>[]>(() => {
-    const areaOf = (exam: ExamSummary) => areas.data?.find((area) => area.id === exam.areaId)
-    return [
+  const areaOf = useCallback(
+    (exam: ExamSummary) => areas.data?.find((area) => area.id === exam.areaId),
+    [areas.data],
+  )
+
+  const columns = useMemo<TableColumn<ExamSummary>[]>(
+    () => [
       {
         key: 'exam',
         header: 'Simulacro',
@@ -69,12 +120,7 @@ export default function ExamHistoryPage() {
       {
         key: 'status',
         header: 'Estado',
-        render: (exam) =>
-          exam.estado === 'FINALIZADO' ? (
-            <Badge tone="neutral">Terminado</Badge>
-          ) : (
-            <Badge tone="warning">En curso</Badge>
-          ),
+        render: (exam) => <ExamStatus exam={exam} />,
       },
       {
         key: 'score',
@@ -86,20 +132,11 @@ export default function ExamHistoryPage() {
         key: 'actions',
         header: <span className="sr-only">Acciones</span>,
         className: 'text-right whitespace-nowrap',
-        render: (exam) => {
-          const finished = exam.estado === 'FINALIZADO'
-          const to = generatePath(finished ? paths.examResult : paths.exam, {
-            examId: String(exam.id),
-          })
-          return (
-            <Link to={to} className={buttonStyles(finished ? 'secondary' : 'primary', 'sm')}>
-              {finished ? 'Ver resultado' : 'Continuar'}
-            </Link>
-          )
-        },
+        render: (exam) => <ExamLink exam={exam} />,
       },
-    ]
-  }, [areas.data])
+    ],
+    [areaOf],
+  )
 
   return (
     <Page>
@@ -140,12 +177,19 @@ export default function ExamHistoryPage() {
           />
         ) : (
           <>
-            <Table
-              caption="Historial de simulacros"
-              columns={columns}
-              rows={result.content}
-              rowKey={(exam) => exam.id}
-            />
+            <ul className="space-y-3 md:hidden">
+              {result.content.map((exam) => (
+                <ExamCard key={exam.id} exam={exam} area={areaOf(exam)} />
+              ))}
+            </ul>
+            <div className="hidden md:block">
+              <Table
+                caption="Historial de simulacros"
+                columns={columns}
+                rows={result.content}
+                rowKey={(exam) => exam.id}
+              />
+            </div>
             <Pagination
               page={page}
               size={size}
