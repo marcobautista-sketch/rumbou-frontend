@@ -13,7 +13,7 @@ export function InlineError({ message, onRetry }: InlineErrorProps) {
       className="flex animate-fade-in flex-wrap items-center gap-3 rounded-2xl border border-danger/30 bg-danger-soft p-4 text-danger"
     >
       <CircleAlert aria-hidden className="size-5 shrink-0" />
-      <p className="flex-1">{message}</p>
+      <p className="min-w-0 flex-[1_1_10rem]">{message}</p>
       {onRetry && (
         <Button variant="secondary" size="sm" onClick={onRetry}>
           <RotateCw aria-hidden className="size-4" />
