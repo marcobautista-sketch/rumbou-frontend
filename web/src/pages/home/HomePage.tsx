@@ -218,7 +218,7 @@ export default function HomePage() {
                 </a>
               </div>
               <p className="text-sm text-ink-muted">
-                Gratis para empezar · En la web, Android y iPhone
+                Gratis para empezar · En la web y Android
                 {!user && (
                   <>
                     {' · '}
