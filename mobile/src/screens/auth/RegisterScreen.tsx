@@ -262,7 +262,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
         <View style={styles.flex}>
           {isLastStep ? (
             <Button
-              title="Finalizar registro"
+              title="Crear cuenta"
               loading={isSubmitting}
               onPress={handleSubmit(onSubmit)}
             />
