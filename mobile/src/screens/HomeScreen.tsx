@@ -141,7 +141,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         : {
             icon: 'document-text' as IconName,
             title: 'Practica por tema',
-            text: 'Los simulacros por tema son la forma más rápida de subir tu puntaje proyectado.',
+            text: 'Refuerza un tema a la vez y mide tu avance en tu próximo simulacro completo.',
             action: 'Elegir tema',
             onPress: () => navigation.navigate('NewExam'),
           }
