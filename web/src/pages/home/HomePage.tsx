@@ -60,7 +60,7 @@ const features: { icon: LucideIcon; title: string; text: string }[] = [
   },
   {
     icon: ChartLine,
-    title: 'Probabilidad de ingreso',
+    title: 'Distancia a tu meta',
     text: 'Comparamos tu puntaje proyectado con el del último ingresante de tu carrera.',
   },
   {
@@ -204,7 +204,7 @@ export default function HomePage() {
       <main>
         <section className="relative overflow-hidden">
           <div aria-hidden className="paper-grid absolute inset-x-0 top-0 h-[34rem]" />
-          <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-4 pt-14 pb-20 sm:px-6 sm:pt-20 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-16 lg:pb-24">
+          <div className="relative mx-auto grid grid-cols-1 max-w-6xl items-center gap-14 px-4 pt-14 pb-20 sm:px-6 sm:pt-20 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-16 lg:pb-24">
             <div className="space-y-7">
               <p className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-sm font-medium text-ink-muted shadow-card">
                 <span className="size-2 rounded-full bg-accent" />
@@ -258,7 +258,7 @@ export default function HomePage() {
           title="Un camino claro desde el primer día"
           description="Sabes a qué carrera postulas, dónde estás hoy y qué practicar para llegar."
         >
-          <ol className="grid gap-5 md:grid-cols-3">
+          <ol className="grid grid-cols-1 gap-5 md:grid-cols-3">
             {steps.map((step, index) => (
               <li
                 key={step.title}
@@ -279,7 +279,7 @@ export default function HomePage() {
           eyebrow="Qué incluye"
           title="Todo lo que necesitas para prepararte, en un solo lugar"
         >
-          <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {features.map(({ icon: Icon, title, text }) => (
               <li key={title} className="rounded-2xl border border-line bg-surface p-6 shadow-card">
                 <span className="inline-flex rounded-xl bg-chip p-2.5 text-primary">
@@ -332,7 +332,7 @@ export default function HomePage() {
           eyebrow="Planes"
           title="Empieza gratis y pasa a PRO cuando lo necesites"
         >
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             {plans.map((plan) => {
               const pro = plan.name === 'PRO'
               return (
@@ -404,7 +404,7 @@ export default function HomePage() {
       </main>
 
       <footer className="border-t border-line bg-surface">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-[minmax(0,1fr)_auto]">
+        <div className="mx-auto grid grid-cols-1 max-w-6xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-[minmax(0,1fr)_auto]">
           <div className="max-w-xl space-y-3">
             <BrandMark size="sm" />
             <p className="text-sm text-ink-muted">

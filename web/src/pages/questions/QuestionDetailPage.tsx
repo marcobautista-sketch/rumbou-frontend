@@ -133,7 +133,7 @@ export default function QuestionDetailPage() {
             }
           />
 
-          <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
+          <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
             <div className="space-y-6">
               <Card className="space-y-5">
                 <div className="flex flex-wrap items-center gap-2">

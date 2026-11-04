@@ -10,7 +10,7 @@ const MAX_TOPICS = 3
 
 function LoadingRow({ label }: { label: string }) {
   return (
-    <div role="status" aria-label={label} className="grid gap-3 sm:grid-cols-3">
+    <div role="status" aria-label={label} className="grid grid-cols-1 gap-3 sm:grid-cols-3">
       {[0, 1, 2].map((index) => (
         <Skeleton key={index} className="h-28 w-full" />
       ))}
@@ -33,7 +33,7 @@ function TopicVideos({ topicId }: { topicId: number }) {
   return (
     <div className="space-y-2">
       {data.videos.length > 0 && (
-        <ul className="grid gap-3 sm:grid-cols-3">
+        <ul className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           {data.videos.map((video) => (
             <li key={video.videoId}>
               <a
@@ -91,7 +91,7 @@ function TopicBooks({ topicId, topic }: { topicId: number; topic: string }) {
 
   return (
     <div className="space-y-2">
-      <ul className="grid gap-3 sm:grid-cols-3">
+      <ul className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {data.map((book) => (
           <li key={book.url}>
             <a

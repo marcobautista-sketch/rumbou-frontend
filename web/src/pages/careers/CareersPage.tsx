@@ -122,7 +122,7 @@ export default function CareersPage() {
               {careers.length}{' '}
               {careers.length === 1 ? 'carrera encontrada' : 'carreras encontradas'}
             </p>
-            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {careers.map((offer) => (
                 <CareerCard
                   key={offer.id}

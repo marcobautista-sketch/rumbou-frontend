@@ -60,7 +60,7 @@ export default function ProfilePage() {
         }
       />
 
-      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
+      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
         <div className="space-y-6">
           <Card aria-labelledby="account-title" className="space-y-5">
             <div className="flex items-center gap-4">
@@ -69,9 +69,8 @@ export default function ProfilePage() {
                 <p className="truncate text-xl font-bold">
                   {[user.nombre, user.apellidos].filter(Boolean).join(' ')}
                 </p>
-                <p className="truncate text-ink-muted">
-                  {user.email} · {roleLabels[user.role]}
-                </p>
+                <p className="truncate text-ink-muted">{user.email}</p>
+                <p className="text-sm font-semibold text-primary">{roleLabels[user.role]}</p>
               </div>
             </div>
             <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5">
@@ -95,7 +94,7 @@ export default function ProfilePage() {
                 }}
               />
             ) : (
-              <dl className="grid gap-4 sm:grid-cols-2">
+              <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <ProfileItem label="Nombres" value={user.nombre} />
                 <ProfileItem label="Apellidos" value={user.apellidos ?? 'Sin registrar'} />
                 <ProfileItem label="Correo" value={user.email} />

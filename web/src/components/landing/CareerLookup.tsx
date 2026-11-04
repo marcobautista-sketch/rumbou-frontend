@@ -46,7 +46,7 @@ export function CareerLookup({ offers, failed }: CareerLookupProps) {
   }
 
   return (
-    <div className="grid gap-5 rounded-2xl border border-line bg-surface p-5 shadow-card sm:p-7 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-8">
+    <div className="grid grid-cols-1 gap-5 rounded-2xl border border-line bg-surface p-5 shadow-card sm:p-7 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-8">
       <div className="space-y-4">
         <SelectField
           label="Universidad"

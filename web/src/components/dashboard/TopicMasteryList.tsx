@@ -16,7 +16,7 @@ export function TopicMasteryList({ topics }: TopicMasteryListProps) {
   )
 
   return (
-    <ul className="grid gap-x-10 gap-y-4 md:grid-cols-2">
+    <ul className="grid grid-cols-1 gap-x-10 gap-y-4 md:grid-cols-2">
       {sorted.map((topic) => {
         const percentage = Math.round(topic.porcentajeAciertos)
         return (

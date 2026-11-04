@@ -40,7 +40,7 @@ export function ScratchpadButton({ scope, question, position }: ScratchpadButton
         footer={<Button onClick={() => setOpen(false)}>Volver a la pregunta</Button>}
       >
         {open && (
-          <div className="grid gap-4 lg:grid-cols-[minmax(0,17rem)_minmax(0,1fr)]">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,17rem)_minmax(0,1fr)]">
             <div className="max-h-40 overflow-y-auto rounded-xl bg-surface-muted p-4 text-sm leading-relaxed lg:max-h-[62vh]">
               <QuestionStatement question={question} />
             </div>

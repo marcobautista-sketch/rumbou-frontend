@@ -17,7 +17,9 @@ interface TableProps<T> {
 
 export function Table<T>({ caption, columns, rows, rowKey, isRowSelected }: TableProps<T>) {
   return (
-    <div className="overflow-x-auto rounded-2xl bg-surface shadow-card">
+    // relative: el texto oculto de los encabezados (sr-only) se posiciona contra esta caja. Sin
+    // eso, escapa del desplazamiento y estira toda la página en celulares.
+    <div className="relative overflow-x-auto rounded-2xl bg-surface shadow-card">
       <table className="w-full text-left text-sm">
         <caption className="sr-only">{caption}</caption>
         <thead className="border-b border-line bg-surface-muted text-xs tracking-wide text-ink-muted uppercase">
