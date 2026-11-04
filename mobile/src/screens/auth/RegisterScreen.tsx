@@ -261,11 +261,7 @@ export default function RegisterScreen({ navigation }: RegisterScreenProps) {
         )}
         <View style={styles.flex}>
           {isLastStep ? (
-            <Button
-              title="Crear cuenta"
-              loading={isSubmitting}
-              onPress={handleSubmit(onSubmit)}
-            />
+            <Button title="Crear cuenta" loading={isSubmitting} onPress={handleSubmit(onSubmit)} />
           ) : (
             <Button title="Siguiente" onPress={goNext} />
           )}
