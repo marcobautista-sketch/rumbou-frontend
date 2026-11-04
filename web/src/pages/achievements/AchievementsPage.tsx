@@ -89,7 +89,7 @@ export default function AchievementsPage() {
         <InlineError message={gamification.error.message} onRetry={gamification.retry} />
       ) : (
         <>
-          <div className="grid gap-5 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
             <Card aria-labelledby="rank-title" className="space-y-5 lg:col-span-2">
               {!data ? (
                 <div className="space-y-3">
@@ -153,7 +153,7 @@ export default function AchievementsPage() {
             </Card>
           </div>
 
-          <div className="grid gap-5 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
             <StatTile
               icon={Flame}
               tone="warning"
@@ -177,7 +177,7 @@ export default function AchievementsPage() {
             <h2 id="achievements-title" className="text-xl font-bold">
               Tus logros
             </h2>
-            <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {catalog.map((achievement) => {
                 const done = unlocked.get(achievement.key)
                 const progress = data ? achievement.progress(data) : null

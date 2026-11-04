@@ -118,7 +118,7 @@ export default function ChallengePage() {
         description="Una pregunta nueva cada día. Respóndela para mantener tu racha y sumar experiencia, aciertes o no."
       />
 
-      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
+      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div>
           {challenge.loading && !current ? (
             <SkeletonList rows={4} label="Cargando el desafío de hoy…" />

@@ -50,7 +50,7 @@ export function QuestionForm({
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-6">
       <Card className="space-y-5">
         <h2 className="text-lg font-semibold">Tema y dificultad</h2>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <SelectField
             label="Universidad y área"
             disabled={areas.loading}

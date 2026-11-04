@@ -129,7 +129,7 @@ export default function ProgressPage() {
             action={<Button onClick={() => setAdding(true)}>Agregar meta</Button>}
           />
         ) : (
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {goals.data?.map((goal) => (
               <GoalCard key={goal.id} goal={goal} onRemove={setGoalToRemove} />
             ))}

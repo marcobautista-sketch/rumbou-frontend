@@ -159,7 +159,7 @@ export default function DashboardPage() {
     <Page>
       <PageHeader title={`Hola, ${user.nombre}`} description={greeting} />
 
-      <div className="grid gap-5 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <GoalHeroCard
             goal={mainGoal}
@@ -178,7 +178,7 @@ export default function DashboardPage() {
       {gamification.error ? (
         <InlineError message={gamification.error.message} onRetry={gamification.retry} />
       ) : (
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
           <StatTile
             icon={Flame}
             tone="warning"
@@ -218,7 +218,7 @@ export default function DashboardPage() {
         </div>
       )}
 
-      <div className="grid gap-5 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
         <Card aria-labelledby="history-title" className="space-y-4 lg:col-span-2">
           <div className="space-y-0.5">
             <h2 id="history-title" className="text-lg font-bold">
