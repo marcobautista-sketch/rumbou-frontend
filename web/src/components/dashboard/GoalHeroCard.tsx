@@ -59,14 +59,11 @@ export function GoalHeroCard({ goal, loading, error, onRetry }: GoalHeroCardProp
           <Flag aria-hidden className="size-6" />
         </span>
         <div className="space-y-1">
-          <h2 className="text-xl font-bold">Elige la carrera a la que postulas</h2>
+          <h2 className="text-xl font-bold">Aquí verás tu meta</h2>
           <p className="text-ink-muted">
             Te mostraremos el puntaje del último ingresante y cuánto te falta para alcanzarlo.
           </p>
         </div>
-        <Link to={paths.careers} className={buttonStyles('primary')}>
-          Elegir mi carrera
-        </Link>
       </Card>
     )
   }

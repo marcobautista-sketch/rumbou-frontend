@@ -47,12 +47,7 @@ function TutorExplanation({ challenge }: { challenge: DailyChallenge }) {
       <Text style={{ color: colors.text }}>{formatMath(explanation)}</Text>
     </View>
   ) : (
-    <Button
-      title="¿Por qué me equivoqué? Pregúntale al tutor"
-      variant="secondary"
-      loading={loading}
-      onPress={ask}
-    />
+    <Button title="Pregúntale al tutor" variant="secondary" loading={loading} onPress={ask} />
   )
 }
 

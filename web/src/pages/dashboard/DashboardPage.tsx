@@ -104,9 +104,11 @@ export default function DashboardPage() {
   )
 
   const goalsLoading = goals.loading && !goals.data
+  // Si la consulta falló no se sabe si ya tiene meta: no hay que invitarlo a elegir una.
+  const goalsFailed = Boolean(goals.error) && !goals.data
   const nextStep = useMemo<NextStep | null>(() => {
     if (goalsLoading || (exams.loading && !exams.data)) return null
-    if (!mainGoal) return { kind: 'goal' }
+    if (!mainGoal && !goalsFailed) return { kind: 'goal' }
     const recent = exams.data?.content ?? []
     const inProgress = recent.find((exam) => exam.estado === 'EN_CURSO')
     if (inProgress) return { kind: 'resume', exam: inProgress }
@@ -114,7 +116,7 @@ export default function DashboardPage() {
     const weakest = recommendations[0]
     if (weakest) return { kind: 'topic', topic: weakest, canStart: weakest.inGoalArea }
     return { kind: 'practice' }
-  }, [goalsLoading, exams.loading, exams.data, mainGoal, recommendations])
+  }, [goalsLoading, goalsFailed, exams.loading, exams.data, mainGoal, recommendations])
 
   const practiceTopic = async (temaId: number) => {
     if (!areaId) return
@@ -147,13 +149,15 @@ export default function DashboardPage() {
       : examDays > 0
         ? formatDays(examDays)
         : '¡Es hoy!'
-  const examHint = !mainGoal
-    ? 'Elige tu carrera meta'
-    : goalArea?.fechaProximoExamen
-      ? `${areaLabel(goalArea.universidad, goalArea.nombre)} · ${formatDate(goalArea.fechaProximoExamen)}${
-          goalArea.fechaExamenConfirmada === false ? ' (estimada)' : ''
-        }`
-      : 'Fecha aún no anunciada'
+  const examHint = goalsFailed
+    ? 'No pudimos cargar tu meta'
+    : !mainGoal
+      ? 'Aparecerá al elegir tu meta'
+      : goalArea?.fechaProximoExamen
+        ? `${areaLabel(goalArea.universidad, goalArea.nombre)} · ${formatDate(goalArea.fechaProximoExamen)}${
+            goalArea.fechaExamenConfirmada === false ? ' (estimada)' : ''
+          }`
+        : 'Fecha aún no anunciada'
 
   return (
     <Page>
@@ -235,7 +239,11 @@ export default function DashboardPage() {
           ) : history.error ? (
             <InlineError message={history.error.message} onRetry={history.retry} />
           ) : !mainGoal ? (
-            <p className="text-ink-muted">Elige tu carrera meta para ver tu evolución.</p>
+            <p className="text-ink-muted">
+              {goalsFailed
+                ? 'Tu evolución aparecerá cuando se cargue tu meta.'
+                : 'Tu evolución aparecerá cuando elijas tu meta.'}
+            </p>
           ) : fullExams.length > 1 ? (
             <ScoreHistoryChart
               history={fullExams}
