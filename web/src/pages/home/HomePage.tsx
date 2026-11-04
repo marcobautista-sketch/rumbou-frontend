@@ -1,12 +1,14 @@
 import {
   ArrowRight,
   BookOpen,
+  CalendarDays,
   ChartLine,
   Check,
   Crown,
   Flame,
   ListOrdered,
   NotebookPen,
+  PenLine,
   Sparkles,
   type LucideIcon,
 } from 'lucide-react'
@@ -26,57 +28,39 @@ import { paths } from '../../routes/paths'
 import { freePlanBenefits, PRO_PRICE, proPlanBenefits } from '../../utils/plans'
 
 const sections = [
-  { id: 'como-funciona', label: 'Cómo funciona' },
-  { id: 'que-incluye', label: 'Qué incluye' },
+  { id: 'pruebalo', label: 'Pruébalo' },
   { id: 'calificacion', label: 'Calificación' },
+  { id: 'como-funciona', label: 'Cómo funciona' },
   { id: 'planes', label: 'Planes' },
 ]
 
-const steps = [
+// Cada paso trae lo que RumboU ofrece en ese momento, para no repetirlo en otra sección.
+const steps: { title: string; text: string; tools: { icon: LucideIcon; text: string }[] }[] = [
   {
     title: 'Elige tu carrera',
     text: 'Te mostramos el puntaje del último ingresante y las vacantes de la carrera a la que postulas.',
+    tools: [
+      { icon: ChartLine, text: 'Tu puntaje proyectado frente a tu meta' },
+      { icon: CalendarDays, text: 'Los días que faltan para tu examen' },
+    ],
   },
   {
     title: 'Rinde tu diagnóstico',
     text: 'Un simulacro completo mide tu punto de partida y tu dominio de cada tema.',
+    tools: [
+      { icon: NotebookPen, text: 'Simulacros por tema o completos' },
+      { icon: ListOrdered, text: 'Resolución paso a paso, con fórmulas y figuras' },
+      { icon: PenLine, text: 'Pizarra para resolver con el dedo o un lápiz' },
+    ],
   },
   {
     title: 'Practica lo que te falta',
-    text: 'Simulacros por tema, el desafío diario y tu plan de estudio, hasta llegar a la zona de ingreso.',
-  },
-]
-
-const features: { icon: LucideIcon; title: string; text: string }[] = [
-  {
-    icon: NotebookPen,
-    title: 'Simulacros como el examen real',
-    text: 'Por tema o completos, con el puntaje y la penalidad de cada universidad, y una pizarra para resolver con el dedo o un lápiz de tablet.',
-  },
-  {
-    icon: ListOrdered,
-    title: 'Resolución paso a paso',
-    text: 'Cada pregunta trae su resolución con fórmulas y figuras, como en una separata.',
-  },
-  {
-    icon: ChartLine,
-    title: 'Distancia a tu meta',
-    text: 'Comparamos tu puntaje proyectado con el del último ingresante de tu carrera.',
-  },
-  {
-    icon: Sparkles,
-    title: 'Tutor con inteligencia artificial',
-    text: 'Te explica en qué te equivocaste y revisa la foto de tu procedimiento en papel.',
-  },
-  {
-    icon: Flame,
-    title: 'Desafío diario y racha',
-    text: 'Una pregunta al día, puntos de experiencia y logros para mantener el ritmo.',
-  },
-  {
-    icon: BookOpen,
-    title: 'Plan de estudio',
-    text: 'Al terminar cada simulacro, videos y libros de los temas que más fallaste.',
+    text: 'Refuerza tus temas más débiles y mide tu avance en tu siguiente simulacro completo.',
+    tools: [
+      { icon: Flame, text: 'Desafío diario, racha y logros' },
+      { icon: BookOpen, text: 'Plan de estudio con videos y libros' },
+      { icon: Sparkles, text: 'Tutor con IA que explica tus errores (plan PRO)' },
+    ],
   },
 ]
 
@@ -102,25 +86,34 @@ function Section({
   eyebrow,
   title,
   description,
+  split = false,
   children,
 }: {
   id?: string
   eyebrow: string
   title: string
   description?: string
+  // En pantallas grandes, el título queda fijo a un lado del contenido.
+  split?: boolean
   children: ReactNode
 }) {
   return (
-    <section id={id} className="scroll-mt-20 py-16 sm:py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="max-w-2xl space-y-3">
+    <section id={id} className="scroll-mt-16 py-16 sm:py-20">
+      <div
+        className={`mx-auto max-w-6xl px-4 sm:px-6 ${
+          split
+            ? 'lg:grid lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:items-start lg:gap-12'
+            : ''
+        }`}
+      >
+        <div className={`max-w-2xl space-y-3 ${split ? 'lg:sticky lg:top-24' : ''}`}>
           <p className="text-sm font-semibold tracking-wider text-primary uppercase">{eyebrow}</p>
           <h2 className="text-3xl leading-tight font-bold tracking-tight text-balance sm:text-4xl">
             {title}
           </h2>
           {description && <p className="text-lg text-pretty text-ink-muted">{description}</p>}
         </div>
-        <div className="mt-10">{children}</div>
+        <div className={split ? 'mt-10 lg:mt-0' : 'mt-10'}>{children}</div>
       </div>
     </section>
   )
@@ -220,14 +213,20 @@ export default function HomePage() {
               </p>
               <div className="flex flex-wrap items-center gap-3">
                 {primaryCta}
-                {!user && (
-                  <Link to={paths.login} className={buttonStyles('secondary', 'lg')}>
-                    Ya tengo cuenta
-                  </Link>
-                )}
+                <a href="#pruebalo" className={buttonStyles('secondary', 'lg')}>
+                  Probar una pregunta
+                </a>
               </div>
               <p className="text-sm text-ink-muted">
-                Gratis para empezar · En la web, Android y iPhone
+                Gratis para empezar · En la web y Android
+                {!user && (
+                  <>
+                    {' · '}
+                    <Link to={paths.login} className="font-semibold text-primary hover:underline">
+                      Ya tengo cuenta
+                    </Link>
+                  </>
+                )}
               </p>
             </div>
             <HeroPreview />
@@ -253,77 +252,67 @@ export default function HomePage() {
         </section>
 
         <Section
-          id="como-funciona"
-          eyebrow="Cómo funciona"
-          title="Un camino claro desde el primer día"
-          description="Sabes a qué carrera postulas, dónde estás hoy y qué practicar para llegar."
+          id="pruebalo"
+          split
+          eyebrow="Pruébalo"
+          title="Resuelve una pregunta ahora"
+          description="No necesitas cuenta. Elige una alternativa y comprueba tu respuesta: verás la resolución completa, igual que al terminar un simulacro."
         >
-          <ol className="grid grid-cols-1 gap-5 md:grid-cols-3">
-            {steps.map((step, index) => (
-              <li
-                key={step.title}
-                className="relative rounded-2xl border border-line bg-surface p-6 shadow-card"
-              >
-                <span className="flex size-10 items-center justify-center rounded-full bg-primary font-display text-lg font-bold text-on-primary">
-                  {index + 1}
-                </span>
-                <h3 className="mt-5 text-lg font-bold">{step.title}</h3>
-                <p className="mt-2 text-ink-muted">{step.text}</p>
-              </li>
-            ))}
-          </ol>
-        </Section>
-
-        <Section
-          id="que-incluye"
-          eyebrow="Qué incluye"
-          title="Todo lo que necesitas para prepararte, en un solo lugar"
-        >
-          <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {features.map(({ icon: Icon, title, text }) => (
-              <li key={title} className="rounded-2xl border border-line bg-surface p-6 shadow-card">
-                <span className="inline-flex rounded-xl bg-chip p-2.5 text-primary">
-                  <Icon aria-hidden className="size-6" />
-                </span>
-                <h3 className="mt-4 text-lg font-bold">{title}</h3>
-                <p className="mt-2 text-ink-muted">{text}</p>
-              </li>
-            ))}
-          </ul>
+          <SampleQuestion />
         </Section>
 
         <div className="border-y border-line bg-surface-muted/60">
           <Section
-            eyebrow="Pruébalo"
-            title="Así se ve una pregunta"
-            description="Elige una alternativa y comprueba tu respuesta: verás la resolución completa, igual que al terminar un simulacro."
+            id="calificacion"
+            eyebrow="Calificación"
+            title="El mismo puntaje y la misma penalidad que el examen"
+            description="Cada respuesta incorrecta resta lo que resta en tu universidad y las que dejas en blanco no cuentan. Así tu puntaje proyectado se compara de verdad con el del último ingresante."
           >
-            <div className="max-w-3xl">
-              <SampleQuestion />
-            </div>
+            <ScoringRules />
+            <p className="mt-4 text-sm text-ink-muted">
+              Fuente: prospectos de admisión de la UNI y de San Marcos.
+            </p>
           </Section>
         </div>
 
         <Section
-          id="calificacion"
-          eyebrow="Calificación"
-          title="El mismo puntaje y la misma penalidad que el examen"
-          description="Cada respuesta incorrecta resta lo que resta en tu universidad y las que dejas en blanco no cuentan. Así tu puntaje proyectado se compara de verdad con el del último ingresante."
+          id="carreras"
+          eyebrow="Tu meta"
+          title="¿Cuánto necesitas para ingresar?"
+          description="Elige tu carrera y mira el puntaje del último ingresante del proceso 2026-II."
         >
-          <ScoringRules />
-          <p className="mt-4 text-sm text-ink-muted">
-            Fuente: prospectos de admisión de la UNI y de San Marcos.
-          </p>
+          <CareerLookup offers={offers.data} failed={Boolean(offers.error)} />
         </Section>
 
         <div className="border-y border-line bg-surface-muted/60">
           <Section
-            id="carreras"
-            eyebrow="Tu meta"
-            title="¿Cuánto necesitas para ingresar?"
-            description="Elige tu carrera y mira el puntaje del último ingresante del proceso 2026-II."
+            id="como-funciona"
+            eyebrow="Cómo funciona"
+            title="Un camino claro desde el primer día"
+            description="Sabes a qué carrera postulas, dónde estás hoy y qué practicar para llegar."
           >
-            <CareerLookup offers={offers.data} failed={Boolean(offers.error)} />
+            <ol className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+              {steps.map((step, index) => (
+                <li
+                  key={step.title}
+                  className="flex flex-col rounded-2xl border border-line bg-surface p-6 shadow-card"
+                >
+                  <span className="flex size-10 items-center justify-center rounded-full bg-primary font-display text-lg font-bold text-on-primary">
+                    {index + 1}
+                  </span>
+                  <h3 className="mt-5 text-lg font-bold">{step.title}</h3>
+                  <p className="mt-2 text-ink-muted">{step.text}</p>
+                  <ul className="mt-5 space-y-3 border-t border-line pt-5">
+                    {step.tools.map(({ icon: Icon, text }) => (
+                      <li key={text} className="flex items-start gap-3 text-sm">
+                        <Icon aria-hidden className="mt-0.5 size-5 shrink-0 text-primary" />
+                        {text}
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ol>
           </Section>
         </div>
 
