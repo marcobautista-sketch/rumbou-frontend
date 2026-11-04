@@ -113,38 +113,40 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
     goals.retry()
   }
 
-  // Lo más útil que puede hacer ahora, en el mismo orden que la web.
-  const nextStep = !goal
-    ? {
-        icon: 'flag' as IconName,
-        title: 'Elige tu carrera meta',
-        text: 'Así comparamos cada simulacro con el puntaje del último ingresante.',
-        action: 'Elegir carrera',
-        onPress: () => navigation.navigate('Goals'),
-      }
-    : inProgress
+  // Lo más útil que puede hacer ahora, en el mismo orden que la web. Si la consulta de metas
+  // falló no se sabe si ya tiene una: no hay que invitarlo a elegir.
+  const nextStep =
+    !goal && !goals.error
       ? {
-          icon: 'play' as IconName,
-          title: `Termina tu ${examTypeLabels[inProgress.tipo].toLowerCase()}`,
-          text: `Lo empezaste el ${formatExamDate(inProgress.fechaInicio)}. Tus respuestas están guardadas.`,
-          action: 'Continuar',
-          onPress: () => navigation.navigate('TakeExam', { examId: inProgress.id }),
+          icon: 'flag' as IconName,
+          title: 'Elige tu carrera meta',
+          text: 'Así comparamos cada simulacro con el puntaje del último ingresante.',
+          action: 'Elegir carrera',
+          onPress: () => navigation.navigate('Goals'),
         }
-      : !hasFinished
+      : inProgress
         ? {
-            icon: 'locate' as IconName,
-            title: 'Rinde tu diagnóstico',
-            text: 'Un simulacro completo mide tu punto de partida en cada tema del examen.',
-            action: 'Empezar',
-            onPress: () => navigation.navigate('NewExam'),
+            icon: 'play' as IconName,
+            title: `Termina tu ${examTypeLabels[inProgress.tipo].toLowerCase()}`,
+            text: `Lo empezaste el ${formatExamDate(inProgress.fechaInicio)}. Tus respuestas están guardadas.`,
+            action: 'Continuar',
+            onPress: () => navigation.navigate('TakeExam', { examId: inProgress.id }),
           }
-        : {
-            icon: 'document-text' as IconName,
-            title: 'Practica por tema',
-            text: 'Refuerza un tema a la vez y mide tu avance en tu próximo simulacro completo.',
-            action: 'Elegir tema',
-            onPress: () => navigation.navigate('NewExam'),
-          }
+        : !hasFinished
+          ? {
+              icon: 'locate' as IconName,
+              title: 'Rinde tu diagnóstico',
+              text: 'Un simulacro completo mide tu punto de partida en cada tema del examen.',
+              action: 'Empezar',
+              onPress: () => navigation.navigate('NewExam'),
+            }
+          : {
+              icon: 'document-text' as IconName,
+              title: 'Practica por tema',
+              text: 'Refuerza un tema a la vez y mide tu avance en tu próximo simulacro completo.',
+              action: 'Elegir tema',
+              onPress: () => navigation.navigate('NewExam'),
+            }
 
   return (
     <ScrollView

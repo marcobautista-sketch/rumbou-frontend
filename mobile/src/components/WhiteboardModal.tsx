@@ -102,19 +102,21 @@ export function WhiteboardModal({
             density="small"
             style={styles.flex}
             buttons={[
-              { value: 'pen', label: 'Lápiz', icon: 'pencil' },
-              { value: 'eraser', label: 'Borrador', icon: 'eraser' },
+              { value: 'pen', label: 'Lápiz', icon: 'pencil', labelStyle: styles.toolLabel },
+              { value: 'eraser', label: 'Borrador', icon: 'eraser', labelStyle: styles.toolLabel },
             ]}
           />
           <IconButton
             icon="undo"
             accessibilityLabel="Deshacer"
+            style={styles.toolButton}
             disabled={strokes.length === 0}
             onPress={() => setStrokes((previous) => previous.slice(0, -1))}
           />
           <IconButton
             icon="delete-outline"
             accessibilityLabel="Borrar hoja"
+            style={styles.toolButton}
             disabled={strokes.length === 0}
             onPress={() => setStrokes([])}
           />
@@ -161,6 +163,9 @@ const styles = StyleSheet.create({
   screen: { flex: 1, gap: 12, paddingHorizontal: 16 },
   title: { fontSize: 22, fontWeight: '800' },
   tools: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  // Sin el margen de Paper y con letra algo menor, "Borrador" cabe completo en 360 px.
+  toolLabel: { fontSize: 13 },
+  toolButton: { margin: 0 },
   board: {
     flex: 1,
     overflow: 'hidden',
