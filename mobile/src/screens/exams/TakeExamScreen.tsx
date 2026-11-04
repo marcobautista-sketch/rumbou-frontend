@@ -146,7 +146,18 @@ function ExamInProgress({ exam, onFinished }: ExamInProgressProps) {
         disabled={answers[index] === null}
         onPress={() => answer(null)}
       />
-      <Button title="Finalizar simulacro" loading={finishing} onPress={confirmFinish} />
+      <View style={[styles.finishSection, { borderTopColor: colors.border }]}>
+        <Text style={[styles.finishHint, { color: colors.muted }]}>
+          Finaliza cuando hayas revisado tus respuestas.
+        </Text>
+        {/* En la última pregunta ya no hay "Siguiente": finalizar pasa a ser la acción principal. */}
+        <Button
+          title="Finalizar simulacro"
+          variant={index === total - 1 ? 'primary' : 'secondary'}
+          loading={finishing}
+          onPress={confirmFinish}
+        />
+      </View>
       <WhiteboardModal
         key={question.preguntaId}
         visible={boardOpen}
@@ -203,4 +214,6 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', gap: 12 },
   flex: { flex: 1 },
   heading: { fontSize: 20, fontWeight: '700' },
+  finishSection: { borderTopWidth: 1, marginTop: 10, paddingTop: 20, gap: 10 },
+  finishHint: { fontSize: 14, lineHeight: 20 },
 })
