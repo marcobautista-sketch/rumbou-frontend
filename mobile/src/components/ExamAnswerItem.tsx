@@ -15,6 +15,8 @@ interface ExamAnswerItemProps {
   onToggle: () => void
 }
 
+// Una pregunta de la revisión: cerrada muestra su estado y el inicio del enunciado; abierta,
+// la respuesta y la explicación. Así las fórmulas solo se dibujan cuando hacen falta.
 export function ExamAnswerItem({ question, position, expanded, onToggle }: ExamAnswerItemProps) {
   const colors = useColors()
   const blank = question.alternativaMarcada === null
