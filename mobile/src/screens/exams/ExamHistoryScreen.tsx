@@ -167,9 +167,13 @@ export default function ExamHistoryScreen({ navigation }: ExamHistoryScreenProps
         />
       )}
       ListHeaderComponent={
-        <Text style={{ color: colors.muted }}>
-          {result.totalElements} {result.totalElements === 1 ? 'simulacro' : 'simulacros'} en total
-        </Text>
+        <View style={styles.header}>
+          <Button title="Nuevo simulacro" onPress={() => navigation.navigate('NewExam')} />
+          <Text style={{ color: colors.muted }}>
+            {result.totalElements} {result.totalElements === 1 ? 'simulacro' : 'simulacros'} en
+            total
+          </Text>
+        </View>
       }
       ListFooterComponent={pager}
       refreshControl={<RefreshControl refreshing={exams.loading} onRefresh={exams.retry} />}
@@ -179,6 +183,7 @@ export default function ExamHistoryScreen({ navigation }: ExamHistoryScreenProps
 
 const styles = StyleSheet.create({
   content: { gap: 10, padding: 20 },
+  header: { gap: 12 },
   centeredView: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   item: { flexDirection: 'row', alignItems: 'center', gap: 12, borderRadius: 16, padding: 16 },
   flex: { flex: 1, gap: 2 },

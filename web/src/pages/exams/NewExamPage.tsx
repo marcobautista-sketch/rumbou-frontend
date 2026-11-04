@@ -138,7 +138,7 @@ export default function NewExamPage() {
         breadcrumbs={[{ label: 'Simulacros', to: paths.examHistory }, { label: 'Nuevo simulacro' }]}
       />
 
-      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_23rem]">
+      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_23rem]">
         <form
           onSubmit={handleSubmit(onSubmit)}
           noValidate
@@ -160,7 +160,7 @@ export default function NewExamPage() {
 
           <fieldset className="space-y-2">
             <legend className="text-sm font-medium">Tipo de simulacro</legend>
-            <div className="grid gap-3 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
               {examTypes.map(({ value, title, description, icon: Icon }) => (
                 <label
                   key={value}
