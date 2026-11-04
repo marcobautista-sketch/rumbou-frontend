@@ -1,13 +1,11 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { useCallback } from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import { AnswerReview } from '../../components/AnswerReview'
+import { useCallback, useState } from 'react'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { Button } from '../../components/Button'
 import { ErrorRetry } from '../../components/ErrorRetry'
+import { ExamAnswerItem } from '../../components/ExamAnswerItem'
 import { GoalProgress } from '../../components/GoalProgress'
 import { LoadingView } from '../../components/LoadingView'
-import { QuestionExplanation } from '../../components/QuestionExplanation'
-import { QuestionStatement } from '../../components/QuestionStatement'
 import { StatCard } from '../../components/StatCard'
 import { useFetch } from '../../hooks/useFetch'
 import type { RootStackParamList } from '../../navigation/types'
@@ -23,6 +21,7 @@ type ExamResultScreenProps = NativeStackScreenProps<RootStackParamList, 'ExamRes
 export default function ExamResultScreen({ navigation, route }: ExamResultScreenProps) {
   const colors = useColors()
   const { examId } = route.params
+  const [expandedAnswerId, setExpandedAnswerId] = useState<number | null>(null)
   const fetchExam = useCallback(
     (signal: AbortSignal) => examService.getDetail(examId, signal),
     [examId],
@@ -50,11 +49,8 @@ export default function ExamResultScreen({ navigation, route }: ExamResultScreen
   const total = exam.preguntas.length
   const accuracy = total ? Math.round((correct / total) * 100) : 0
 
-  return (
-    <ScrollView
-      style={{ backgroundColor: colors.background }}
-      contentContainerStyle={styles.content}
-    >
+  const summary = (
+    <View style={styles.summary}>
       <Text style={[styles.context, { color: colors.primary }]}>
         {examTypeLabels[exam.tipo]}
         {area ? ` · ${areaLabel(area.universidad, area.nombre)}` : ''}
@@ -138,33 +134,50 @@ export default function ExamResultScreen({ navigation, route }: ExamResultScreen
         onPress={() => navigation.replace('NewExam')}
       />
 
-      <Text style={[styles.heading, { color: colors.text }]}>Revisa tus respuestas</Text>
-      {exam.preguntas.map((question, position) => (
-        <View
-          key={question.respuestaUsuarioId}
-          style={[styles.card, { backgroundColor: colors.surface }]}
-        >
-          <Text style={[styles.questionTitle, { color: colors.muted }]}>
-            Pregunta {position + 1} · {question.tema}
-          </Text>
-          <QuestionStatement question={question} fontSize={16} />
-          {question.claveCorrecta !== null && (
-            <AnswerReview
-              alternatives={question.alternativas}
-              formatted={question.presentacion?.alternativas}
-              correct={question.claveCorrecta}
-              marked={question.alternativaMarcada}
-            />
-          )}
-          <QuestionExplanation explanation={question.explicacion} steps={question.pasos} />
-        </View>
-      ))}
-    </ScrollView>
+      <View style={styles.reviewHeading}>
+        <Text style={[styles.heading, { color: colors.text }]}>Revisa tus respuestas</Text>
+        <Text style={[styles.reviewHint, { color: colors.muted }]}>
+          {total} preguntas · Toca una para ver su respuesta y explicación.
+        </Text>
+      </View>
+    </View>
+  )
+
+  return (
+    <FlatList
+      style={{ backgroundColor: colors.background }}
+      contentContainerStyle={styles.content}
+      data={exam.preguntas}
+      keyExtractor={(question) => String(question.respuestaUsuarioId)}
+      extraData={expandedAnswerId}
+      ListHeaderComponent={summary}
+      ItemSeparatorComponent={AnswerSeparator}
+      renderItem={({ item, index }) => (
+        <ExamAnswerItem
+          question={item}
+          position={index}
+          expanded={expandedAnswerId === item.respuestaUsuarioId}
+          onToggle={() =>
+            setExpandedAnswerId((current) =>
+              current === item.respuestaUsuarioId ? null : item.respuestaUsuarioId,
+            )
+          }
+        />
+      )}
+    />
   )
 }
 
+function AnswerSeparator() {
+  return <View style={styles.separator} />
+}
+
 const styles = StyleSheet.create({
-  content: { gap: 14, padding: 20 },
+  content: { padding: 20 },
+  summary: { gap: 14, paddingBottom: 16 },
+  separator: { height: 10 },
+  reviewHeading: { gap: 4, marginTop: 10 },
+  reviewHint: { fontSize: 14, lineHeight: 20 },
   row: { flexDirection: 'row', gap: 10 },
   card: { gap: 8, borderRadius: 16, padding: 16 },
   score: { fontSize: 40, fontWeight: '800', fontVariant: ['tabular-nums'] },
@@ -173,5 +186,4 @@ const styles = StyleSheet.create({
   note: { borderRadius: 12, padding: 12, lineHeight: 20 },
   flex: { flex: 1 },
   heading: { fontSize: 18, fontWeight: '700' },
-  questionTitle: { fontSize: 13, fontWeight: '600' },
 })
