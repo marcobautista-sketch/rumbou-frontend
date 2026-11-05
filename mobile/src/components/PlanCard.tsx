@@ -11,7 +11,7 @@ import { ErrorRetry } from './ErrorRetry'
 
 const proBenefits = [
   'Simulacros ilimitados de la UNI y San Marcos',
-  'Tutor de IA y asistente que explican en qué te equivocaste',
+  'Evolución de tu puntaje y dominio por tema',
   'Hasta 3 carreras meta para comparar',
 ]
 

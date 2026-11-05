@@ -28,7 +28,7 @@ async function microphoneAllowed() {
       current.status !== 'undetermined' ||
       (await askChoice(
         'Usar el micrófono',
-        'RumboU usa el micrófono solo mientras grabas tu pregunta para el asistente.',
+        'RumboU usa el micrófono solo mientras grabas tu explicación de una pregunta.',
         [{ text: 'Continuar', value: 'ok' }],
       ))
     if (!accepted) return false
@@ -36,7 +36,7 @@ async function microphoneAllowed() {
   }
   const choice = await askChoice(
     'Sin acceso al micrófono',
-    'Puedes escribir tu pregunta o dar el permiso del micrófono en Ajustes.',
+    'Puedes escribir una nota o dar el permiso del micrófono en Ajustes.',
     [
       { text: 'Abrir Ajustes', value: 'settings' },
       { text: 'Escribir', value: 'write' },
@@ -75,7 +75,7 @@ export function useVoiceRecorder() {
   const stop = async () => {
     setRecording(false)
     await recorder.stop()
-    // Sin esto, en iPhone la respuesta hablada saldría por el auricular y casi no se oiría.
+    // Sin esto, en iPhone lo grabado saldría por el auricular y casi no se oiría.
     await setAudioModeAsync({ allowsRecording: false })
     return recorder.uri
   }
