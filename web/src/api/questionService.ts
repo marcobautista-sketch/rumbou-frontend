@@ -1,14 +1,6 @@
 import type { Page } from '../types/page'
-import type {
-  AdminQuestion,
-  Question,
-  QuestionQuery,
-  QuestionRequest,
-  TutorExplanation,
-} from '../types/question'
+import type { AdminQuestion, Question, QuestionQuery, QuestionRequest } from '../types/question'
 import { apiClient } from './client'
-
-const TUTOR_TIMEOUT_MS = 60000
 
 export const questionService = {
   async list(query: QuestionQuery, signal?: AbortSignal) {
@@ -49,15 +41,6 @@ export const questionService = {
 
   async approveBatch(ids: number[]) {
     const { data } = await apiClient.patch<AdminQuestion[]>('/preguntas/aprobar-lote', { ids })
-    return data
-  },
-
-  async askTutor(questionId: number, markedAlternative?: number | null) {
-    const { data } = await apiClient.post<TutorExplanation>(
-      `/preguntas/${questionId}/tutor-ia`,
-      markedAlternative == null ? undefined : { alternativaMarcada: markedAlternative },
-      { timeout: TUTOR_TIMEOUT_MS },
-    )
     return data
   },
 }
