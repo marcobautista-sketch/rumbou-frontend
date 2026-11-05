@@ -3,8 +3,6 @@ import type { DailyChallenge } from '../../types/challenge'
 import { AnswerReview } from '../exam/AnswerReview'
 import { QuestionExplanation } from '../questions/QuestionExplanation'
 import { QuestionStatement } from '../questions/QuestionStatement'
-import { TutorPanel } from '../questions/TutorPanel'
-import { SolutionReviewPanel } from '../solution/SolutionReviewPanel'
 import { Card } from '../ui/Card'
 
 export function ChallengeResult({ challenge }: { challenge: DailyChallenge }) {
@@ -47,15 +45,6 @@ export function ChallengeResult({ challenge }: { challenge: DailyChallenge }) {
           <QuestionExplanation explanation={challenge.explicacion} steps={challenge.pasos} />
         )}
       </Card>
-
-      {!correct && (
-        <TutorPanel
-          questionId={challenge.preguntaId}
-          markedAlternative={challenge.alternativaMarcada}
-        />
-      )}
-
-      <SolutionReviewPanel questionId={challenge.preguntaId} />
 
       <p className="flex items-center justify-center gap-2 text-ink-muted">
         <CalendarClock aria-hidden className="size-5" />

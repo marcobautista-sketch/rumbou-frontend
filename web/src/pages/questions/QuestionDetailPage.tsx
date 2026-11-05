@@ -10,7 +10,6 @@ import { DifficultyBadge } from '../../components/questions/DifficultyBadge'
 import { QuestionExplanation } from '../../components/questions/QuestionExplanation'
 import { QuestionStatement } from '../../components/questions/QuestionStatement'
 import { ReviewStatusBadges } from '../../components/questions/ReviewStatusBadges'
-import { TutorPanel } from '../../components/questions/TutorPanel'
 import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
 import { buttonStyles } from '../../components/ui/buttonStyles'
@@ -151,7 +150,6 @@ export default function QuestionDetailPage() {
                   <QuestionExplanation explanation={data.explicacion} steps={data.pasos} />
                 )}
               </Card>
-              <TutorPanel questionId={data.id} />
               <Link to={listUrl} className={buttonStyles('ghost')}>
                 <ArrowLeft aria-hidden className="size-4" />
                 Volver al banco
@@ -183,7 +181,7 @@ export default function QuestionDetailPage() {
                   </h2>
                   <p className="text-sm text-ink-muted">
                     La clave y la resolución paso a paso aparecen al terminar un simulacro o al
-                    responder el desafío diario. Si te trabas, pídele una pista al tutor.
+                    responder el desafío diario.
                   </p>
                 </Card>
               )}

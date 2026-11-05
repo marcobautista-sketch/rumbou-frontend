@@ -49,8 +49,3 @@ export interface QuestionQuery extends QuestionFilters {
   sort?: string
   texto?: string
 }
-
-export interface TutorExplanation {
-  preguntaId: number
-  explicacion: string
-}

@@ -239,12 +239,6 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         onPress={() => navigation.navigate('Challenge')}
       />
       <Shortcut
-        icon="mic-outline"
-        title="Asistente RumboU"
-        description="Pregúntale por voz o por texto."
-        onPress={() => navigation.navigate('Assistant')}
-      />
-      <Shortcut
         icon="library-outline"
         title="Mi plan de estudio"
         description="Videos y libros de tus temas más débiles."

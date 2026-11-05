@@ -3,8 +3,6 @@ import { useState } from 'react'
 import type { ExamQuestion } from '../../types/exam'
 import { QuestionExplanation } from '../questions/QuestionExplanation'
 import { QuestionStatement } from '../questions/QuestionStatement'
-import { TutorPanel } from '../questions/TutorPanel'
-import { SolutionReviewPanel } from '../solution/SolutionReviewPanel'
 import { AnswerReview } from './AnswerReview'
 
 function statusOf(question: ExamQuestion) {
@@ -66,15 +64,6 @@ function ReviewItem({ question, number }: { question: ExamQuestion; number: numb
           )}
           {(question.explicacion || question.pasos) && (
             <QuestionExplanation explanation={question.explicacion} steps={question.pasos} />
-          )}
-          {!question.esCorrecta && (
-            <>
-              <TutorPanel
-                questionId={question.preguntaId}
-                markedAlternative={question.alternativaMarcada}
-              />
-              <SolutionReviewPanel questionId={question.preguntaId} />
-            </>
           )}
         </div>
       )}

@@ -5,7 +5,6 @@ import { useAuth } from '../hooks/useAuth'
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen'
 import LoginScreen from '../screens/auth/LoginScreen'
 import RegisterScreen from '../screens/auth/RegisterScreen'
-import AssistantScreen from '../screens/AssistantScreen'
 import ExamResultScreen from '../screens/exams/ExamResultScreen'
 import NewExamScreen from '../screens/exams/NewExamScreen'
 import TakeExamScreen from '../screens/exams/TakeExamScreen'
@@ -35,11 +34,6 @@ export function RootNavigator() {
       {status === 'authenticated' ? (
         <>
           <Stack.Screen name="Main" component={MainTabs} />
-          <Stack.Screen
-            name="Assistant"
-            component={AssistantScreen}
-            options={{ headerShown: true, title: 'Asistente' }}
-          />
           <Stack.Screen
             name="StudyPlan"
             component={StudyPlanScreen}
