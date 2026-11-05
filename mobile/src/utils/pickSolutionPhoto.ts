@@ -7,7 +7,7 @@ export type PhotoSource = 'camera' | 'library'
 
 const MAX_PHOTO_BYTES = 5 * 1024 * 1024
 
-// allowsEditing deja recortar solo el procedimiento: la foto pesa menos y el tutor no se distrae.
+// allowsEditing deja recortar solo el procedimiento: la foto pesa menos y se lee mejor.
 const pickerOptions: ImagePicker.ImagePickerOptions = {
   mediaTypes: ['images'],
   allowsEditing: true,
@@ -23,7 +23,7 @@ async function cameraAllowed(): Promise<PhotoSource | null> {
       current.status !== 'undetermined' ||
       (await askChoice(
         'Usar la cámara',
-        'RumboU usa la cámara solo para fotografiar tu solución en papel y enviársela al tutor.',
+        'RumboU usa la cámara solo para fotografiar tu procedimiento en papel.',
         [{ text: 'Continuar', value: 'ok' }],
       ))
     if (!accepted) return null

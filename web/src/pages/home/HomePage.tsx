@@ -9,7 +9,6 @@ import {
   ListOrdered,
   NotebookPen,
   PenLine,
-  Sparkles,
   type LucideIcon,
 } from 'lucide-react'
 import { useCallback, type ReactNode } from 'react'
@@ -59,7 +58,6 @@ const steps: { title: string; text: string; tools: { icon: LucideIcon; text: str
     tools: [
       { icon: Flame, text: 'Desafío diario, racha y logros' },
       { icon: BookOpen, text: 'Plan de estudio con videos y libros' },
-      { icon: Sparkles, text: 'Tutor con IA que explica tus errores (plan PRO)' },
     ],
   },
 ]

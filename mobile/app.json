@@ -2,7 +2,7 @@
   "expo": {
     "name": "RumboU",
     "slug": "rumbou",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -18,7 +18,8 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "app.rumbou.mobile"
+      "package": "app.rumbou.mobile",
+      "versionCode": 2
     },
     "scheme": "rumbou",
     "plugins": [
@@ -32,15 +33,15 @@
       [
         "expo-image-picker",
         {
-          "cameraPermission": "RumboU usa la cámara para fotografiar tu solución escrita a mano y que el tutor la revise.",
-          "photosPermission": "RumboU abre tus fotos para que elijas la foto de tu solución.",
-          "microphonePermission": false
+          "cameraPermission": "RumboU usa la cámara para fotografiar tu procedimiento y compararlo con la resolución.",
+          "photosPermission": "RumboU abre tus fotos para que elijas la foto de tu procedimiento.",
+          "microphonePermission": "RumboU usa el micrófono para que grabes tu explicación de una pregunta."
         }
       ],
       [
         "expo-audio",
         {
-          "microphonePermission": "RumboU usa el micrófono para que le hagas preguntas al asistente con tu voz."
+          "microphonePermission": "RumboU usa el micrófono para que grabes tu explicación de una pregunta."
         }
       ]
     ],
@@ -51,7 +52,7 @@
       }
     },
     "runtimeVersion": {
-      "policy": "sdkVersion"
+      "policy": "appVersion"
     },
     "updates": {
       "url": "https://u.expo.dev/7bd9af25-e597-41fb-9fd6-6265a5257f45"

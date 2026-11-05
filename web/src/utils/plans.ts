@@ -11,10 +11,7 @@ export const freePlanBenefits = [
 
 export const proPlanBenefits = [
   'Simulacros ilimitados por tema y completos',
-  'Tutor con IA: 30 consultas al día',
-  'Revisión de tu procedimiento por foto',
   'Evolución de tu puntaje y dominio por tema',
-  'Asistente por voz en la app',
   'Hasta 3 carreras meta',
 ]
 
