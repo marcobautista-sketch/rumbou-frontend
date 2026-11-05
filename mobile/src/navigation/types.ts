@@ -16,7 +16,6 @@ export type RootStackParamList = {
   Register: undefined
   ForgotPassword: undefined
   Main: NavigatorScreenParams<MainTabParamList> | undefined
-  Assistant: undefined
   StudyPlan: { examId?: number } | undefined
   NewExam: undefined
   TakeExam: { examId: number }

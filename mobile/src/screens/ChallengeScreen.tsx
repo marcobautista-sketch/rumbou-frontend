@@ -10,11 +10,9 @@ import { OptionList } from '../components/OptionList'
 import { ProgressBar } from '../components/ProgressBar'
 import { QuestionExplanation } from '../components/QuestionExplanation'
 import { QuestionStatement } from '../components/QuestionStatement'
-import { SolutionPhotoReview } from '../components/SolutionPhotoReview'
 import { StatCard } from '../components/StatCard'
 import { useFetch } from '../hooks/useFetch'
 import { challengeService } from '../services/challengeService'
-import { tutorService } from '../services/tutorService'
 import { userService } from '../services/userService'
 import { ScratchButton } from '../components/ScratchButton'
 import { WhiteboardModal, type ScratchStroke } from '../components/WhiteboardModal'
@@ -24,32 +22,6 @@ import { formattedAlternative } from '../utils/alternatives'
 import { formatDays } from '../utils/format'
 import { formatMath } from '../utils/formatMath'
 import { notify } from '../utils/notify'
-
-function TutorExplanation({ challenge }: { challenge: DailyChallenge }) {
-  const colors = useColors()
-  const [explanation, setExplanation] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
-
-  const ask = async () => {
-    setLoading(true)
-    try {
-      setExplanation(await tutorService.explain(challenge.preguntaId, challenge.alternativaMarcada))
-    } catch (error) {
-      notify.error(error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return explanation ? (
-    <View style={[styles.note, { backgroundColor: colors.accentSoft }]}>
-      <Text style={[styles.noteTitle, { color: colors.text }]}>Tutor IA</Text>
-      <Text style={{ color: colors.text }}>{formatMath(explanation)}</Text>
-    </View>
-  ) : (
-    <Button title="Pregúntale al tutor" variant="secondary" loading={loading} onPress={ask} />
-  )
-}
 
 function ChallengeResult({ challenge }: { challenge: DailyChallenge }) {
   const colors = useColors()
@@ -88,8 +60,6 @@ function ChallengeResult({ challenge }: { challenge: DailyChallenge }) {
         />
       )}
       <QuestionExplanation explanation={challenge.explicacion} steps={challenge.pasos} />
-      {!correct && <TutorExplanation challenge={challenge} />}
-      <SolutionPhotoReview questionId={challenge.preguntaId} />
       <Text style={[styles.centered, { color: colors.muted }]}>
         Vuelve mañana por un nuevo desafío.
       </Text>
