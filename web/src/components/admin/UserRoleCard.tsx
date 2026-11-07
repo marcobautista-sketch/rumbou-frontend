@@ -16,7 +16,7 @@ const roleTones: Record<Role, BadgeTone> = {
 
 const roleDescriptions: Record<Role, string> = {
   USER: 'Rinde simulacros y ve solo preguntas aprobadas.',
-  REVIEWER: 'Además, revisa y aprueba preguntas generadas con IA.',
+  REVIEWER: 'Además, revisa y aprueba preguntas nuevas.',
   ADMIN: 'Acceso total: crea, edita y elimina preguntas y gestiona roles.',
 }
 

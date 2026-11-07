@@ -1,8 +1,7 @@
 import type { BadgeTone } from '../components/ui/Badge'
-import type { Difficulty, QuestionOrigin } from '../types/question'
+import type { Difficulty } from '../types/question'
 
 export const difficulties: Difficulty[] = ['FACIL', 'MEDIA', 'DIFICIL']
-export const origins: QuestionOrigin[] = ['SEMILLA', 'IA_APROBADA']
 
 export const difficultyLabels: Record<Difficulty, string> = {
   FACIL: 'Fácil',
@@ -14,11 +13,6 @@ export const difficultyTones: Record<Difficulty, BadgeTone> = {
   FACIL: 'success',
   MEDIA: 'warning',
   DIFICIL: 'danger',
-}
-
-export const originLabels: Record<QuestionOrigin, string> = {
-  SEMILLA: 'Banco base',
-  IA_APROBADA: 'Generada con IA',
 }
 
 export const questionSortOptions = [

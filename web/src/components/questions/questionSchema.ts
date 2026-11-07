@@ -17,7 +17,6 @@ export const questionSchema = z.object({
   claveCorrecta: z.string().min(1, 'Marca cuál es la alternativa correcta'),
   explicacion: z.string().trim().max(3000, 'La explicación no puede pasar de 3000 caracteres'),
   dificultad: z.enum(['FACIL', 'MEDIA', 'DIFICIL'], { error: 'Elige la dificultad' }),
-  origen: z.enum(['SEMILLA', 'IA_APROBADA']),
   aprobada: z.boolean(),
 })
 
@@ -31,7 +30,6 @@ export const emptyQuestionForm: QuestionFormValues = {
   claveCorrecta: '',
   explicacion: '',
   dificultad: 'MEDIA',
-  origen: 'SEMILLA',
   aprobada: true,
 }
 
@@ -43,7 +41,6 @@ export function toQuestionRequest(form: QuestionFormValues): QuestionRequest {
     claveCorrecta: Number(form.claveCorrecta),
     explicacion: form.explicacion || null,
     dificultad: form.dificultad,
-    origen: form.origen,
     aprobada: form.aprobada,
   }
 }

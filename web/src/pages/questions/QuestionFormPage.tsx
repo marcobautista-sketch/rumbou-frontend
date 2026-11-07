@@ -25,7 +25,6 @@ function toFormValues(question: AdminQuestion): QuestionFormValues {
     claveCorrecta: String(question.claveCorrecta),
     explicacion: question.explicacion ?? '',
     dificultad: question.dificultad,
-    origen: question.origen,
     aprobada: question.aprobada,
   }
 }
