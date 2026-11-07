@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
 import { setAudioModeAsync, useAudioPlayer, useAudioPlayerStatus } from 'expo-audio'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Alert, Image, StyleSheet, Text, View } from 'react-native'
 import { SegmentedButtons, TextInput } from 'react-native-paper'
 import { useAuth } from '../hooks/useAuth'
@@ -59,13 +59,18 @@ function NotebookEditor({ question, examId, userId }: NotebookPanelProps & { use
   const [entry, setEntry] = useState(
     () => notebookStore.get(userId, question.preguntaId) ?? blankEntry(question, examId),
   )
+  // Guardar una foto o un audio toma un momento: cada cambio se suma a la última versión, no a
+  // la que se veía cuando empezó.
+  const latestEntry = useRef(entry)
   const hasNotes = Boolean(entry.photo || entry.audio || entry.note.trim() || entry.status)
   const player = useAudioPlayer(null)
   const { playing } = useAudioPlayerStatus(player)
 
   // Cualquier apunte nuevo queda por repasar hasta que se marque como entendido.
   const update = (changes: Partial<NotebookEntry>) => {
-    const next = { ...entry, status: entry.status ?? 'REVIEW', ...changes }
+    const current = latestEntry.current
+    const next = { ...current, status: current.status ?? 'REVIEW', ...changes }
+    latestEntry.current = next
     setEntry(next)
     notebookStore.save(userId, next)
   }
@@ -74,7 +79,7 @@ function NotebookEditor({ question, examId, userId }: NotebookPanelProps & { use
     try {
       const name = `audio-${question.preguntaId}-${Date.now()}.m4a`
       await notebookStore.keepFile(userId, uri, name)
-      notebookStore.deleteFile(userId, entry.audio)
+      notebookStore.deleteFile(userId, latestEntry.current.audio)
       update({ audio: name })
     } catch {
       failure('No pudimos guardar tu audio. Intenta de nuevo.')
@@ -96,7 +101,7 @@ function NotebookEditor({ question, examId, userId }: NotebookPanelProps & { use
       if (!photo) return
       const name = `foto-${question.preguntaId}-${Date.now()}.jpg`
       await notebookStore.keepFile(userId, photo.uri, name)
-      notebookStore.deleteFile(userId, entry.photo)
+      notebookStore.deleteFile(userId, latestEntry.current.photo)
       update({ photo: name })
     } catch {
       failure('No pudimos guardar tu foto. Intenta de nuevo.')
@@ -155,7 +160,8 @@ function NotebookEditor({ question, examId, userId }: NotebookPanelProps & { use
           onPress: () => {
             player.pause()
             notebookStore.remove(userId, question.preguntaId)
-            setEntry(blankEntry(question, examId))
+            latestEntry.current = blankEntry(question, examId)
+            setEntry(latestEntry.current)
           },
         },
       ],
@@ -186,14 +192,25 @@ function NotebookEditor({ question, examId, userId }: NotebookPanelProps & { use
           <Button
             title={entry.photo ? 'Cambiar foto' : 'Tomar foto'}
             variant="secondary"
+            disabled={recorder.recording}
             onPress={() => void addPhoto('camera')}
           />
         </View>
         <View style={styles.flex}>
           {entry.photo ? (
-            <Button title="Quitar foto" variant="ghost" onPress={removePhoto} />
+            <Button
+              title="Quitar foto"
+              variant="ghost"
+              disabled={recorder.recording}
+              onPress={removePhoto}
+            />
           ) : (
-            <Button title="Galería" variant="ghost" onPress={() => void addPhoto('library')} />
+            <Button
+              title="Galería"
+              variant="ghost"
+              disabled={recorder.recording}
+              onPress={() => void addPhoto('library')}
+            />
           )}
         </View>
       </View>
@@ -249,7 +266,9 @@ function NotebookEditor({ question, examId, userId }: NotebookPanelProps & { use
       <Text style={[styles.hint, { color: colors.muted }]}>
         Se guarda solo en este celular. Si desinstalas la app, se borra.
       </Text>
-      {hasNotes && <Button title="Quitar del cuaderno" variant="ghost" onPress={confirmRemove} />}
+      {hasNotes && !recorder.recording && (
+        <Button title="Quitar del cuaderno" variant="ghost" onPress={confirmRemove} />
+      )}
     </View>
   )
 }

@@ -20,10 +20,15 @@ export function UniversityProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (userId === null) return
     const controller = new AbortController()
+    let latestRequest = 0
 
-    const load = () =>
-      goalService.list(controller.signal).then(
+    const load = () => {
+      latestRequest += 1
+      const request = latestRequest
+      return goalService.list(controller.signal).then(
         (goals) => {
+          // Una respuesta vieja no debe pisar la de la última meta agregada o quitada.
+          if (request !== latestRequest) return
           const siglas = findMainGoal(goals)?.universidad
           setLoaded({ userId, university: siglas && isUniversity(siglas) ? siglas : null })
         },
@@ -31,6 +36,7 @@ export function UniversityProvider({ children }: { children: ReactNode }) {
           // Sin conexión se conservan los colores que ya tenía.
         },
       )
+    }
 
     void load()
     const unsubscribe = onGoalsChanged(load)
