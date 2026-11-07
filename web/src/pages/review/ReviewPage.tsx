@@ -166,7 +166,7 @@ export default function ReviewPage() {
     <Page>
       <PageHeader
         title="Revisión de preguntas"
-        description="Las preguntas generadas con IA esperan aquí hasta que un revisor las apruebe."
+        description="Las preguntas nuevas esperan aquí hasta que un revisor las apruebe."
         actions={
           <Button
             onClick={() => setConfirmingBatch(true)}
