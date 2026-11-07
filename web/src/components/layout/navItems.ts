@@ -4,6 +4,7 @@ import {
   GraduationCap,
   House,
   LibraryBig,
+  Medal,
   NotebookPen,
   Trophy,
   UsersRound,
@@ -43,6 +44,7 @@ export const navSections: NavSection[] = [
       { label: 'Progreso', to: paths.progress, icon: ChartLine },
       { label: 'Carreras', to: paths.careers, icon: GraduationCap },
       { label: 'Logros', to: paths.achievements, icon: Trophy },
+      { label: 'Liga semanal', to: paths.league, icon: Medal },
     ],
   },
   {

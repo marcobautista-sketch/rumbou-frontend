@@ -10,6 +10,7 @@ export const DashboardPage = lazy(() => import('../pages/dashboard/DashboardPage
 export const ProgressPage = lazy(() => import('../pages/progress/ProgressPage'))
 export const CareersPage = lazy(() => import('../pages/careers/CareersPage'))
 export const AchievementsPage = lazy(() => import('../pages/achievements/AchievementsPage'))
+export const LeaguePage = lazy(() => import('../pages/league/LeaguePage'))
 export const ExamHistoryPage = lazy(() => import('../pages/exams/ExamHistoryPage'))
 export const NewExamPage = lazy(() => import('../pages/exams/NewExamPage'))
 export const TakeExamPage = lazy(() => import('../pages/exams/TakeExamPage'))

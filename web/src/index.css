@@ -12,6 +12,7 @@
   --color-ink: var(--ink);
   --color-ink-muted: var(--ink-muted);
   --color-line: var(--line);
+  --color-brand: var(--brand);
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
   --color-on-primary: var(--on-primary);
@@ -39,6 +40,7 @@
   --ink: #1e2430;
   --ink-muted: #565c68;
   --line: #e2e0d6;
+  --brand: #2452c4;
   --primary: #2452c4;
   --primary-hover: #1c43a6;
   --on-primary: #ffffff;
@@ -63,6 +65,7 @@
   --ink: #edeef1;
   --ink-muted: #a8adb8;
   --line: #2e323c;
+  --brand: #8eaaff;
   --primary: #8eaaff;
   --primary-hover: #b3c6ff;
   --on-primary: #0f1422;
@@ -78,6 +81,37 @@
   --danger: #ff8c84;
   --danger-soft: #43201e;
   --grid: #272c37;
+}
+
+/* Acentos de la universidad de la meta principal. Acierto, error y aviso no cambian, para que
+   no cambie su significado, y --brand mantiene el color del logo. UNI sale de su manual de
+   identidad (Granate y Beige Arena); UNMSM usa tonos inspirados en sus azules, sin sus signos. */
+:root[data-university='UNI'] {
+  --primary: #711610;
+  --primary-hover: #5a110c;
+  --on-primary: #ffffff;
+  --chip: #f4e9d0;
+}
+
+:root.dark[data-university='UNI'] {
+  --primary: #e6d9aa;
+  --primary-hover: #f1e7c4;
+  --on-primary: #2b1a10;
+  --chip: #3b2f1d;
+}
+
+:root[data-university='UNMSM'] {
+  --primary: #14407f;
+  --primary-hover: #0f3364;
+  --on-primary: #ffffff;
+  --chip: #e1ecf8;
+}
+
+:root.dark[data-university='UNMSM'] {
+  --primary: #8fc2f2;
+  --primary-hover: #b3d7f7;
+  --on-primary: #0b1f33;
+  --chip: #17304a;
 }
 
 body {
