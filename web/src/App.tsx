@@ -3,6 +3,7 @@ import { RouterProvider } from 'react-router'
 import { ErrorBoundary } from './components/feedback/ErrorBoundary'
 import { AuthProvider } from './contexts/AuthProvider'
 import { ThemeProvider } from './contexts/ThemeProvider'
+import { UniversityThemeSync } from './contexts/UniversityThemeSync'
 import { router } from './routes/router'
 
 export default function App() {
@@ -10,6 +11,7 @@ export default function App() {
     <ErrorBoundary>
       <ThemeProvider>
         <AuthProvider>
+          <UniversityThemeSync />
           <RouterProvider router={router} />
           <Toaster
             position="top-right"
