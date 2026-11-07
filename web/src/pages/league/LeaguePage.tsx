@@ -189,7 +189,7 @@ export default function LeaguePage() {
       {league?.universidad && (
         <>
           {league.participa ? (
-            <MyStanding league={league} onLeft={retry} />
+            <MyStanding league={league} onLeft={() => (page > 1 ? setPage(1) : retry())} />
           ) : hasRole('USER') ? (
             <JoinCard onJoined={retry} />
           ) : (
@@ -200,7 +200,7 @@ export default function LeaguePage() {
 
           <section className="space-y-4" aria-label="Tabla de la semana">
             <h2 className="text-lg font-semibold">Tabla de la semana</h2>
-            {league.entradas.content.length === 0 ? (
+            {league.entradas.totalElements === 0 ? (
               <EmptyState
                 icon={UsersRound}
                 title="Nadie suma XP todavía"

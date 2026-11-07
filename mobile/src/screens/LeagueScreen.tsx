@@ -183,7 +183,7 @@ export default function LeagueScreen({ navigation }: LeagueScreenProps) {
         Mide tu constancia, no tu nivel académico. Se reinicia cada lunes.
       </Text>
       {league.participa ? (
-        <MyStanding league={league} onLeft={retry} />
+        <MyStanding league={league} onLeft={() => (page > 0 ? setPage(0) : retry())} />
       ) : applicant ? (
         <JoinCard onJoined={retry} />
       ) : (

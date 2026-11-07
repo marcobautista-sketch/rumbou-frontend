@@ -21,6 +21,9 @@ type NotebookIndex = Record<string, NotebookEntry>
 // Con fotos de hasta 5 MB, este tope deja el cuaderno por debajo de 250 MB.
 export const MAX_NOTEBOOK_PHOTOS = 50
 
+const INDEX_NAME = 'index.json'
+const NEW_INDEX_NAME = 'index.nuevo.json'
+
 const indexes = new Map<number, NotebookIndex>()
 const unsaved = new Set<number>()
 let writing = false
@@ -30,18 +33,23 @@ function userDirectory(userId: number) {
   return new Directory(Paths.document, 'cuaderno', String(userId))
 }
 
-function indexFile(userId: number) {
-  return new File(userDirectory(userId), 'index.json')
-}
-
-function readIndex(userId: number): NotebookIndex {
-  const file = indexFile(userId)
-  if (!file.exists) return {}
+function parseIndex(file: File) {
+  if (!file.exists) return null
   try {
     return JSON.parse(file.textSync()) as NotebookIndex
   } catch {
-    return {}
+    return null
   }
+}
+
+// Si la app se cerró a mitad de un guardado, una de las dos copias sigue completa.
+function readIndex(userId: number): NotebookIndex {
+  const directory = userDirectory(userId)
+  return (
+    parseIndex(new File(directory, INDEX_NAME)) ??
+    parseIndex(new File(directory, NEW_INDEX_NAME)) ??
+    {}
+  )
 }
 
 function indexOf(userId: number) {
@@ -53,11 +61,15 @@ function indexOf(userId: number) {
   return index
 }
 
+// Primero se escribe una copia completa y recién después reemplaza al índice: si la escritura
+// se corta, o no hay espacio, el índice anterior sigue intacto.
 async function writeIndex(userId: number) {
-  userDirectory(userId).create({ intermediates: true, idempotent: true })
-  const file = indexFile(userId)
-  if (!file.exists) file.create()
-  await file.write(JSON.stringify(indexOf(userId)))
+  const directory = userDirectory(userId)
+  directory.create({ intermediates: true, idempotent: true })
+  const newIndex = new File(directory, NEW_INDEX_NAME)
+  if (!newIndex.exists) newIndex.create()
+  await newIndex.write(JSON.stringify(indexOf(userId)))
+  await newIndex.move(new File(directory, INDEX_NAME), { overwrite: true })
 }
 
 // La nota se guarda con cada tecla. Mientras hay una escritura en curso, los cambios nuevos solo
