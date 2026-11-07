@@ -15,6 +15,7 @@ import { userService } from '../services/userService'
 import { useColors } from '../theme/useColors'
 import { examTypeLabels, formatExamDate } from '../utils/examLabels'
 import { daysUntil, formatDays } from '../utils/format'
+import { findMainGoal } from '../utils/mainGoal'
 import { universityShort } from '../utils/universityLabels'
 
 type HomeScreenProps = MainTabScreenProps<'Home'>
@@ -98,7 +99,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
   const goals = useFetch(fetchGoals)
   const areas = useFetch(fetchAreas)
 
-  const goal = goals.data?.[0] ?? null
+  const goal = findMainGoal(goals.data ?? [])
   const area = areas.data?.find((candidate) => candidate.id === goal?.areaId) ?? null
   const examDays = area?.fechaProximoExamen ? daysUntil(area.fechaProximoExamen) : null
   // El backend lista los simulacros del más reciente al más antiguo: basta con la primera página.
@@ -243,6 +244,18 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         title="Mi plan de estudio"
         description="Videos y libros de tus temas más débiles."
         onPress={() => navigation.navigate('StudyPlan')}
+      />
+      <Shortcut
+        icon="book-outline"
+        title="Cuaderno de errores"
+        description="Tus fotos, audios y notas de las preguntas que repasas."
+        onPress={() => navigation.navigate('Notebook')}
+      />
+      <Shortcut
+        icon="trophy-outline"
+        title="Liga semanal"
+        description="Compara tu actividad de la semana con otros postulantes."
+        onPress={() => navigation.navigate('League')}
       />
     </ScrollView>
   )

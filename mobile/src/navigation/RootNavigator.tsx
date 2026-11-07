@@ -8,6 +8,8 @@ import RegisterScreen from '../screens/auth/RegisterScreen'
 import ExamResultScreen from '../screens/exams/ExamResultScreen'
 import NewExamScreen from '../screens/exams/NewExamScreen'
 import TakeExamScreen from '../screens/exams/TakeExamScreen'
+import LeagueScreen from '../screens/LeagueScreen'
+import NotebookScreen from '../screens/NotebookScreen'
 import StudyPlanScreen from '../screens/StudyPlanScreen'
 import { MainTabs } from './MainTabs'
 import type { RootStackParamList } from './types'
@@ -52,7 +54,20 @@ export function RootNavigator() {
           <Stack.Screen
             name="ExamResult"
             component={ExamResultScreen}
-            options={{ headerShown: true, title: 'Tu resultado' }}
+            options={({ route }) => ({
+              headerShown: true,
+              title: route.params.questionId ? 'Pregunta' : 'Tu resultado',
+            })}
+          />
+          <Stack.Screen
+            name="Notebook"
+            component={NotebookScreen}
+            options={{ headerShown: true, title: 'Cuaderno de errores' }}
+          />
+          <Stack.Screen
+            name="League"
+            component={LeagueScreen}
+            options={{ headerShown: true, title: 'Liga semanal' }}
           />
         </>
       ) : (

@@ -8,6 +8,7 @@ export const paths = {
   dashboard: '/dashboard',
   progress: '/progress',
   achievements: '/achievements',
+  league: '/league',
   careers: '/careers',
   challenge: '/challenge',
   examHistory: '/exams',

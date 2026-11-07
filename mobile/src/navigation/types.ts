@@ -19,7 +19,10 @@ export type RootStackParamList = {
   StudyPlan: { examId?: number } | undefined
   NewExam: undefined
   TakeExam: { examId: number }
-  ExamResult: { examId: number }
+  // Con questionId se abre solo esa pregunta, desde el cuaderno.
+  ExamResult: { examId: number; questionId?: number }
+  Notebook: undefined
+  League: undefined
 }
 
 // Una pestaña puede navegar a sus hermanas y también a las pantallas del stack que la contiene.

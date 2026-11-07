@@ -1,9 +1,9 @@
 import { DarkTheme, DefaultTheme, type Theme } from '@react-navigation/native'
-import { palette } from './colors'
+import { paletteFor, type ColorScheme, type Palette, type University } from './colors'
 
 // Los encabezados y la barra de pestañas usan la paleta Cuaderno, no los grises por defecto
 // de React Navigation: así la app se ve igual que la web.
-function themeFrom(base: Theme, colors: (typeof palette)['light' | 'dark']): Theme {
+function themeFrom(base: Theme, colors: Palette): Theme {
   return {
     ...base,
     colors: {
@@ -18,7 +18,6 @@ function themeFrom(base: Theme, colors: (typeof palette)['light' | 'dark']): The
   }
 }
 
-export const navigationThemes = {
-  light: themeFrom(DefaultTheme, palette.light),
-  dark: themeFrom(DarkTheme, palette.dark),
+export function navigationThemeFor(scheme: ColorScheme, university: University | null) {
+  return themeFrom(scheme === 'dark' ? DarkTheme : DefaultTheme, paletteFor(scheme, university))
 }

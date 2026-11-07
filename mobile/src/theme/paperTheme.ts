@@ -1,5 +1,5 @@
 import { MD3DarkTheme, MD3LightTheme, type MD3Theme } from 'react-native-paper'
-import { palette, type Palette } from './colors'
+import { paletteFor, type ColorScheme, type Palette, type University } from './colors'
 
 // React Native Paper trae el morado de Material Design por defecto. Aquí sus colores se toman
 // de la paleta Cuaderno, para que sus componentes se vean igual que el resto de RumboU.
@@ -41,7 +41,9 @@ function paperTheme(base: MD3Theme, colors: Palette): MD3Theme {
   }
 }
 
-export const paperThemes = {
-  light: paperTheme(MD3LightTheme, palette.light),
-  dark: paperTheme(MD3DarkTheme, palette.dark),
+export function paperThemeFor(scheme: ColorScheme, university: University | null) {
+  return paperTheme(
+    scheme === 'dark' ? MD3DarkTheme : MD3LightTheme,
+    paletteFor(scheme, university),
+  )
 }

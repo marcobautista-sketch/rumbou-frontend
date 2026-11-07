@@ -1,6 +1,10 @@
+import { useContext, useMemo } from 'react'
 import { useColorScheme } from 'react-native'
-import { palette, type Palette } from './colors'
+import { UniversityContext } from '../contexts/UniversityContext'
+import { paletteFor, type Palette } from './colors'
 
 export function useColors(): Palette {
-  return useColorScheme() === 'dark' ? palette.dark : palette.light
+  const scheme = useColorScheme() === 'dark' ? 'dark' : 'light'
+  const university = useContext(UniversityContext)
+  return useMemo(() => paletteFor(scheme, university), [scheme, university])
 }

@@ -24,7 +24,7 @@ export function BrandMark({ size = 'md' }: BrandMarkProps) {
       <span className="inline-flex shrink-0 rounded-lg bg-white p-1 shadow-card">
         <img src="/logo.png" alt="" className={logoSizes[size]} />
       </span>
-      <span className={`font-display font-bold tracking-tight text-primary ${wordSizes[size]}`}>
+      <span className={`font-display font-bold tracking-tight text-brand ${wordSizes[size]}`}>
         RumboU
       </span>
     </span>

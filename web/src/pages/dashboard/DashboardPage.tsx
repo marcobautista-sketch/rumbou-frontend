@@ -27,6 +27,7 @@ import { paths } from '../../routes/paths'
 import type { TopicDetail } from '../../types/exam'
 import type { ScoreHistoryEntry } from '../../types/progress'
 import { fullExamHistory } from '../../utils/examSummary'
+import { findMainGoal } from '../../utils/universityTheme'
 import { daysUntil, formatDate, formatDays } from '../../utils/format'
 import { notify } from '../../utils/notify'
 import { areaLabel, universityShort } from '../../utils/universityLabels'
@@ -65,7 +66,7 @@ export default function DashboardPage() {
   const exams = useFetch(fetchExams)
 
   // El historial y los temas dependen del área de la carrera meta (la primera de la lista).
-  const mainGoal = goals.data?.[0] ?? null
+  const mainGoal = findMainGoal(goals.data ?? [])
   const areaId = mainGoal?.areaId ?? null
   const fetchHistory = useCallback(
     (signal: AbortSignal) =>
