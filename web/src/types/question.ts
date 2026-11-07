@@ -1,7 +1,6 @@
 import type { QuestionPresentation, SolutionStep } from './presentation'
 
 export type Difficulty = 'FACIL' | 'MEDIA' | 'DIFICIL'
-export type QuestionOrigin = 'SEMILLA' | 'IA_APROBADA'
 
 export interface Question {
   id: number
@@ -16,7 +15,6 @@ export interface Question {
 export interface AdminQuestion extends Question {
   claveCorrecta: number
   explicacion: string | null
-  origen: QuestionOrigin
   aprobada: boolean
   pasos: SolutionStep[] | null
 }
@@ -32,14 +30,12 @@ export interface QuestionRequest {
   claveCorrecta: number
   explicacion: string | null
   dificultad: Difficulty
-  origen: QuestionOrigin
   aprobada: boolean
 }
 
 export interface QuestionFilters {
   temaId?: number
   dificultad?: Difficulty
-  origen?: QuestionOrigin
   aprobada?: boolean
 }
 

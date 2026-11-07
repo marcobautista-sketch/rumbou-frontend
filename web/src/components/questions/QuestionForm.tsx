@@ -4,7 +4,7 @@ import { useAreaTopics } from '../../hooks/useAreaTopics'
 import { ALTERNATIVES_COUNT, questionSchema, type QuestionFormValues } from './questionSchema'
 import type { Topic } from '../../types/exam'
 import { alternativeLetter } from '../../utils/format'
-import { difficulties, difficultyLabels, originLabels, origins } from '../../utils/questionLabels'
+import { difficulties, difficultyLabels } from '../../utils/questionLabels'
 import { Button } from '../ui/Button'
 import { Card } from '../ui/Card'
 import { fieldStyles } from '../ui/fieldStyles'
@@ -97,14 +97,6 @@ export function QuestionForm({
             {difficulties.map((difficulty) => (
               <option key={difficulty} value={difficulty}>
                 {difficultyLabels[difficulty]}
-              </option>
-            ))}
-          </SelectField>
-
-          <SelectField label="Origen" {...register('origen')}>
-            {origins.map((origin) => (
-              <option key={origin} value={origin}>
-                {originLabels[origin]}
               </option>
             ))}
           </SelectField>
