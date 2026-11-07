@@ -5,11 +5,13 @@ import { useColors } from '../theme/useColors'
 import type { ExamQuestion } from '../types/exam'
 import { formatMath } from '../utils/formatMath'
 import { AnswerReview } from './AnswerReview'
+import { NotebookPanel } from './NotebookPanel'
 import { QuestionExplanation } from './QuestionExplanation'
 import { QuestionStatement } from './QuestionStatement'
 
 interface ExamAnswerItemProps {
   question: ExamQuestion
+  examId: number
   position: number
   expanded: boolean
   onToggle: () => void
@@ -17,7 +19,13 @@ interface ExamAnswerItemProps {
 
 // Una pregunta de la revisión: cerrada muestra su estado y el inicio del enunciado; abierta,
 // la respuesta y la explicación. Así las fórmulas solo se dibujan cuando hacen falta.
-export function ExamAnswerItem({ question, position, expanded, onToggle }: ExamAnswerItemProps) {
+export function ExamAnswerItem({
+  question,
+  examId,
+  position,
+  expanded,
+  onToggle,
+}: ExamAnswerItemProps) {
   const colors = useColors()
   const blank = question.alternativaMarcada === null
   const status = blank ? 'En blanco' : question.esCorrecta ? 'Correcta' : 'Incorrecta'
@@ -80,6 +88,7 @@ export function ExamAnswerItem({ question, position, expanded, onToggle }: ExamA
             />
           )}
           <QuestionExplanation explanation={question.explicacion} steps={question.pasos} />
+          <NotebookPanel question={question} examId={examId} />
         </View>
       )}
     </View>

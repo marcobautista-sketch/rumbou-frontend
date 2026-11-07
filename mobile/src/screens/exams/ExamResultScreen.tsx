@@ -20,8 +20,8 @@ type ExamResultScreenProps = NativeStackScreenProps<RootStackParamList, 'ExamRes
 
 export default function ExamResultScreen({ navigation, route }: ExamResultScreenProps) {
   const colors = useColors()
-  const { examId } = route.params
-  const [expandedAnswerId, setExpandedAnswerId] = useState<number | null>(null)
+  const { examId, questionId } = route.params
+  const [expandedQuestionId, setExpandedQuestionId] = useState(questionId ?? null)
   const fetchExam = useCallback(
     (signal: AbortSignal) => examService.getDetail(examId, signal),
     [examId],
@@ -137,7 +137,7 @@ export default function ExamResultScreen({ navigation, route }: ExamResultScreen
       <View style={styles.reviewHeading}>
         <Text style={[styles.heading, { color: colors.text }]}>Revisa tus respuestas</Text>
         <Text style={[styles.reviewHint, { color: colors.muted }]}>
-          {total} preguntas · Toca una para ver su respuesta y explicación.
+          {total} preguntas · Toca una para ver su resolución y agregar tus apuntes.
         </Text>
       </View>
     </View>
@@ -147,19 +147,26 @@ export default function ExamResultScreen({ navigation, route }: ExamResultScreen
     <FlatList
       style={{ backgroundColor: colors.background }}
       contentContainerStyle={styles.content}
-      data={exam.preguntas}
+      keyboardShouldPersistTaps="handled"
+      automaticallyAdjustKeyboardInsets
+      data={
+        questionId
+          ? exam.preguntas.filter((question) => question.preguntaId === questionId)
+          : exam.preguntas
+      }
       keyExtractor={(question) => String(question.respuestaUsuarioId)}
-      extraData={expandedAnswerId}
-      ListHeaderComponent={summary}
+      extraData={expandedQuestionId}
+      ListHeaderComponent={questionId ? undefined : summary}
       ItemSeparatorComponent={AnswerSeparator}
-      renderItem={({ item, index }) => (
+      renderItem={({ item }) => (
         <ExamAnswerItem
           question={item}
-          position={index}
-          expanded={expandedAnswerId === item.respuestaUsuarioId}
+          examId={examId}
+          position={exam.preguntas.indexOf(item)}
+          expanded={expandedQuestionId === item.preguntaId}
           onToggle={() =>
-            setExpandedAnswerId((current) =>
-              current === item.respuestaUsuarioId ? null : item.respuestaUsuarioId,
+            setExpandedQuestionId((current) =>
+              current === item.preguntaId ? null : item.preguntaId,
             )
           }
         />

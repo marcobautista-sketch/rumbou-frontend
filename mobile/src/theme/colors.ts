@@ -46,4 +46,32 @@ export const palette = {
   },
 } as const
 
-export type Palette = (typeof palette)[keyof typeof palette]
+export type Palette = Record<keyof (typeof palette)['light'], string>
+export type ColorScheme = keyof typeof palette
+export type University = 'UNI' | 'UNMSM'
+
+type UniversityAccents = Pick<Palette, 'primary' | 'onPrimary' | 'chip'>
+
+// Cada universidad cambia solo los acentos: acierto, error y aviso conservan su color para que
+// no cambie su significado. UNI sale de su manual de identidad (Granate y Beige Arena). UNMSM
+// usa tonos inspirados en sus azules, sin sus signos. El logo de RumboU no cambia.
+const universityAccents: Record<University, Record<ColorScheme, UniversityAccents>> = {
+  UNI: {
+    light: { primary: '#711610', onPrimary: '#ffffff', chip: '#f4e9d0' },
+    dark: { primary: '#e6d9aa', onPrimary: '#2b1a10', chip: '#3b2f1d' },
+  },
+  UNMSM: {
+    light: { primary: '#14407f', onPrimary: '#ffffff', chip: '#e1ecf8' },
+    dark: { primary: '#8fc2f2', onPrimary: '#0b1f33', chip: '#17304a' },
+  },
+}
+
+export function isUniversity(siglas: string): siglas is University {
+  return siglas in universityAccents
+}
+
+export function paletteFor(scheme: ColorScheme, university: University | null): Palette {
+  return university
+    ? { ...palette[scheme], ...universityAccents[university][scheme] }
+    : palette[scheme]
+}

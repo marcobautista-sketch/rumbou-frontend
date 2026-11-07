@@ -14,7 +14,6 @@ import { Button } from '../components/Button'
 import { ChangePasswordForm } from '../components/ChangePasswordForm'
 import { FormTextField } from '../components/FormTextField'
 import { PlanCard } from '../components/PlanCard'
-import { SensorCheck } from '../components/SensorCheck'
 import { useAuth } from '../hooks/useAuth'
 import { userService } from '../services/userService'
 import { useColors } from '../theme/useColors'
@@ -139,8 +138,6 @@ export default function ProfileScreen() {
 
         <Text style={[styles.heading, { color: colors.text }]}>Cambiar contraseña</Text>
         <ChangePasswordForm />
-
-        <SensorCheck />
 
         <Button title="Cerrar sesión" variant="secondary" onPress={confirmLogout} />
       </ScrollView>
