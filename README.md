@@ -12,7 +12,7 @@ CS 2031 Desarrollo Basado en Plataformas (UTEC).
 | --- | --- | --- |
 | API REST | AWS EC2 detrás de nginx con HTTPS, base en RDS PostgreSQL | `https://184-194-122-22.sslip.io/api/v1` (salud: `/api/v1/health`) |
 | Web | Vercel | https://rumbou-frontend.vercel.app |
-| Móvil | Expo Go con EAS Update (proyecto `@rumbou/rumbou`, canal `preview`) | Entra a la API por el mismo dominio de la web |
+| Móvil | Expo Go en iPhone y Android, y un APK para Android con EAS Build y EAS Update (proyecto `@rumbou/rumbou`, canal `preview`) | Entra a la API por el mismo dominio de la web |
 
 ## Arquitectura
 
@@ -22,7 +22,7 @@ flowchart LR
   app["Móvil<br/>React Native + Expo"] -->|HTTPS + JWT| vercel
   vercel["Vercel<br/>reescribe /api/*"] --> api
   api["API REST<br/>Spring Boot en EC2"] --> db[("PostgreSQL<br/>RDS")]
-  api --> ext["Gemini · YouTube · Google Books · Mercado Pago"]
+  api --> ext["YouTube · Google Books · Mercado Pago"]
   app --> ol["Open Library"]
   web --> ol
 ```
@@ -43,13 +43,17 @@ Las dos apps siguen las mismas capas:
 | Rendir simulacros (por tema, completo, diagnóstico) y ver el resultado | ✓ | ✓ |
 | Historial de simulacros paginado | ✓ | ✓ |
 | Panel con racha, metas, evolución del PSP y dominio por tema | ✓ | |
-| Desafío diario, plan de estudio con videos y libros, tutor con IA | ✓ | ✓ |
-| Foto o pizarra de la solución revisada por el tutor | ✓ | ✓ |
-| Asistente por voz | | ✓ |
+| Desafío diario y plan de estudio con videos y libros | ✓ | ✓ |
+| Pizarra para resolver mientras rindes | ✓ | ✓ |
+| Liga semanal con alias, para comparar tu actividad de la semana con la de otros postulantes | ✓ | ✓ |
+| Colores según la universidad de tu meta (UNI o San Marcos), en modo claro y oscuro | ✓ | ✓ |
+| Cuaderno de errores: foto del procedimiento, explicación grabada y nota por pregunta | | ✓ |
 | Editar el perfil | ✓ | ✓ |
 | Banco de preguntas con filtros, revisión y administración de roles | ✓ | |
 
-Sensores del móvil: **cámara** (foto de la solución, con la galería si no hay permiso), **micrófono** (asistente por voz, con la opción de escribir si no hay permiso) y **huella o Face ID** (entrar sin contraseña).
+Sensores del móvil: **cámara** (foto del procedimiento en el Cuaderno de errores, con la galería si no hay permiso), **micrófono** (explicación grabada de hasta 30 segundos, con la nota escrita si no hay permiso) y **huella o Face ID** (entrar sin contraseña). El cuaderno se guarda en el celular, separado por cuenta, y se conserva al cerrar la app.
+
+Los colores salen de la meta principal, que es la meta activa más antigua: la UNI usa el granate y el beige de su manual de identidad, y San Marcos tonos inspirados en sus azules, sin escudos ni logos. Sin meta o sin sesión se usa la paleta de RumboU, y el logo no cambia.
 
 ## Cómo correrlo
 
@@ -79,6 +83,13 @@ Escanea el código QR con la app **Expo Go** (Android o iOS).
 
 Para que el celular llegue al backend de tu PC, copia `mobile/.env.example` como `mobile/.env.local` y pon la IP de tu PC en `EXPO_PUBLIC_API_URL`: en el celular, `localhost` es el propio celular.
 
+Para usar la API desplegada en vez de la local, define la variable antes de arrancar. En PowerShell:
+
+```powershell
+$env:EXPO_PUBLIC_API_URL = "https://rumbou-frontend.vercel.app"
+npx expo start --clear
+```
+
 ## Cómo desplegarlo
 
 ### Web en Vercel
@@ -98,7 +109,7 @@ eas login
 eas init                      # crea el proyecto en Expo y guarda su projectId en app.json
 eas update:configure          # activa las actualizaciones por canal
 eas build -p android --profile preview   # genera un APK que se instala con un enlace
-eas update --channel preview --message "Entrega final"
+eas update --channel preview --environment preview --message "Entrega final"
 ```
 
 `eas build` deja un enlace para instalar el APK en Android. Después de eso, `eas update` publica los cambios de JavaScript sin tener que generar otro APK.
