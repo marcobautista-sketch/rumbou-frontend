@@ -216,7 +216,10 @@ export default function HomePage() {
                 </a>
               </div>
               <p className="text-sm text-ink-muted">
-                Gratis para empezar · En la web y Android
+                Gratis para empezar · En la web y Android ·{' '}
+                <Link to={paths.app} className="font-semibold text-primary hover:underline">
+                  Llévala a tu celular
+                </Link>
                 {!user && (
                   <>
                     {' · '}
