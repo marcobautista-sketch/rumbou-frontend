@@ -1,11 +1,30 @@
-import { create, isAxiosError, type InternalAxiosRequestConfig } from 'axios'
+import {
+  create,
+  isAxiosError,
+  isCancel,
+  type AxiosError,
+  type InternalAxiosRequestConfig,
+} from 'axios'
 import type { AuthTokens } from '../types/auth'
 import { toApiError } from './apiError'
 import { tokenStorage } from './tokenStorage'
 
 interface RetriableRequest extends InternalAxiosRequestConfig {
   retriedWithNewToken?: boolean
+  retriedAfterFailure?: boolean
 }
+
+const RETRY_DELAY_MS = 1000
+
+// Solo se repiten las lecturas (GET) que fallaron por la red o porque el servidor estaba
+// caído un momento (502, 503, 504): repetirlas no cambia nada en el backend. Igual que en la web.
+function canRetry(error: AxiosError, request: RetriableRequest) {
+  if (request.method !== 'get' || request.retriedAfterFailure || isCancel(error)) return false
+  const status = error.response?.status
+  return status === undefined || status === 502 || status === 503 || status === 504
+}
+
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 const clientConfig = {
   baseURL: `${process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:8080'}/api/v1`,
@@ -53,6 +72,13 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error: unknown) => {
     const request = isAxiosError(error) ? (error.config as RetriableRequest) : undefined
+
+    if (isAxiosError(error) && request && canRetry(error, request)) {
+      request.retriedAfterFailure = true
+      await wait(RETRY_DELAY_MS)
+      return apiClient(request)
+    }
+
     // 401 = el access token venció: se renueva y se repite la petición una sola vez.
     const sessionCanBeRenewed =
       isAxiosError(error) &&
