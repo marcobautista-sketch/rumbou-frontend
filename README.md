@@ -6,13 +6,24 @@ CS 2031 Desarrollo Basado en Plataformas (UTEC).
 
 - **Integrantes:** Marco Emilio Bautista Ortega, Fabiana Marcela Gomez Chavez, Juan Carlos Alexander Vergara Montalván y Zoe Camila Garrido Cantoni
 
+## Participación y coevaluación de los integrantes
+
+| Integrante | Principales aportes | Participación |
+| --- | --- | --- |
+| Marco Emilio Bautista Ortega | Backend: autenticación con JWT y refresh tokens, motor de simulacros y calificación, banco de preguntas, liga semanal, despliegue en AWS (EC2, RDS, HTTPS) y su evidencia. Web y móvil: la mayor parte de las pantallas, el Cuaderno de errores con cámara y micrófono, los temas por universidad, la liga semanal, la publicación en Vercel y en EAS. Coordinación del equipo y documentación. | 100 % |
+| Fabiana Marcela Gomez Chavez | Backend: banco de preguntas (CRUD, filtros paginados, búsqueda por texto, aprobación individual y en lote), construcción y carga del banco de 792 preguntas, revisión del proyecto contra la rúbrica, rol REVIEWER e interfaces de servicio. Web: componentes base (Card, Badge, Modal, Skeleton, Pagination, Breadcrumbs, Table), layout con Navbar y Sidebar, modo oscuro, banco de preguntas y revisión, formularios con React Hook Form y Zod, historial paginado. Móvil: rendir simulacros, historial paginado, pestañas e inicio. Despliegue del móvil con EAS y HTTPS de la API. | 100 % |
+| Juan Carlos Alexander Vergara Montalván | Backend: catálogo académico (universidades, áreas, carreras, ofertas, esquemas de calificación y temas) y su carga desde CSV, módulo de progreso (objetivos, PSP, IP, semáforo, dominio por tema e historial), `ProgresoListener` y manejo de parámetros inválidos. Web: inicio con racha y meta, mis objetivos, logros, catálogo de carreras con búsqueda, filtros y detalle. | 100 % |
+| Zoe Camila Garrido Cantoni | Backend: suscripción PRO con `PlanService` y límites por plan, webhook de Mercado Pago idempotente, activación y vencimiento diario de suscripciones, gamificación (racha, XP, logros y su catálogo) y correos HTML con Thymeleaf y sus listeners. | 100 % |
+
+Coevaluación del equipo: cada integrante cumplió el 100 % de las responsabilidades que asumió.
+
 ## En producción
 
 | Parte | Dónde | URL |
 | --- | --- | --- |
 | API REST | AWS EC2 detrás de nginx con HTTPS, base en RDS PostgreSQL | `https://184-194-122-22.sslip.io/api/v1` (salud: `/api/v1/health`) |
 | Web | Vercel | https://rumbou-frontend.vercel.app |
-| Móvil | Expo Go en iPhone y Android, y un APK para Android con EAS Build y EAS Update (proyecto `@rumbou/rumbou`, canal `preview`) | Entra a la API por el mismo dominio de la web |
+| Móvil | Expo Go en iPhone y Android, y un APK para Android con EAS Build y EAS Update (proyecto `@rumbou/rumbou`, canal `preview`) | [Descargar el APK 1.1.0 para Android](https://github.com/marcobautista-sketch/rumbou-frontend/releases/download/v1.1.0/rumbou-1.1.0.apk) · entra a la API por el mismo dominio de la web |
 
 ## Arquitectura
 
@@ -112,4 +123,4 @@ eas build -p android --profile preview   # genera un APK que se instala con un e
 eas update --channel preview --environment preview --message "Entrega final"
 ```
 
-`eas build` deja un enlace para instalar el APK en Android. Después de eso, `eas update` publica los cambios de JavaScript sin tener que generar otro APK.
+`eas build` deja un enlace para instalar el APK en Android, pero ese enlace vence a los 30 días: por eso el APK también está publicado en [Releases](https://github.com/marcobautista-sketch/rumbou-frontend/releases/latest), que es permanente. Después de eso, `eas update` publica los cambios de JavaScript sin tener que generar otro APK.

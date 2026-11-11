@@ -1,6 +1,7 @@
 import { Toaster } from 'react-hot-toast'
 import { RouterProvider } from 'react-router'
 import { ErrorBoundary } from './components/feedback/ErrorBoundary'
+import { OfflineBanner } from './components/feedback/OfflineBanner'
 import { AuthProvider } from './contexts/AuthProvider'
 import { ThemeProvider } from './contexts/ThemeProvider'
 import { UniversityThemeSync } from './contexts/UniversityThemeSync'
@@ -10,6 +11,7 @@ export default function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider>
+        <OfflineBanner />
         <AuthProvider>
           <UniversityThemeSync />
           <RouterProvider router={router} />
