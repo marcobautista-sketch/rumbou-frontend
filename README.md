@@ -23,6 +23,7 @@ Coevaluación del equipo: cada integrante cumplió el 100 % de las responsabilid
 | --- | --- | --- |
 | API REST | AWS EC2 detrás de nginx con HTTPS, base en RDS PostgreSQL | `https://184-194-122-22.sslip.io/api/v1` (salud: `/api/v1/health`) |
 | Web | Vercel | https://rumbou-frontend.vercel.app |
+| Probar desde el celular | Página pública a la que lleva el QR de la presentación: en Android instala el APK y en iPhone abre la web | https://rumbou-frontend.vercel.app/app |
 | Móvil | Expo Go en iPhone y Android, y un APK para Android con EAS Build y EAS Update (proyecto `@rumbou/rumbou`, canal `preview`) | [Descargar el APK 1.1.0 para Android](https://github.com/marcobautista-sketch/rumbou-frontend/releases/download/v1.1.0/rumbou-1.1.0.apk) · entra a la API por el mismo dominio de la web |
 
 ## Arquitectura
@@ -121,6 +122,8 @@ eas init                      # crea el proyecto en Expo y guarda su projectId e
 eas update:configure          # activa las actualizaciones por canal
 eas build -p android --profile preview   # genera un APK que se instala con un enlace
 eas update --channel preview --environment preview --message "Entrega final"
+# Solo para el equipo: la misma app en Expo Go, sin laptop. Expo Go solo abre proyectos de sus miembros.
+RUMBOU_EXPO_GO=1 eas update --channel expo-go --environment preview --message "Expo Go"
 ```
 
 `eas build` deja un enlace para instalar el APK en Android, pero ese enlace vence a los 30 días: por eso el APK también está publicado en [Releases](https://github.com/marcobautista-sketch/rumbou-frontend/releases/latest), que es permanente. Después de eso, `eas update` publica los cambios de JavaScript sin tener que generar otro APK.

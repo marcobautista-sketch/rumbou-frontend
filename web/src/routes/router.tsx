@@ -5,6 +5,7 @@ import { GuestRoute } from './GuestRoute'
 import {
   AchievementsPage,
   AdminUsersPage,
+  AppDownloadPage,
   CareersPage,
   ChallengePage,
   DashboardPage,
@@ -37,6 +38,7 @@ export const router = createBrowserRouter([
     errorElement: <RouteErrorPage />,
     children: [
       { path: paths.home, element: <HomePage /> },
+      { path: paths.app, element: <AppDownloadPage /> },
       { path: paths.resetPassword, element: <ResetPasswordPage /> },
       {
         element: <GuestRoute />,
